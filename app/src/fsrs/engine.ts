@@ -60,8 +60,22 @@ export function isDue(state: MemoryState): boolean {
   return new Date(state.due) <= new Date()
 }
 
+// Progresso para o painel dos pais — só conta itens realmente dominados
 export function masteryPercent(states: MemoryState[]): number {
   if (states.length === 0) return 0
   const mastered = states.filter((s) => s.state === 2 && s.stability >= 7).length
   return Math.round((mastered / states.length) * 100)
+}
+
+// Progresso para a home — reflete o avanço desde a primeira sessão
+// state 1 (Aprendendo) = 40 pts | state 2 (Revisão) = 80 pts | state 2 + estável = 100 pts
+export function progressPercent(states: MemoryState[], totalItems: number): number {
+  if (totalItems === 0) return 0
+  const score = states.reduce((sum, s) => {
+    if (s.state === 2 && s.stability >= 7) return sum + 100
+    if (s.state === 2) return sum + 80
+    if (s.state === 3) return sum + 50  // Reaprendendo
+    return sum + 40                      // Aprendendo (state 1)
+  }, 0)
+  return Math.min(100, Math.round(score / totalItems))
 }

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '../stores/appStore'
 import { db } from '../db/schema'
-import { isDue, masteryPercent } from '../fsrs/engine'
+import { isDue, progressPercent } from '../fsrs/engine'
 import { trails, topics } from '../content/trails'
 import type { MemoryState, SessionLog } from '../types'
 
@@ -46,7 +46,7 @@ export default function Home() {
     const topic = topics.find((t) => t.id === topicId)
     if (!topic) return 0
     const states = topic.itens.map((qid) => memoryStates[qid]).filter(Boolean) as MemoryState[]
-    return masteryPercent(states)
+    return progressPercent(states, topic.itens.length)
   }
 
   function getTreeSize(trail: typeof trails[0]): number {
