@@ -4,66 +4,94 @@ import { useAppStore } from '../stores/appStore'
 import { db } from '../db/schema'
 import { isDue, masteryPercent } from '../fsrs/engine'
 import { trails, topics } from '../content/trails'
-import type { MemoryState } from '../types'
+import type { MemoryState, SessionLog } from '../types'
 
 export default function Home() {
   const { activeChild, memoryStates, setMemoryStates } = useAppStore()
   const navigate = useNavigate()
   const [dueCount, setDueCount] = useState(0)
+  const [nextReview, setNextReview] = useState<string | null>(null)
+  const [streak, setStreak] = useState(0)
 
   useEffect(() => {
     if (!activeChild) return
-    loadMemoryStates()
+    loadData()
   }, [activeChild])
 
-  async function loadMemoryStates() {
+  async function loadData() {
     if (!activeChild) return
+
     const states = await db.memoryStates.where('child_id').equals(activeChild.id).toArray()
     setMemoryStates(states)
-    setDueCount(states.filter(isDue).length)
+
+    const due = states.filter(isDue)
+    setDueCount(due.length)
+
+    // Próxima revisão — menor "due" entre os não vencidos
+    const future = states
+      .filter((s) => !isDue(s))
+      .map((s) => new Date(s.due))
+      .sort((a, b) => a.getTime() - b.getTime())
+    setNextReview(future[0] ? formatNextReview(future[0]) : null)
+
+    // Streak — dias consecutivos com sessão
+    const logs = await db.sessionLogs
+      .where('child_id').equals(activeChild.id)
+      .reverse()
+      .toArray()
+    setStreak(calcStreak(logs))
   }
 
   function getTopicMastery(topicId: string): number {
     const topic = topics.find((t) => t.id === topicId)
     if (!topic) return 0
-    const states = topic.itens
-      .map((qid) => memoryStates[qid])
-      .filter(Boolean) as MemoryState[]
+    const states = topic.itens.map((qid) => memoryStates[qid]).filter(Boolean) as MemoryState[]
     return masteryPercent(states)
   }
 
   function getTreeSize(trail: typeof trails[0]): number {
     const allMastery = trail.topicos.map((tid) => getTopicMastery(tid))
-    const avg = allMastery.reduce((a, b) => a + b, 0) / (allMastery.length || 1)
-    return avg
+    return allMastery.reduce((a, b) => a + b, 0) / (allMastery.length || 1)
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white p-4 max-w-lg mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white p-4 max-w-lg mx-auto pb-8">
       <header className="pt-6 pb-4 flex items-start justify-between">
         <div>
           <p className="text-gray-400 text-sm">Olá,</p>
           <h1 className="text-2xl font-bold text-indigo-700">{activeChild?.nome} 🌳</h1>
         </div>
-        <button
-          onClick={() => navigate('/parents')}
-          className="mt-1 text-gray-300 hover:text-indigo-400 transition-colors"
-          title="Painel do responsável"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-          </svg>
-        </button>
+        <div className="flex items-center gap-3 mt-1">
+          {streak > 0 && (
+            <div className="flex items-center gap-1 bg-orange-50 text-orange-500 rounded-full px-2 py-1">
+              <span className="text-sm">🔥</span>
+              <span className="text-xs font-bold">{streak}</span>
+            </div>
+          )}
+          <button
+            onClick={() => navigate('/parents')}
+            className="text-gray-300 hover:text-indigo-400 transition-colors"
+            title="Painel do responsável"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
+          </button>
+        </div>
       </header>
 
       {/* Estudo de hoje */}
       <section className="bg-indigo-600 rounded-2xl p-5 text-white mb-6 shadow">
         <p className="text-indigo-200 text-sm mb-1">Estudo de hoje</p>
-        <p className="text-lg font-semibold mb-4">
+        <p className="text-lg font-semibold mb-1">
           {dueCount > 0
             ? `${dueCount} revisão${dueCount > 1 ? 'ões' : ''} te esperando`
             : 'Nenhuma revisão pendente — ótimo!'}
         </p>
+        {dueCount === 0 && nextReview && (
+          <p className="text-indigo-300 text-xs mb-3">Próxima revisão: {nextReview}</p>
+        )}
+        {dueCount > 0 && <div className="mb-3" />}
         <button
           onClick={() => navigate('/session')}
           className="bg-white text-indigo-700 font-bold rounded-xl px-6 py-2 hover:bg-indigo-50 transition-colors"
@@ -119,4 +147,35 @@ export default function Home() {
       </section>
     </div>
   )
+}
+
+function calcStreak(logs: SessionLog[]): number {
+  if (logs.length === 0) return 0
+  const today = new Date().toISOString().slice(0, 10)
+  const uniqueDays = [...new Set(logs.map((l) => l.date))].sort().reverse()
+
+  // Streak só conta se estudou hoje ou ontem
+  const mostRecent = uniqueDays[0]
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
+  if (mostRecent !== today && mostRecent !== yesterday) return 0
+
+  let count = 1
+  for (let i = 1; i < uniqueDays.length; i++) {
+    const prev = new Date(uniqueDays[i - 1])
+    const curr = new Date(uniqueDays[i])
+    const diff = Math.round((prev.getTime() - curr.getTime()) / 86400000)
+    if (diff === 1) count++
+    else break
+  }
+  return count
+}
+
+function formatNextReview(date: Date): string {
+  const today = new Date()
+  const tomorrow = new Date(today)
+  tomorrow.setDate(today.getDate() + 1)
+
+  if (date.toDateString() === today.toDateString()) return 'ainda hoje'
+  if (date.toDateString() === tomorrow.toDateString()) return 'amanhã'
+  return date.toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'short' })
 }
