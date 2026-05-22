@@ -85,7 +85,7 @@ export default function Home() {
         <p className="text-indigo-200 text-sm mb-1">Estudo de hoje</p>
         <p className="text-lg font-semibold mb-1">
           {dueCount > 0
-            ? `${dueCount} revisão${dueCount > 1 ? 'ões' : ''} te esperando`
+            ? `${dueCount} ${dueCount > 1 ? 'revisões' : 'revisão'} te esperando`
             : 'Nenhuma revisão pendente — ótimo!'}
         </p>
         {dueCount === 0 && nextReview && (

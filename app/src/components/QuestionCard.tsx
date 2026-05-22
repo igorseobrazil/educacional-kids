@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import type { Question } from '../types'
 
 interface Props {
@@ -9,6 +9,8 @@ interface Props {
 export default function QuestionCard({ question, onAnswer }: Props) {
   const [selected, setSelected] = useState<string | null>(null)
   const [textAnswer, setTextAnswer] = useState('')
+  const [dicaAberta, setDicaAberta] = useState(false)
+  const dicaRef = useRef<HTMLDivElement>(null)
 
   function handleSubmit() {
     const answer =
@@ -80,10 +82,20 @@ export default function QuestionCard({ question, onAnswer }: Props) {
       )}
 
       {question.dica && (
-        <details className="text-sm text-gray-400">
-          <summary className="cursor-pointer hover:text-indigo-500">Ver dica</summary>
-          <p className="mt-2 text-gray-500">{question.dica}</p>
-        </details>
+        <div>
+          <button
+            onClick={() => setDicaAberta((v) => !v)}
+            className="flex items-center gap-1.5 text-amber-500 text-sm font-medium hover:text-amber-600 transition-colors"
+          >
+            <span>💡</span>
+            <span>{dicaAberta ? 'Esconder dica' : 'Ver dica'}</span>
+          </button>
+          {dicaAberta && (
+            <div ref={dicaRef} className="mt-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800 leading-relaxed">
+              {question.dica}
+            </div>
+          )}
+        </div>
       )}
 
       <button

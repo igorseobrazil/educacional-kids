@@ -115,6 +115,7 @@ export const questions: Question[] = [
     enunciado: 'Substantivo próprio tem a primeira letra em maiúscula e nomeia um ser _______ (único/geral).',
     resposta_correta: 'único',
     explicacao: 'Substantivos próprios identificam um ser específico e único — como "Brasil", "Maria" ou "Amazônia". Por isso começam com maiúscula.',
+    dica: 'Pense no seu próprio nome. Só você é você — por isso é único. "Menina" é geral (tem muitas meninas), mas "Helena" é único (é só você).',
   },
   {
     id: 'q-sub-04', topico_id: 'topic-substantivo', tipo: 'multipla_escolha', dificuldade: 2,
@@ -175,6 +176,7 @@ export const questions: Question[] = [
     enunciado: 'O adjetivo concorda em gênero e número com o _______ que ele qualifica.',
     resposta_correta: 'substantivo',
     explicacao: 'O adjetivo "segue" o substantivo: se o substantivo é feminino plural, o adjetivo também fica feminino plural. Ex: "meninas inteligentes".',
+    dica: 'Pense em "gato gordo" → "gata gorda". O adjetivo "gordo" mudou junto com o substantivo. Ele sempre segue quem ele descreve.',
   },
   {
     id: 'q-adj-04', topico_id: 'topic-adjetivo', tipo: 'multipla_escolha', dificuldade: 2,
@@ -235,6 +237,7 @@ export const questions: Question[] = [
     enunciado: 'Complete com o artigo correto: "_____ meninas chegaram cedo." (as/umas)',
     resposta_correta: 'as',
     explicacao: '"As meninas" usa artigo definido — indica meninas específicas, já conhecidas de quem fala. "Umas meninas" indicaria meninas quaisquer.',
+    dica: 'Pergunta: a frase fala de meninas específicas que a gente já sabe quem são, ou de meninas quaisquer? Se são conhecidas, use "as". Se são qualquer uma, use "umas".',
   },
   {
     id: 'q-art-04', topico_id: 'topic-artigo', tipo: 'multipla_escolha', dificuldade: 2,
@@ -303,6 +306,7 @@ export const questions: Question[] = [
     enunciado: 'Substitua o nome pelo pronome correto: "Pedro e Ana chegaram tarde. _______ estavam atrasados."',
     resposta_correta: 'Eles',
     explicacao: '"Pedro e Ana" são duas pessoas (masculino + feminino). O pronome que os substitui no plural misto é "eles".',
+    dica: 'Pedro = ele. Ana = ela. Juntos, no plural, viram "eles". Em português, quando tem menino e menina juntos, o pronome plural é sempre "eles".',
   },
   {
     id: 'q-pro-04', topico_id: 'topic-pronome', tipo: 'multipla_escolha', dificuldade: 2,
@@ -363,6 +367,7 @@ export const questions: Question[] = [
     enunciado: 'O verbo muda de forma para indicar o _______ em que a ação acontece: passado, presente ou futuro.',
     resposta_correta: 'tempo',
     explicacao: 'A flexão de tempo é uma característica do verbo: "corri" (passado), "corro" (presente), "correrei" (futuro).',
+    dica: 'Pense no verbo "jogar": "joguei" (ontem — passado), "jogo" (agora — presente), "jogarei" (amanhã — futuro). O que mudou entre eles?',
   },
   {
     id: 'q-vb-04', topico_id: 'topic-verbo', tipo: 'multipla_escolha', dificuldade: 2,
@@ -423,6 +428,7 @@ export const questions: Question[] = [
     enunciado: '"Inteligente" e "_______ " são sinônimos porque têm sentido parecido. (esperto/preguiçoso)',
     resposta_correta: 'esperto',
     explicacao: '"Esperto" e "inteligente" têm sentido muito próximo — ambos descrevem alguém com boa capacidade de entender as coisas.',
+    dica: 'Sinônimo = mesma ideia, palavra diferente. Qual das duas opções tem sentido parecido com "inteligente": alguém que entende tudo rápido, ou alguém que não gosta de fazer nada?',
   },
   {
     id: 'q-sin-04', topico_id: 'topic-sinonimos', tipo: 'multipla_escolha', dificuldade: 2,
@@ -483,6 +489,7 @@ export const questions: Question[] = [
     enunciado: 'O antônimo de "chegada" é "_______".',
     resposta_correta: 'partida',
     explicacao: '"Partida" é o oposto de "chegada" — uma indica o início do movimento, a outra indica o fim.',
+    dica: 'Pensa no aeroporto: quando o avião pousa, é uma chegada. Quando ele decola e vai embora, é uma _______. O oposto de chegar é...',
   },
   {
     id: 'q-ant-04', topico_id: 'topic-antonimos', tipo: 'multipla_escolha', dificuldade: 2,
