@@ -9,6 +9,7 @@ import Session from './pages/Session'
 import Setup from './pages/Setup'
 import Login from './pages/Login'
 import ParentPanel from './pages/ParentPanel'
+import UpdatePrompt from './components/UpdatePrompt'
 
 export default function App() {
   const { user, authLoading, setUser, setAuthLoading } = useAuthStore()
@@ -49,6 +50,7 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <UpdatePrompt />
       <Routes>
         <Route
           path="/"

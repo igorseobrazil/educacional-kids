@@ -4,28 +4,34 @@ import { useAppStore } from '../stores/appStore'
 import { useAuthStore } from '../stores/authStore'
 import { signOut } from '../lib/authHelpers'
 import { db } from '../db/schema'
-import { masteryPercent } from '../fsrs/engine'
+import { progressPercent, masteryPercent } from '../fsrs/engine'
 import { topics, trails } from '../content/trails'
 import type { MemoryState, SessionLog } from '../types'
 
 export default function ParentPanel() {
-  const { activeChild, memoryStates } = useAppStore()
+  const { activeChild } = useAppStore()
   const user = useAuthStore((s) => s.user)
   const navigate = useNavigate()
   const [sessions, setSessions] = useState<SessionLog[]>([])
+  const [memoryMap, setMemoryMap] = useState<Record<string, MemoryState>>({})
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (activeChild) loadSessions()
+    if (activeChild) loadData()
   }, [activeChild])
 
-  async function loadSessions() {
+  async function loadData() {
     if (!activeChild) return
-    const logs = await db.sessionLogs
-      .where('child_id').equals(activeChild.id)
-      .reverse()
-      .limit(10)
-      .toArray()
+    setLoading(true)
+
+    const [states, logs] = await Promise.all([
+      db.memoryStates.where('child_id').equals(activeChild.id).toArray(),
+      db.sessionLogs.where('child_id').equals(activeChild.id).reverse().limit(10).toArray(),
+    ])
+
+    setMemoryMap(Object.fromEntries(states.map((s) => [s.question_id, s])))
     setSessions(logs)
+    setLoading(false)
   }
 
   async function handleSignOut() {
@@ -33,23 +39,23 @@ export default function ParentPanel() {
     navigate('/login')
   }
 
-  function getTopicMastery(topicId: string) {
+  function getTopicStates(topicId: string) {
     const topic = topics.find((t) => t.id === topicId)
-    if (!topic) return 0
-    const states = topic.itens
-      .map((qid) => memoryStates[qid])
-      .filter(Boolean) as MemoryState[]
-    return masteryPercent(states)
+    if (!topic) return []
+    return topic.itens.map((qid) => memoryMap[qid]).filter(Boolean) as MemoryState[]
   }
 
-  function getOverallMastery() {
-    const allStates = Object.values(memoryStates) as MemoryState[]
-    return masteryPercent(allStates)
+  function getOverallProgress() {
+    const allStates = Object.values(memoryMap) as MemoryState[]
+    const totalItems = trails.flatMap((t) => t.topicos).reduce((sum, tid) => {
+      const topic = topics.find((t) => t.id === tid)
+      return sum + (topic?.itens.length ?? 0)
+    }, 0)
+    return progressPercent(allStates, totalItems)
   }
 
   function getStudiedDays() {
-    const uniqueDays = new Set(sessions.map((s) => s.date))
-    return uniqueDays.size
+    return new Set(sessions.map((s) => s.date)).size
   }
 
   function getTotalCorrect() {
@@ -60,7 +66,15 @@ export default function ParentPanel() {
     return sessions.reduce((sum, s) => sum + s.items_seen, 0)
   }
 
-  const overallMastery = getOverallMastery()
+  const overallProgress = getOverallProgress()
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <span className="text-3xl animate-pulse">🌳</span>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 max-w-lg mx-auto">
@@ -80,23 +94,25 @@ export default function ParentPanel() {
 
       <div className="p-4 flex flex-col gap-5">
 
-        {/* Criança + domínio geral */}
+        {/* Criança + progresso geral */}
         <div className="bg-white rounded-2xl shadow-sm p-5">
           <div className="flex items-center gap-3 mb-4">
-            <span className="text-3xl">{overallMastery < 30 ? '🌱' : overallMastery < 70 ? '🌿' : '🌳'}</span>
+            <span className="text-3xl">
+              {overallProgress < 20 ? '🌱' : overallProgress < 60 ? '🌿' : '🌳'}
+            </span>
             <div>
               <p className="font-bold text-gray-800 text-lg">{activeChild?.nome}</p>
               <p className="text-gray-400 text-xs">{user?.email}</p>
             </div>
           </div>
           <div className="flex items-end gap-2">
-            <span className="text-4xl font-bold text-indigo-600">{overallMastery}%</span>
-            <span className="text-gray-400 text-sm mb-1">de domínio geral</span>
+            <span className="text-4xl font-bold text-indigo-600">{overallProgress}%</span>
+            <span className="text-gray-400 text-sm mb-1">de progresso geral</span>
           </div>
           <div className="w-full bg-gray-100 rounded-full h-2 mt-2">
             <div
               className="bg-indigo-500 h-2 rounded-full transition-all"
-              style={{ width: `${overallMastery}%` }}
+              style={{ width: `${overallProgress}%` }}
             />
           </div>
         </div>
@@ -111,37 +127,47 @@ export default function ParentPanel() {
           />
         </div>
 
-        {/* Domínio por tópico */}
+        {/* Progresso por tópico */}
         <div className="bg-white rounded-2xl shadow-sm p-5">
           <h2 className="font-semibold text-gray-700 mb-4">Progresso por tópico</h2>
-          <div className="flex flex-col gap-4">
-            {trails.flatMap((trail) =>
-              trail.topicos.map((topicId) => {
-                const topic = topics.find((t) => t.id === topicId)
-                if (!topic) return null
-                const mastery = getTopicMastery(topicId)
-                return (
-                  <div key={topicId}>
-                    <div className="flex justify-between items-center mb-1">
-                      <p className="text-sm text-gray-600">{topic.nome}</p>
-                      <span className="text-xs font-semibold text-indigo-500">{mastery}%</span>
-                    </div>
-                    <div className="w-full bg-gray-100 rounded-full h-2">
-                      <div
-                        className="bg-indigo-400 h-2 rounded-full transition-all"
-                        style={{ width: `${mastery}%` }}
-                      />
-                    </div>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {mastery === 0 && 'Ainda não começou'}
-                      {mastery > 0 && mastery < 50 && 'Aprendendo'}
-                      {mastery >= 50 && mastery < 80 && 'Bom progresso'}
-                      {mastery >= 80 && 'Dominado 🎉'}
-                    </p>
-                  </div>
-                )
-              })
-            )}
+          <div className="flex flex-col gap-5">
+            {trails.map((trail) => (
+              <div key={trail.id}>
+                <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-3">
+                  {trail.nome}
+                </p>
+                <div className="flex flex-col gap-3">
+                  {trail.topicos.map((topicId) => {
+                    const topic = topics.find((t) => t.id === topicId)
+                    if (!topic) return null
+                    const states = getTopicStates(topicId)
+                    const progress = progressPercent(states, topic.itens.length)
+                    const mastery = masteryPercent(states)
+                    return (
+                      <div key={topicId}>
+                        <div className="flex justify-between items-center mb-1">
+                          <p className="text-sm text-gray-600">{topic.nome}</p>
+                          <span className="text-xs font-semibold text-indigo-500">{progress}%</span>
+                        </div>
+                        <div className="w-full bg-gray-100 rounded-full h-2">
+                          <div
+                            className="bg-indigo-400 h-2 rounded-full transition-all"
+                            style={{ width: `${progress}%` }}
+                          />
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1">
+                          {progress === 0 && 'Ainda não começou'}
+                          {progress > 0 && progress < 50 && 'Iniciando'}
+                          {progress >= 50 && progress < 80 && 'Bom progresso'}
+                          {progress >= 80 && mastery < 50 && 'Avançado — revisando'}
+                          {mastery >= 50 && 'Dominado 🎉'}
+                        </p>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -157,9 +183,7 @@ export default function ParentPanel() {
                     <p className="text-xs text-gray-400">{s.items_seen} questões · {s.new_items} novas</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-semibold text-indigo-600">
-                      {s.correct}/{s.items_seen}
-                    </p>
+                    <p className="text-sm font-semibold text-indigo-600">{s.correct}/{s.items_seen}</p>
                     <p className="text-xs text-gray-400">acertos</p>
                   </div>
                 </div>
@@ -168,13 +192,13 @@ export default function ParentPanel() {
           </div>
         )}
 
-        {/* Como você pode ajudar */}
+        {/* Como ajudar */}
         <div className="bg-indigo-50 rounded-2xl p-5">
           <h2 className="font-semibold text-indigo-700 mb-3">Como você pode ajudar</h2>
           <ul className="flex flex-col gap-2 text-sm text-indigo-800">
             <li className="flex gap-2">
               <span>💬</span>
-              <span>Pergunte sobre o que {activeChild?.nome} aprendeu hoje — explicar em voz alta fixa muito mais do que reler.</span>
+              <span>Pergunte o que {activeChild?.nome} aprendeu hoje — explicar em voz alta fixa muito mais do que reler.</span>
             </li>
             <li className="flex gap-2">
               <span>📅</span>
@@ -182,7 +206,7 @@ export default function ParentPanel() {
             </li>
             <li className="flex gap-2">
               <span>🎉</span>
-              <span>Elogie o esforço e a persistência, não só o acerto. "Você se dedicou nisso!" motiva muito mais do que "você é inteligente".</span>
+              <span>Elogie o esforço, não só o acerto. "Você se dedicou nisso!" motiva mais do que "você é inteligente".</span>
             </li>
             <li className="flex gap-2">
               <span>😴</span>
