@@ -1,0 +1,122 @@
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAppStore } from '../stores/appStore'
+import { db } from '../db/schema'
+import { isDue, masteryPercent } from '../fsrs/engine'
+import { trails, topics } from '../content/trails'
+import type { MemoryState } from '../types'
+
+export default function Home() {
+  const { activeChild, memoryStates, setMemoryStates } = useAppStore()
+  const navigate = useNavigate()
+  const [dueCount, setDueCount] = useState(0)
+
+  useEffect(() => {
+    if (!activeChild) return
+    loadMemoryStates()
+  }, [activeChild])
+
+  async function loadMemoryStates() {
+    if (!activeChild) return
+    const states = await db.memoryStates.where('child_id').equals(activeChild.id).toArray()
+    setMemoryStates(states)
+    setDueCount(states.filter(isDue).length)
+  }
+
+  function getTopicMastery(topicId: string): number {
+    const topic = topics.find((t) => t.id === topicId)
+    if (!topic) return 0
+    const states = topic.itens
+      .map((qid) => memoryStates[qid])
+      .filter(Boolean) as MemoryState[]
+    return masteryPercent(states)
+  }
+
+  function getTreeSize(trail: typeof trails[0]): number {
+    const allMastery = trail.topicos.map((tid) => getTopicMastery(tid))
+    const avg = allMastery.reduce((a, b) => a + b, 0) / (allMastery.length || 1)
+    return avg
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white p-4 max-w-lg mx-auto">
+      <header className="pt-6 pb-4 flex items-start justify-between">
+        <div>
+          <p className="text-gray-400 text-sm">Olá,</p>
+          <h1 className="text-2xl font-bold text-indigo-700">{activeChild?.nome} 🌳</h1>
+        </div>
+        <button
+          onClick={() => navigate('/parents')}
+          className="mt-1 text-gray-300 hover:text-indigo-400 transition-colors"
+          title="Painel do responsável"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          </svg>
+        </button>
+      </header>
+
+      {/* Estudo de hoje */}
+      <section className="bg-indigo-600 rounded-2xl p-5 text-white mb-6 shadow">
+        <p className="text-indigo-200 text-sm mb-1">Estudo de hoje</p>
+        <p className="text-lg font-semibold mb-4">
+          {dueCount > 0
+            ? `${dueCount} revisão${dueCount > 1 ? 'ões' : ''} te esperando`
+            : 'Nenhuma revisão pendente — ótimo!'}
+        </p>
+        <button
+          onClick={() => navigate('/session')}
+          className="bg-white text-indigo-700 font-bold rounded-xl px-6 py-2 hover:bg-indigo-50 transition-colors"
+        >
+          {dueCount > 0 ? 'Começar revisão' : 'Explorar conteúdo'}
+        </button>
+      </section>
+
+      {/* Trilhas */}
+      <section>
+        <h2 className="text-gray-500 text-sm font-semibold uppercase tracking-wide mb-3">Suas jornadas</h2>
+        <div className="flex flex-col gap-4">
+          {trails.map((trail) => {
+            const size = getTreeSize(trail)
+            return (
+              <div key={trail.id} className="bg-white rounded-2xl shadow p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="text-3xl">{size < 30 ? '🌱' : size < 70 ? '🌿' : '🌳'}</span>
+                  <div>
+                    <p className="font-bold text-gray-800">{trail.nome}</p>
+                    <p className="text-gray-400 text-xs">{trail.materia}</p>
+                  </div>
+                </div>
+                <div className="flex flex-col gap-2">
+                  {trail.topicos.map((topicId) => {
+                    const topic = topics.find((t) => t.id === topicId)
+                    if (!topic) return null
+                    const mastery = getTopicMastery(topicId)
+                    return (
+                      <button
+                        key={topicId}
+                        onClick={() => navigate(`/session?topic=${topicId}`)}
+                        className="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-indigo-50 transition-colors text-left"
+                      >
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-700">{topic.nome}</p>
+                          <div className="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                            <div
+                              className="bg-indigo-500 h-1.5 rounded-full transition-all"
+                              style={{ width: `${mastery}%` }}
+                            />
+                          </div>
+                        </div>
+                        <span className="text-xs text-gray-400">{mastery}%</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      </section>
+    </div>
+  )
+}

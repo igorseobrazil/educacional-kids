@@ -1,0 +1,23 @@
+# Dependências
+node_modules/
+
+# Build
+app/dist/
+app/.vite/
+
+# Variáveis de ambiente — NUNCA commitar o .env com credenciais reais
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
