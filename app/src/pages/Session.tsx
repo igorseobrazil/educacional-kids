@@ -88,7 +88,7 @@ export default function Session() {
     const isCorrect =
       question.tipo === 'elaboracao'
         ? true // elaboração é sempre auto-avaliada como correta para o FSRS
-        : answer.trim().toLowerCase() === question.resposta_correta.trim().toLowerCase()
+        : normalize(answer) === normalize(question.resposta_correta)
 
     setLastAnswer({ correct: isCorrect, answer })
 
@@ -165,4 +165,10 @@ export default function Session() {
       </div>
     </div>
   )
+}
+
+// Remove espaços, pontuação no final e normaliza maiúsculas
+// para que "Substantivo." == "substantivo" == "SUBSTANTIVO"
+function normalize(s: string): string {
+  return s.trim().toLowerCase().replace(/[.,!?;:]+$/, '').trim()
 }
