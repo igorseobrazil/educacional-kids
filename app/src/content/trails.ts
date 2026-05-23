@@ -151,7 +151,7 @@ export const topics: Topic[] = [
     trilha_id: 'trail-gramatica-uso',
     eixo_bncc: 'Análise linguística e gramática',
     descricao: 'Você vai aprender as três categorias de palavras quanto ao acento — oxítona, paroxítona e proparoxítona — e entender o sistema lógico que decide quando uma palavra precisa de acento escrito.',
-    gancho_curiosidade: 'Se "ônibus" tem acento e "caminhão" não tem, é porque existe um sistema que decide quando acentuar. Mas a regra é mais lógica do que parece — e você vai conseguir deduzir ela.',
+    gancho_curiosidade: 'Por que "médico" tem acento e "mesa" não tem? Por que "café" tem acento e "carne" não tem? Existe um sistema lógico que decide quando acentuar — e depois de aprender, você vai conseguir deduzir qualquer palavra.',
     pre_requisitos: [],
     itens: ['q-ac-01','q-ac-02','q-ac-03','q-ac-cad','q-ac-04','q-ac-05','q-ac-06','q-ac-07','q-ac-08'],
   },
