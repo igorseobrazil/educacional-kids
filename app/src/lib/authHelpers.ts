@@ -75,6 +75,8 @@ export async function createChild(nome: string, uid: string): Promise<Child> {
   }
   await db.children.put(child)
   await setDoc(doc(firestore, 'children', child.id), child)
+  // Cria lookup de convite (permite que outros responsáveis encontrem sem ser guardian)
+  await setDoc(doc(firestore, 'invite_codes', child.invite_code), { child_id: child.id })
   return child
 }
 
@@ -114,22 +116,22 @@ export async function updateChild(childId: string, fields: Partial<Child>) {
 }
 
 export async function joinChildByCode(code: string, uid: string): Promise<Child | null> {
-  const q = query(
-    collection(firestore, 'children'),
-    where('invite_code', '==', code.toUpperCase()),
-  )
-  const snap = await getDocs(q)
-  if (snap.empty) return null
+  // 1. Busca o child_id pelo código (qualquer usuário autenticado pode ler)
+  const lookupSnap = await getDoc(doc(firestore, 'invite_codes', code.toUpperCase()))
+  if (!lookupSnap.exists()) return null
 
-  const childDoc = snap.docs[0]
-  const child = childDoc.data() as Child
+  const childId = lookupSnap.data().child_id as string
 
-  if (child.guardians.includes(uid)) return child // já é responsável
+  // 2. Adiciona o uid como guardian (regra permite mesmo sem ser guardian)
+  await updateDoc(doc(firestore, 'children', childId), { guardians: arrayUnion(uid) })
 
-  const updated: Child = { ...child, guardians: [...child.guardians, uid] }
-  await updateDoc(doc(firestore, 'children', child.id), { guardians: arrayUnion(uid) })
-  await db.children.put(updated)
-  return updated
+  // 3. Agora pode ler o documento completo
+  const childSnap = await getDoc(doc(firestore, 'children', childId))
+  if (!childSnap.exists()) return null
+
+  const child = childSnap.data() as Child
+  await db.children.put(child)
+  return child
 }
 
 // ── Migração ─────────────────────────────────────────────────────────────────
@@ -154,6 +156,9 @@ export async function migrateLocalDataIfNeeded(uid: string): Promise<boolean> {
 
     // Sobe filho para novo caminho no Firestore
     await setDoc(doc(firestore, 'children', child.id), updated)
+
+    // Cria lookup de convite
+    await setDoc(doc(firestore, 'invite_codes', updated.invite_code), { child_id: child.id })
 
     // Sobe memory_states
     const states = await db.memoryStates.where('child_id').equals(child.id).toArray()
