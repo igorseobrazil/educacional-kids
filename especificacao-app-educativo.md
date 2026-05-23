@@ -222,31 +222,39 @@ Todo o estudo funciona sem internet. Conteúdo e progresso ficam no dispositivo;
 ### 8.1 Estratégia geral
 Um único código atende PWA e desktop. A **PWA já é instalável** no computador, funciona offline e atualiza sozinha — para o MVP, a PWA é o app de desktop. Mais adiante, o mesmo código pode ser empacotado com **Tauri** para uma janela nativa mais leve.
 
-### 8.2 Stack sugerida
-- **Front-end:** React + Vite.
-- **PWA:** service worker para offline + manifest para instalação.
-- **Armazenamento local:** IndexedDB (via biblioteca Dexie).
-- **Repetição espaçada:** biblioteca FSRS já existente, integrada ao estado local.
-- **Estado:** Zustand.
-- **Backend / banco:** Supabase (PostgreSQL) — incluído desde o MVP.
-- **Autenticação:** Supabase Auth (login dos pais; perfil da criança vinculado).
-- **Sincronização real-time:** Supabase Realtime (WebSocket) — atualiza todos os dispositivos em tempo real.
-- **Desktop (fase futura):** Tauri reaproveitando o mesmo código.
+### 8.2 Stack implementada
+
+| Camada | Tecnologia | Detalhe |
+|---|---|---|
+| Front-end | React + Vite + Tailwind v4 | PWA + desktop com um só código |
+| PWA | vite-plugin-pwa (prompt mode) | Offline, instalável, banner de atualização |
+| Armazenamento local | Dexie (IndexedDB) | Fonte de verdade local; funciona offline |
+| Repetição espaçada | ts-fsrs | FSRS com fuzz habilitado |
+| Estado global | Zustand (com persist) | Sem boilerplate |
+| Backend / banco | Firebase Firestore | Gratuito no Spark plan |
+| Autenticação | Firebase Auth | Google Sign-In + e-mail/senha |
+| Sincronização real-time | Firestore Realtime | WebSocket; atualiza todos os dispositivos |
+| Animações | Framer Motion + canvas-confetti | Micro-animações e confete em momentos especiais |
+| Hospedagem | Vercel | Free tier; repositório público |
+| AI feedback (pendente) | Google Gemini Flash | Free tier; para elaboração personalizada |
+| Desktop (fase futura) | Tauri | Reaproveitando o mesmo código React |
 
 ### 8.3 Padrão offline-first com sincronização em nuvem
-Toda escrita vai primeiro ao IndexedDB local (funciona sem internet, sem latência). Quando online, o app sincroniza com o Supabase em background. O Supabase Realtime empurra as atualizações para outros dispositivos via WebSocket. Conflitos resolvidos por timestamp — o estado FSRS mais recente por item vence. Itens pendentes de sync ficam numa fila local e são enviados ao reconectar.
+Toda escrita vai primeiro ao IndexedDB local (funciona sem internet, sem latência). Quando online, o app sincroniza com o Firebase em background. O Firestore Realtime empurra as atualizações para outros dispositivos via WebSocket. Conflitos resolvidos por timestamp — o estado FSRS mais recente por item vence. Itens pendentes de sync ficam numa fila local (Dexie) e são enviados ao reconectar.
 
 ---
 
 ## 9. Fluxo do usuário (sessão típica)
 
-1. A criança abre o app e vê a árvore do conhecimento e o "estudo de hoje".
-2. Escolhe começar a sessão (ou escolhe uma trilha/jornada específica).
-3. Ao entrar num tópico novo, recebe o gancho de curiosidade que abre a história.
-4. O app monta a sessão: mistura de revisões devidas + itens novos (respeitando o limite diário).
-5. Para cada item: a criança tenta responder → recebe feedback imediato → vê uma explicação curta.
-6. Após ~10–15 itens, a sessão termina com uma tela de encerramento positiva.
-7. A árvore cresce; o progresso é salvo; o app indica quando será a próxima revisão.
+1. **Primeiro acesso:** onboarding de 3 telas explica como o app funciona.
+2. A criança abre o app e vê a home com a árvore do conhecimento, streak de dias e "estudo de hoje".
+3. Escolhe começar a sessão ou escolhe um tópico específico.
+4. **Tópico novo:** exibe a descrição do tópico + gancho de curiosidade antes de começar.
+5. O app monta a sessão: mistura de revisões devidas + itens novos (máximo 5 novos/dia).
+6. Para cada item: a criança tenta responder → feedback imediato com animação → explicação curta.
+7. **Questão de caderno:** em cada tópico, um card pede que a criança escreva o conceito-base no caderno físico com a data.
+8. Após ~10–15 itens, a sessão termina com tela de encerramento (especial na primeira sessão; confete se ≥80%).
+9. A árvore cresce; o progresso é salvo localmente e sincronizado; o app indica a próxima revisão.
 
 ---
 
