@@ -23,6 +23,7 @@ export default function ParentPanel() {
   // Adicionar filho
   const [novoNome, setNovoNome] = useState('')
   const [addLoading, setAddLoading] = useState(false)
+  const [addErro, setAddErro] = useState('')
 
   // Aniversário por filho (DDMM)
   const [birthdayEdits, setBirthdayEdits] = useState<Record<string, string>>({})
@@ -48,12 +49,19 @@ export default function ParentPanel() {
     e.preventDefault()
     if (!novoNome.trim() || !user) return
     setAddLoading(true)
-    const child = await createChild(novoNome.trim(), user.uid)
-    addChild(child)
-    setActiveChild(child)
-    setNovoNome('')
-    setAddLoading(false)
-    setTab('progresso')
+    setAddErro('')
+    try {
+      const child = await createChild(novoNome.trim(), user.uid)
+      addChild(child)
+      setActiveChild(child)
+      setNovoNome('')
+      setTab('progresso')
+    } catch (err) {
+      console.error('Erro ao criar filho:', err)
+      setAddErro('Não foi possível salvar. Verifique sua conexão e tente novamente.')
+    } finally {
+      setAddLoading(false)
+    }
   }
 
   async function handleSaveBirthday(childId: string) {
@@ -316,6 +324,7 @@ export default function ParentPanel() {
                   {addLoading ? '...' : 'Criar'}
                 </button>
               </form>
+              {addErro && <p className="text-red-500 text-sm mt-2">{addErro}</p>}
             </div>
 
             {/* Instrução para entrar com código */}
