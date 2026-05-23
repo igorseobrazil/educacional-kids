@@ -18,9 +18,12 @@ export default function ParentPanel() {
 
   useEffect(() => {
     if (activeChild) loadData()
-    // Bloqueia novamente quando sair do painel
-    return () => setParentUnlocked(false)
   }, [activeChild])
+
+  // Bloqueia só quando o componente desmonta de verdade (não a cada mudança de activeChild)
+  useEffect(() => {
+    return () => setParentUnlocked(false)
+  }, [])
 
   async function loadData() {
     if (!activeChild) return

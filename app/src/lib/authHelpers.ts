@@ -7,7 +7,7 @@ import {
   signInWithPopup,
   type User,
 } from 'firebase/auth'
-import { doc, setDoc, getDocs, collection } from 'firebase/firestore'
+import { doc, setDoc, getDoc, getDocs, collection } from 'firebase/firestore'
 import { auth, firestore } from './firebase'
 import { db } from '../db/schema'
 import type { Child } from '../types'
@@ -58,7 +58,6 @@ export async function savePin(uid: string, pin: string) {
 }
 
 export async function getPin(uid: string): Promise<string | null> {
-  const { getDoc } = await import('firebase/firestore')
   const snap = await getDoc(doc(firestore, 'users', uid))
   return snap.exists() ? (snap.data()?.pin ?? null) : null
 }
