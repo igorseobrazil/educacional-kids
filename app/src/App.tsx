@@ -10,6 +10,7 @@ import Setup from './pages/Setup'
 import Login from './pages/Login'
 import ParentPanel from './pages/ParentPanel'
 import UpdatePrompt from './components/UpdatePrompt'
+import PinGate from './components/PinGate'
 
 export default function App() {
   const { user, authLoading, setUser, setAuthLoading } = useAuthStore()
@@ -82,7 +83,10 @@ export default function App() {
         />
         <Route
           path="/parents"
-          element={!user ? <Navigate to="/login" replace /> : <ParentPanel />}
+          element={
+            !user ? <Navigate to="/login" replace /> :
+            <PinGate><ParentPanel /></PinGate>
+          }
         />
       </Routes>
     </BrowserRouter>

@@ -51,6 +51,20 @@ export async function saveChild(child: Child, uid: string) {
   )
 }
 
+// ── PIN ─────────────────────────────────────────────────────────────────────
+
+export async function savePin(uid: string, pin: string) {
+  await setDoc(doc(firestore, 'users', uid), { pin }, { merge: true })
+}
+
+export async function getPin(uid: string): Promise<string | null> {
+  const { getDoc } = await import('firebase/firestore')
+  const snap = await getDoc(doc(firestore, 'users', uid))
+  return snap.exists() ? (snap.data()?.pin ?? null) : null
+}
+
+// ── Filhos ───────────────────────────────────────────────────────────────────
+
 // Busca crianças do usuário no Firestore e sincroniza localmente
 export async function loadChildrenFromFirestore(uid: string): Promise<Child[]> {
   const snap = await getDocs(collection(firestore, 'users', uid, 'children'))
