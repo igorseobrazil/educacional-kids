@@ -138,9 +138,10 @@ export const questions: Question[] = [
     explicacao: 'A maioria dos substantivos terminados em "-ão" fazem plural em "-ãos": cidadão → cidadãos. Outros casos: leão → leões, alemão → alemães.',
   },
   {
-    id: 'q-sub-07', topico_id: 'topic-substantivo', tipo: 'ordenacao', dificuldade: 2,
-    enunciado: 'Separe as palavras em dois grupos: SUBSTANTIVOS e NÃO SUBSTANTIVOS.\nPalavras: escola | estudar | felicidade | verde | cachorro | correr',
-    resposta_correta: 'Substantivos: escola, felicidade, cachorro | Não substantivos: estudar, verde, correr',
+    id: 'q-sub-07', topico_id: 'topic-substantivo', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Quais palavras da lista abaixo são SUBSTANTIVOS?\nescola | estudar | felicidade | verde | cachorro | correr',
+    resposta_correta: 'escola, felicidade e cachorro',
+    distratores: ['estudar, correr e verde', 'escola, verde e cachorro', 'felicidade, correr e escola'],
     explicacao: '"Escola", "felicidade" e "cachorro" nomeiam um lugar, um sentimento e um animal — são substantivos. "Estudar" e "correr" são verbos; "verde" é adjetivo.',
   },
   {
@@ -180,10 +181,10 @@ export const questions: Question[] = [
   },
   {
     id: 'q-adj-04', topico_id: 'topic-adjetivo', tipo: 'multipla_escolha', dificuldade: 2,
-    enunciado: 'Seu personagem está "farmando aura" — ficando cada vez mais respeitado. Qual adjetivo melhor descreve alguém com muita aura?',
-    resposta_correta: 'imponente',
+    enunciado: 'Seu personagem está "farmando aura" — todo mundo começa a admirá-lo. Qual adjetivo descreve alguém assim?',
+    resposta_correta: 'admirado',
     distratores: ['apressado', 'distraído', 'desorganizado'],
-    explicacao: '"Imponente" descreve alguém que transmite respeito e presença — exatamente o que acontece com quem está "farmando aura".',
+    explicacao: '"Admirado" descreve alguém que as outras pessoas respeitam e olham com admiração — exatamente o que acontece com quem está "farmando aura".',
     referencia_cultural: 'farmando aura',
     validade_cultural: '2027-01-01',
   },
@@ -201,9 +202,10 @@ export const questions: Question[] = [
     explicacao: 'Adjetivos terminados em "-or" normalmente formam o feminino com "-ora": trabalhador → trabalhadora, protetor → protetora.',
   },
   {
-    id: 'q-adj-07', topico_id: 'topic-adjetivo', tipo: 'ordenacao', dificuldade: 2,
-    enunciado: 'Separe em ADJETIVOS e NÃO ADJETIVOS:\nfantástico | correr | engraçada | escola | péssimo | liberdade | alto',
-    resposta_correta: 'Adjetivos: fantástico, engraçada, péssimo, alto | Não adjetivos: correr, escola, liberdade',
+    id: 'q-adj-07', topico_id: 'topic-adjetivo', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Quais palavras da lista são ADJETIVOS?\nfantástico | correr | engraçada | escola | péssimo | liberdade | alto',
+    resposta_correta: 'fantástico, engraçada, péssimo e alto',
+    distratores: ['correr, escola e liberdade', 'fantástico, escola e alto', 'engraçada, liberdade e péssimo'],
     explicacao: '"Fantástico", "engraçada", "péssimo" e "alto" qualificam substantivos — são adjetivos. "Correr" é verbo; "escola" e "liberdade" são substantivos.',
   },
   {
@@ -298,7 +300,7 @@ export const questions: Question[] = [
     id: 'q-pro-02', topico_id: 'topic-pronome', tipo: 'multipla_escolha', dificuldade: 1,
     enunciado: 'Na frase "Nós fomos ao cinema ontem", o pronome pessoal é:',
     resposta_correta: 'nós',
-    distratores: ['fomos', 'cinema', 'ontem'],
+    distratores: ['a gente', 'todos', 'eles'],
     explicacao: '"Nós" é pronome pessoal do plural — representa o sujeito da frase (as pessoas que foram ao cinema).',
   },
   {
@@ -331,9 +333,14 @@ export const questions: Question[] = [
     validade_cultural: '2029-01-01',
   },
   {
-    id: 'q-pro-07', topico_id: 'topic-pronome', tipo: 'ordenacao', dificuldade: 2,
-    enunciado: 'Organize os pronomes pela pessoa que representam:\neu | elas | tu | nós | ele | vocês\n1ª pessoa | 2ª pessoa | 3ª pessoa',
+    id: 'q-pro-07', topico_id: 'topic-pronome', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual opção classifica corretamente os pronomes por pessoa?\neu | elas | tu | nós | ele | vocês',
     resposta_correta: '1ª: eu, nós | 2ª: tu, vocês | 3ª: ele, elas',
+    distratores: [
+      '1ª: eu, tu | 2ª: nós, vocês | 3ª: ele, elas',
+      '1ª: eu, ele | 2ª: tu, vocês | 3ª: nós, elas',
+      '1ª: eu | 2ª: tu, nós | 3ª: ele, elas, vocês',
+    ],
     explicacao: '1ª pessoa = quem fala (eu, nós). 2ª pessoa = com quem se fala (tu, vocês). 3ª pessoa = de quem se fala (ele, ela, eles, elas).',
   },
   {
@@ -363,11 +370,12 @@ export const questions: Question[] = [
     explicacao: '"Descobriu" indica uma ação que aconteceu — é verbo. "Descoberta" e "descobridor" são substantivos; "incrível" é adjetivo.',
   },
   {
-    id: 'q-vb-03', topico_id: 'topic-verbo', tipo: 'lacuna', dificuldade: 1,
-    enunciado: 'O verbo muda de forma para indicar o _______ em que a ação acontece: passado, presente ou futuro.',
-    resposta_correta: 'tempo',
+    id: 'q-vb-03', topico_id: 'topic-verbo', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'O verbo muda de forma para indicar quando a ação acontece. Isso se chama flexão de:',
+    resposta_correta: 'Tempo (passado, presente, futuro)',
+    distratores: ['Lugar (aqui, lá, longe)', 'Tamanho (grande, pequeno)', 'Modo (bem, mal, rápido)'],
     explicacao: 'A flexão de tempo é uma característica do verbo: "corri" (passado), "corro" (presente), "correrei" (futuro).',
-    dica: 'Pense no verbo "jogar": "joguei" (ontem — passado), "jogo" (agora — presente), "jogarei" (amanhã — futuro). O que mudou entre eles?',
+    dica: 'Pense no verbo "jogar": "joguei" (ontem), "jogo" (agora), "jogarei" (amanhã). O que mudou entre eles?',
   },
   {
     id: 'q-vb-04', topico_id: 'topic-verbo', tipo: 'multipla_escolha', dificuldade: 2,
@@ -392,9 +400,10 @@ export const questions: Question[] = [
     explicacao: '"Sou" é presente, "era/fui" é passado, "serei" é futuro. "Eu serei campeão" — a ação ainda vai acontecer.',
   },
   {
-    id: 'q-vb-07', topico_id: 'topic-verbo', tipo: 'ordenacao', dificuldade: 2,
-    enunciado: 'Classifique as palavras em VERBOS e NÃO VERBOS:\ncorreu | alegria | estudar | bonito | nevou | amizade | é | rápido',
-    resposta_correta: 'Verbos: correu, estudar, nevou, é | Não verbos: alegria, bonito, amizade, rápido',
+    id: 'q-vb-07', topico_id: 'topic-verbo', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Quais palavras da lista são VERBOS?\ncorreu | alegria | estudar | bonito | nevou | amizade | é | rápido',
+    resposta_correta: 'correu, estudar, nevou e é',
+    distratores: ['alegria, amizade, bonito e rápido', 'correu, alegria, estudar e bonito', 'nevou, amizade, é e rápido'],
     explicacao: '"Correu", "estudar", "nevou" e "é" indicam ação, estado ou fenômeno — são verbos. Os outros são substantivos ou adjetivos.',
   },
   {
@@ -453,9 +462,14 @@ export const questions: Question[] = [
     validade_cultural: '2029-01-01',
   },
   {
-    id: 'q-sin-07', topico_id: 'topic-sinonimos', tipo: 'ordenacao', dificuldade: 2,
-    enunciado: 'Forme pares de sinônimos com as palavras abaixo:\nrápido | triste | iniciar | veloz | melancólico | começar',
-    resposta_correta: 'rápido ↔ veloz | triste ↔ melancólico | iniciar ↔ começar',
+    id: 'q-sin-07', topico_id: 'topic-sinonimos', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual opção forma corretamente pares de sinônimos?\nrápido | triste | iniciar | veloz | melancólico | começar',
+    resposta_correta: 'rápido/veloz, triste/melancólico, iniciar/começar',
+    distratores: [
+      'rápido/melancólico, triste/veloz, iniciar/começar',
+      'rápido/começar, triste/iniciar, veloz/melancólico',
+      'rápido/triste, veloz/melancólico, iniciar/começar',
+    ],
     explicacao: '"Rápido/veloz", "triste/melancólico" e "iniciar/começar" são pares de sinônimos — cada par tem sentido parecido.',
   },
   {
@@ -485,11 +499,12 @@ export const questions: Question[] = [
     explicacao: '"Fraco" é o oposto de "forte". "Poderoso" e "grande" têm sentido parecido com forte — são sinônimos, não antônimos.',
   },
   {
-    id: 'q-ant-03', topico_id: 'topic-antonimos', tipo: 'lacuna', dificuldade: 1,
-    enunciado: 'O antônimo de "chegada" é "_______".',
+    id: 'q-ant-03', topico_id: 'topic-antonimos', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Qual é o antônimo de "chegada"?',
     resposta_correta: 'partida',
+    distratores: ['viagem', 'passagem', 'caminho'],
     explicacao: '"Partida" é o oposto de "chegada" — uma indica o início do movimento, a outra indica o fim.',
-    dica: 'Pensa no aeroporto: quando o avião pousa, é uma chegada. Quando ele decola e vai embora, é uma _______. O oposto de chegar é...',
+    dica: 'Pensa no aeroporto: quando o avião pousa, é uma chegada. Quando ele decola e vai embora, é uma _______.',
   },
   {
     id: 'q-ant-04', topico_id: 'topic-antonimos', tipo: 'multipla_escolha', dificuldade: 2,
@@ -509,15 +524,20 @@ export const questions: Question[] = [
   {
     id: 'q-ant-06', topico_id: 'topic-antonimos', tipo: 'multipla_escolha', dificuldade: 2,
     enunciado: 'Qual é o antônimo de "generoso"?',
-    resposta_correta: 'mesquinho',
+    resposta_correta: 'egoísta',
     distratores: ['bondoso', 'solidário', 'gentil'],
-    explicacao: '"Mesquinho" descreve quem não gosta de compartilhar — o oposto de "generoso", que é quem dá e compartilha com prazer.',
+    explicacao: '"Egoísta" descreve quem só pensa em si mesmo — o oposto de "generoso", que é quem gosta de ajudar e compartilhar.',
   },
   {
-    id: 'q-ant-07', topico_id: 'topic-antonimos', tipo: 'ordenacao', dificuldade: 2,
-    enunciado: 'Forme pares de antônimos:\namor | antigo | moderno | ódio | vitória | derrota',
-    resposta_correta: 'amor ↔ ódio | antigo ↔ moderno | vitória ↔ derrota',
-    explicacao: 'Cada par tem palavras com sentidos opostos: amor/ódio (sentimentos), antigo/moderno (tempo), vitória/derrota (resultado).',
+    id: 'q-ant-07', topico_id: 'topic-antonimos', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual opção forma corretamente pares de antônimos?\namor | antigo | moderno | ódio | vitória | derrota',
+    resposta_correta: 'amor/ódio, antigo/moderno, vitória/derrota',
+    distratores: [
+      'amor/moderno, antigo/derrota, vitória/ódio',
+      'amor/vitória, antigo/ódio, moderno/derrota',
+      'amor/derrota, antigo/vitória, moderno/ódio',
+    ],
+    explicacao: 'Cada par tem sentidos opostos: amor/ódio (sentimentos), antigo/moderno (época), vitória/derrota (resultado).',
   },
   {
     id: 'q-ant-08', topico_id: 'topic-antonimos', tipo: 'elaboracao', dificuldade: 3,
