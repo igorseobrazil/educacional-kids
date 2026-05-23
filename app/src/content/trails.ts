@@ -17,6 +17,22 @@ export const trails: Trail[] = [
     narrativa: 'As palavras têm segredos escondidos no seu significado. Nessa jornada você vai descobrir como elas se relacionam, se aproximam e se opõem.',
     topicos: ['topic-sinonimos', 'topic-antonimos'],
   },
+  {
+    id: 'trail-ortografia',
+    nome: 'Ortografia',
+    materia: 'Língua Portuguesa',
+    ano_escolar: 5,
+    narrativa: 'Por que "carro" tem dois R e "caro" tem um? Por que "passo" tem dois S e "caso" tem um? Nessa trilha você vai decifrar os segredos da escrita correta.',
+    topicos: ['topic-rr', 'topic-ss'],
+  },
+  {
+    id: 'trail-construcao',
+    nome: 'Construção de Palavras',
+    materia: 'Língua Portuguesa',
+    ano_escolar: 5,
+    narrativa: 'Uma palavra pode virar várias outras só mudando o começo ou o final. É como montar peças de Lego com a língua portuguesa.',
+    topicos: ['topic-formacao'],
+  },
 ]
 
 export const topics: Topic[] = [
@@ -87,6 +103,39 @@ export const topics: Topic[] = [
     gancho_curiosidade: 'Em todo jogo tem luz e sombra, herói e vilão, ataque e defesa. Na língua portuguesa também — essas palavras opostas têm um nome especial.',
     pre_requisitos: ['topic-sinonimos'],
     itens: ['q-ant-01','q-ant-02','q-ant-03','q-ant-cad','q-ant-04','q-ant-05','q-ant-06','q-ant-07','q-ant-08'],
+  },
+
+  // ── TRAIL: ORTOGRAFIA ───────────────────────────────────────────────────────
+
+  {
+    id: 'topic-rr',
+    nome: 'R e RR',
+    trilha_id: 'trail-ortografia',
+    eixo_bncc: 'Análise linguística e gramática',
+    gancho_curiosidade: 'Por que "caro" e "carro" têm sons diferentes se só mudou uma letra? O R tem dois poderes escondidos — e saber usá-los vai acabar com um dos erros mais comuns na escrita.',
+    pre_requisitos: [],
+    itens: ['q-rr-01','q-rr-02','q-rr-03','q-rr-cad','q-rr-04','q-rr-05','q-rr-06','q-rr-07','q-rr-08'],
+  },
+  {
+    id: 'topic-ss',
+    nome: 'S e SS',
+    trilha_id: 'trail-ortografia',
+    eixo_bncc: 'Análise linguística e gramática',
+    gancho_curiosidade: 'Por que "passo" tem dois S e "caso" tem um, se os dois têm S no meio? Se o som é parecido, por que a escrita é diferente? Esse é um dos maiores segredos da ortografia.',
+    pre_requisitos: ['topic-rr'],
+    itens: ['q-ss-01','q-ss-02','q-ss-03','q-ss-cad','q-ss-04','q-ss-05','q-ss-06','q-ss-07','q-ss-08'],
+  },
+
+  // ── TRAIL: CONSTRUÇÃO DE PALAVRAS ───────────────────────────────────────────
+
+  {
+    id: 'topic-formacao',
+    nome: 'Prefixo e Sufixo',
+    trilha_id: 'trail-construcao',
+    eixo_bncc: 'Análise linguística e gramática',
+    gancho_curiosidade: 'Você sabia que uma só palavra pode virar várias outras só mudando o começo ou o final? "Feliz" vira "infeliz", "felizmente", "felicidade"... É como desbloquear habilidades numa palavra.',
+    pre_requisitos: ['topic-substantivo', 'topic-adjetivo', 'topic-verbo'],
+    itens: ['q-fp-01','q-fp-02','q-fp-03','q-fp-cad','q-fp-04','q-fp-05','q-fp-06','q-fp-07','q-fp-08'],
   },
 ]
 
@@ -594,5 +643,231 @@ export const questions: Question[] = [
     resposta_correta: '',
     explicacao: 'O exercício mostra como antônimos criam contraste — e é exatamente isso que escritores usam para tornar histórias mais interessantes.',
     referencia_cultural: 'herói e vilão de qualquer história',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // R E RR
+  // ════════════════════════════════════════════════════════════
+
+  {
+    id: 'q-rr-01', topico_id: 'topic-rr', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Entre vogais, o som FORTE do R (como no início de "rato") se escreve com:',
+    resposta_correta: 'RR — dois erres',
+    distratores: ['R — um erre só', 'GR', 'RH'],
+    explicacao: 'Entre vogais, o som forte do R sempre se escreve com RR: ca-RRo, ter-RA, bar-RO. Com um R só entre vogais, o som fica suave — como em "cara" ou "moro".',
+  },
+  {
+    id: 'q-rr-02', topico_id: 'topic-rr', tipo: 'lacuna', dificuldade: 1,
+    enunciado: 'Complete corretamente: Você usa bo_acha para apagar o lápis. (r/rr)',
+    resposta_correta: 'rr',
+    explicacao: '"Borracha" tem RR porque o som é forte e está entre as vogais o e a: bo-RR-a-cha. Fale em voz alta: o R está "batendo forte", não "zumbindo suave".',
+    dica: 'Fale "borracha" em voz alta. Esse R soa como no início de "rato" — forte! Som forte entre vogais = RR.',
+  },
+  {
+    id: 'q-rr-03', topico_id: 'topic-rr', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Qual frase está escrita CORRETAMENTE?',
+    resposta_correta: 'O cachorro late muito quando chove.',
+    distratores: [
+      'O cachoro late muito quando chove.',
+      'O cachorro late muito quando xove.',
+      'O cacho-rro late muito quando chove.',
+    ],
+    explicacao: '"Cachorro" tem RR porque o som é forte entre as vogais o e o: ca-cho-RRo. Erro muito comum: escrever "cachoro" com um R só.',
+  },
+  {
+    id: 'q-rr-cad', topico_id: 'topic-rr', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'R e RR\n\nO R tem dois sons em português:\n\nR SUAVE (um só R entre vogais):\ncara, moro, barato, caro, para\n\nR FORTE — escreve como RR entre vogais:\ncarro, terra, barro, ferro, cachorro, borracha, serrar\n\nR FORTE com um só R (outros casos):\nInício de palavra → rato, rua, rio, rosa\nDepois de consoante → genro, honra, Israel',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+  {
+    id: 'q-rr-04', topico_id: 'topic-rr', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: '"Moro" e "morro" são palavras diferentes. Qual frase usa as DUAS corretamente?',
+    resposta_correta: 'Eu moro perto daquele morro.',
+    distratores: [
+      'Eu morro perto daquele moro.',
+      'Eu moro perto daquele moro.',
+      'Eu morro perto daquele morro.',
+    ],
+    explicacao: '"Moro" = eu vivo (verbo morar). "Morro" = elevação de terra, ou eu morro (verbo morrer). Contexto define tudo — e a ortografia também!',
+  },
+  {
+    id: 'q-rr-05', topico_id: 'topic-rr', tipo: 'verdadeiro_falso', dificuldade: 2,
+    enunciado: 'O RR pode aparecer no início de uma palavra, como em "rrato" ou "rrua".',
+    resposta_correta: 'Falso',
+    explicacao: 'RR nunca aparece no início de palavras em português. No início, o R sozinho já tem som forte automaticamente: rato, rua, rio, Roma. O RR só existe entre vogais.',
+  },
+  {
+    id: 'q-rr-06', topico_id: 'topic-rr', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'O Maracanã é o estádio mais famoso do Brasil. Na palavra "Maracanã", o R entre as vogais tem som:',
+    resposta_correta: 'Suave — por isso se escreve com um R só',
+    distratores: [
+      'Forte — por isso deveria ter RR',
+      'Mudo — o R não é pronunciado',
+      'Duplo — o R vale por dois',
+    ],
+    explicacao: 'Em "Ma-ra-ca-nã", o R está entre vogais com som suave — como em "cara". Por isso um R só. Se fosse forte, seria "Marracanã" — e soaria estranho!',
+    referencia_cultural: 'futebol brasileiro',
+    validade_cultural: '2032-01-01',
+  },
+  {
+    id: 'q-rr-07', topico_id: 'topic-rr', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual das palavras abaixo tem R com som SUAVE (como em "moro")?',
+    resposta_correta: 'barato',
+    distratores: ['carro', 'terra', 'rato'],
+    explicacao: '"Barato" tem R entre vogais com som suave: ba-RA-to. "Carro" e "terra" têm RR (forte). "Rato" começa com R — que também é forte, mas não usa RR.',
+  },
+  {
+    id: 'q-rr-08', topico_id: 'topic-rr', tipo: 'elaboracao', dificuldade: 3,
+    enunciado: 'Escreva 3 palavras com RR e 3 palavras com R de som suave (entre vogais). Invente uma frase com cada uma. Depois explique com suas palavras: como você sabe quando usar R ou RR?',
+    resposta_correta: '',
+    explicacao: 'A melhor forma de fixar essa regra é escrever e falar em voz alta. O ouvido ajuda muito: som forte entre vogais → RR. Som suave → R só.',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // S E SS
+  // ════════════════════════════════════════════════════════════
+
+  {
+    id: 'q-ss-01', topico_id: 'topic-ss', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Na palavra "casa", o S entre as vogais a e a tem som de:',
+    resposta_correta: 'Z — como em "zebra"',
+    distratores: ['S — como em "sopa"', 'CH — como em "chuva"', 'Ç — como em "açúcar"'],
+    explicacao: 'S entre vogais vira som de Z: "casa" soa "caza", "rosa" soa "roza", "mesa" soa "meza". Para o som de S forte entre vogais, precisamos de SS.',
+  },
+  {
+    id: 'q-ss-02', topico_id: 'topic-ss', tipo: 'lacuna', dificuldade: 1,
+    enunciado: 'Complete: Você pa_ou de fase no jogo! (s/ss)',
+    resposta_correta: 'ss',
+    explicacao: '"Passou" tem SS porque o som é forte (como em "sopa") e está entre vogais: pa-SS-ou. Com S só, soaria "pazou" — que não existe.',
+    dica: 'Fala "passou" em voz alta. Esse S no meio soa forte, não como Z. Som forte de S entre vogais = SS.',
+  },
+  {
+    id: 'q-ss-03', topico_id: 'topic-ss', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'A pizza tem uma ma_a de farinha deliciosa. Qual a grafia correta?',
+    resposta_correta: 'massa',
+    distratores: ['masa', 'mássa', 'mazza'],
+    explicacao: '"Massa" tem SS porque o som é forte entre as vogais a e a: mas-SA. Com S só, "masa" soaria "maza" — e seria outra coisa!',
+    referencia_cultural: 'culinária / pizza',
+    validade_cultural: '2032-01-01',
+  },
+  {
+    id: 'q-ss-cad', topico_id: 'topic-ss', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'S e SS\n\nEntre vogais:\nS (um só) = som de Z: ca-SA (caza), ro-SA (roza), me-SA (meza)\nSS (dois) = som de S forte: mas-SA, pas-SO, gros-SO, pro-fes-SO-ra\n\nFora das vogais:\nS sozinho pode ter som forte: sol, sopa, festa, casca\n\nDica de ouro:\nFale a palavra em voz alta.\nSoou como Z entre vogais? → S\nSoou como S forte entre vogais? → SS',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+  {
+    id: 'q-ss-04', topico_id: 'topic-ss', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: '"Casar" e "cassar" existem e têm sentidos completamente diferentes. Qual opção explica certo?',
+    resposta_correta: 'Casar = unir em casamento (S suave, som de Z) | Cassar = cancelar/revogar (SS forte)',
+    distratores: [
+      'Casar = cancelar | Cassar = unir em casamento',
+      'As duas palavras têm o mesmo sentido, só a escrita muda',
+      'Nenhuma das duas existe em português',
+    ],
+    explicacao: 'Um S entre vogais muda tudo: "casar" (som de Z) e "cassar" (SS forte) são palavras completamente diferentes. Ortografia importa!',
+  },
+  {
+    id: 'q-ss-05', topico_id: 'topic-ss', tipo: 'verdadeiro_falso', dificuldade: 2,
+    enunciado: 'Em "grosso", o SS aparece porque o som de S entre as vogais o e o é forte.',
+    resposta_correta: 'Verdadeiro',
+    explicacao: '"Grosso" tem SS entre as vogais o e o: gros-SO. Com S só, soaria "grozo" — que não existe. O SS garante o som forte.',
+  },
+  {
+    id: 'q-ss-06', topico_id: 'topic-ss', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Sua professora escreveu uma palavra no quadro. Qual está CORRETA?',
+    resposta_correta: 'professora',
+    distratores: ['profesora', 'profesôra', 'proffessora'],
+    explicacao: '"Professora" tem SS: pro-fes-SO-ra. O SS está entre as vogais e e o, fazendo o som forte. "Profesora" com S só soaria "profezora".',
+  },
+  {
+    id: 'q-ss-07', topico_id: 'topic-ss', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual frase tem TODAS as palavras escritas corretamente?',
+    resposta_correta: 'A professora passou uma tarefa difícil.',
+    distratores: [
+      'A profesora pasou uma tarefa difícil.',
+      'A professora pasou uma taréfa difícil.',
+      'A profesôra passou uma tarefa dificil.',
+    ],
+    explicacao: '"Professora" (SS entre e e o) e "passou" (SS entre a e o) — ambas com som forte entre vogais, ambas com SS.',
+  },
+  {
+    id: 'q-ss-08', topico_id: 'topic-ss', tipo: 'elaboracao', dificuldade: 3,
+    enunciado: 'Escreva um parágrafo curto sobre algo que aconteceu hoje ou ontem. Use pelo menos 3 palavras com SS. Depois sublinha cada SS e explica por que aquela palavra usa SS e não S.',
+    resposta_correta: '',
+    explicacao: 'Escrever e depois analisar o próprio texto é uma das formas mais eficazes de fixar regras de ortografia.',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // PREFIXO E SUFIXO
+  // ════════════════════════════════════════════════════════════
+
+  {
+    id: 'q-fp-01', topico_id: 'topic-formacao', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'O prefixo é uma parte que se acrescenta:',
+    resposta_correta: 'No início da palavra, mudando seu sentido',
+    distratores: ['No final da palavra, mudando sua classe', 'No meio da palavra, entre sílabas', 'Substituindo uma letra da palavra'],
+    explicacao: 'Prefixo vem antes da palavra raiz e muda o sentido: "feliz" → "in-feliz", "fazer" → "re-fazer", "ligar" → "des-ligar".',
+  },
+  {
+    id: 'q-fp-02', topico_id: 'topic-formacao', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Em "desfazer", o prefixo "des-" indica:',
+    resposta_correta: 'Ação contrária — o oposto de fazer',
+    distratores: ['Repetição da ação', 'Intensidade maior da ação', 'Quem realiza a ação'],
+    explicacao: 'O prefixo "des-" cria o oposto da palavra: desfazer = desfazer o que foi feito, desligar = oposto de ligar, desorganizar = oposto de organizar.',
+  },
+  {
+    id: 'q-fp-03', topico_id: 'topic-formacao', tipo: 'lacuna', dificuldade: 1,
+    enunciado: 'A palavra "rapidamente" foi formada pelo sufixo "-mente", que transforma o adjetivo "rápido" em um _______.',
+    resposta_correta: 'advérbio',
+    explicacao: 'O sufixo "-mente" transforma adjetivos em advérbios: rápido → rapidamente, feliz → felizmente, lento → lentamente. Advérbio é a palavra que diz COMO, QUANDO ou ONDE algo acontece.',
+    dica: 'Advérbio modifica o verbo. "Ela correu rapidamente" — "rapidamente" diz COMO ela correu. O sufixo -mente sempre cria esse tipo de palavra.',
+  },
+  {
+    id: 'q-fp-cad', topico_id: 'topic-formacao', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Prefixo e Sufixo\n\nPREFIXO — vai no INÍCIO, muda o sentido:\ndes- → contrário: desfazer, desligar, desorganizar\nin- / im- → negação: infeliz, impossível, incapaz\nre- → repetição: refazer, reler, reorganizar\nsuper- → intensidade: super-herói, superpoder\nmini- → redução: minissaia, minissérie\n\nSUFIXO — vai no FINAL, muda a função:\n-inho/-inha → diminutivo: gatinho, casinha\n-eiro/-eira → profissão/lugar: padeiro, livreiro\n-mente → advérbio: rapidamente, felizmente\n-ção → substantivo: organizar → organização',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+  {
+    id: 'q-fp-04', topico_id: 'topic-formacao', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Seu personagem no jogo está completamente desorganizado — itens espalhados por todo o inventário. O prefixo "des-" em "desorganizado" indica:',
+    resposta_correta: 'Que o personagem não está organizado — negação do estado',
+    distratores: [
+      'Que o personagem se organizou e depois desistiu',
+      'Que o personagem é muito organizado',
+      'Que o personagem está se reorganizando',
+    ],
+    explicacao: '"Des-" cria o oposto: desorganizado = não organizado. Se quisesse "reorganizando", usaria o prefixo "re-" = repetição da ação.',
+    referencia_cultural: 'inventário de jogo',
+    validade_cultural: '2032-01-01',
+  },
+  {
+    id: 'q-fp-05', topico_id: 'topic-formacao', tipo: 'verdadeiro_falso', dificuldade: 2,
+    enunciado: 'Em "padeiro", o sufixo "-eiro" indica profissão — a pessoa que faz ou vende pão.',
+    resposta_correta: 'Verdadeiro',
+    explicacao: 'O sufixo "-eiro/-eira" frequentemente indica profissão: padeiro (faz/vende pão), livreiro (vende livros), fazendeiro (tem fazenda), cabeleireiro (cuida do cabelo).',
+  },
+  {
+    id: 'q-fp-06', topico_id: 'topic-formacao', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual prefixo transforma "capaz" no seu OPOSTO?',
+    resposta_correta: 'in- → incapaz',
+    distratores: ['re- → recapaz', 'super- → supercapaz', 'des- → descapaz'],
+    explicacao: 'O prefixo "in-" (ou "im-" antes de p/b) cria a negação: incapaz, infeliz, impossível, impaciente. "Supercapaz" seria alguém muito capaz — o contrário!',
+  },
+  {
+    id: 'q-fp-07', topico_id: 'topic-formacao', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual palavra foi formada adicionando o sufixo "-ção" a um verbo?',
+    resposta_correta: 'organização (de organizar)',
+    distratores: ['corrida (de correr)', 'rapidamente (de rápido)', 'gatinho (de gato)'],
+    explicacao: '"Organização" = organizar + ção. O sufixo "-ção" transforma verbos em substantivos. "Corrida" também vem de "correr" mas usa outro sufixo ("-ida"). "Rapidamente" usa "-mente". "Gatinho" usa "-inho".',
+  },
+  {
+    id: 'q-fp-08', topico_id: 'topic-formacao', tipo: 'elaboracao', dificuldade: 3,
+    enunciado: 'Escolha 3 prefixos diferentes (des-, re-, in-, super-, mini-) e crie uma palavra com cada um — pode ser uma palavra que já existe ou uma palavra inventada por você. Escreva uma frase com cada palavra e explique o que o prefixo está fazendo nela.',
+    resposta_correta: '',
+    explicacao: 'Brincar com prefixos é o que escritores e poetas fazem. Guimarães Rosa inventava palavras novas misturando prefixos e sufixos com palavras comuns.',
+    referencia_cultural: 'criação de palavras / escritores',
   },
 ]
