@@ -19,7 +19,7 @@ export default defineConfig({
     react(),
     tailwindcss(),
     VitePWA({
-      registerType: 'prompt',        // mostra o banner antes de ativar a nova versão
+      registerType: 'autoUpdate',    // atualiza automaticamente sem banner
       injectRegister: 'auto',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {

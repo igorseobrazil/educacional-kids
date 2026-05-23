@@ -1,0 +1,697 @@
+ Pronto. Dois documentos atualizados no repositório:
+
+  ROADMAP.md — o documento do dia a dia:
+  - Estado atual: 5 trilhas, 20 tópicos, ~154 questões
+  - ✅  O que está feito (infraestrutura, auth, pedagógico, conteúdo, UX)
+  - 🔲 O que ainda falta, em ordem de prioridade
+  - Stack técnica fixada
+
+  especificacao-app-educativo.md — spec do produto:
+  - Seção 8.2 atualizada com a stack real (Firebase no lugar de Supabase)
+  - Seção 9 atualizada com o fluxo atual (onboarding, gancho, caderno, confete)
+
+  A cada sessão posso atualizar o ROADMAP.md com o que foi feito e o que mudou de prioridade. Boa noite!
+
+✻ Baked for 1m 57s · 3 shells still running
+
+> Tudo comitado  e  já em produção? Posso acessar pelo app, no celular que deixei carregando?
+● PowerShell(git -C "C:\Projetos\educacional" status --short; git -C "C:\Projetos\educacional" log --oneline -3 2>&1)
+  ⎿  ?? .claude/
+     ?? print.png
+     a2a1c6b docs: ROADMAP.md criado + spec atualizada com stack real e fluxo atual
+     … +2 lines (ctrl+o to expand)
+
+● Tudo commitado e no GitHub. O Vercel já deve ter feito o deploy automático — leva ~1 minuto após cada push.
+
+  Para acessar no celular:
+  - Se o app estiver aberto em segundo plano desde antes: feche completamente e reabra. Pode aparecer o banner "Nova
+  versão disponível" — toca em Atualizar
+  - Se já estiver com a tela apagada carregando: só abrir direto já deve pegar a versão mais recente
+
+  Se quiser confirmar que está na versão de hoje, abre o painel dos pais e vê se aparecem as abas "Progresso" e "Filhos
+  e responsáveis" — isso confirma que é a versão atual.
+
+  Boa noite!
+
+✻ Sautéed for 22s · 3 shells still running
+
+> Ah. Outra coisa. Qual funcionalidade voce acha que devemos implementar no  app, para que a criança já esteja com o      caderno ao lado quando começar as lições?     
+● Boa pergunta de design. Minha sugestão:
+
+  Uma tela de preparação antes da sessão — quando a Helena toca em "Começar revisão", antes de ir para as questões,
+  aparece uma tela rápida e lúdica:
+
+  🎒 Antes de começar...
+
+  ☑ Caderno
+  ☑ Lápis ou caneta
+  ☑ Lugar tranquilo
+
+  [ Estou pronto! → ]
+
+  Por que funciona:
+  - Cria um ritual de início — estudos mostram que rituais de preparação melhoram o foco
+  - A Helena vai ao caderno antes, não no meio da sessão
+  - É rápida — um toque e passa
+  - Não aparece como obrigação, aparece como checklist divertido
+
+  Detalhes de UX que importam:
+  - Mostrar uma vez por dia — não toda sessão, para não ficar chato
+  - Se ela já está na segunda sessão do dia, pula
+  - Visual leve, fundo colorido, sem texto longo
+
+  Implemento agora?
+
+✻ Churned for 26s · 3 shells still running
+
+> Poisé. Nem sei  se seria somente na  revisão,  mas quando ela abrir pela primeira vez o app no  dia. Outra coisa,       sobre a gamificação, pensei em criar uma moeda no jogo. A criança vai acumulando "folhas" de acordo com que  ela vai    avançando no  jogo e ganhando os bônus. E essas folhas poderão ser trocadas ou por minutos de  celular (dai temos que    estipular um limite) ou por mesada (daí temos que estipular um limite tb para tb equilibrar com as horas de jogos os    mídias sociais no celular). O que você acha?
+● Adoro a ideia das folhas — encaixa perfeitamente na metáfora da árvore do conhecimento que já existe no app. Algumas
+  reflexões antes de implementar:
+
+  ---
+  O que achei ótimo:
+
+  A moeda conecta aprendizado a recompensas reais que a família controla — não o app. Isso é diferente de streak ou XP
+  abstratos. A Helena sabe exatamente o que está ganhando e para quê. É transparente e honesto.
+
+  Também resolve um problema real de família: o tempo de tela vira moeda de troca negociada, não uma batalha.
+
+  ---
+  Um ponto de atenção (da literatura pedagógica):
+
+  Recompensas externas podem, com o tempo, substituir a motivação interna — "estudo para ganhar folhas" em vez de
+  "estudo porque gosto de aprender". O efeito se chama overjustification effect.
+
+  A mitigação é simples: as folhas recompensam consistência e esforço (sessão feita, streak, tópico dominado), não
+  acerto. Assim a mensagem é "você foi persistente" — não "você foi inteligente".
+
+  ---
+  Como eu implementaria:
+
+  🍃 Folhas ganhas por:
+  - Completar uma sessão do dia: 10 folhas
+  - Manter streak: +5 folhas/dia de bônus
+  - Dominar um tópico: 50 folhas
+  - Sessão com ≥80% de acerto: +10 folhas bônus
+
+  💱 Painel dos pais define as trocas:
+  - X folhas = 1 minuto de celular (máx Y min/dia)
+  - X folhas = R$1 de mesada (máx R$X/semana)
+  - Troca confirmada com PIN do responsável
+
+  O saldo de folhas fica visível na home (🍃 124), e o painel dos pais tem o histórico e a seção de troca.
+
+  ---
+  Para os limites, você e sua esposa definem os valores no painel. A sugestão seria começar conservadora:
+  - Máximo de 30 minutos de celular resgatáveis por dia
+  - Máximo de R$20/semana de mesada resgatável
+
+  Depois ajusta baseado no que funciona com a Helena.
+
+  ---
+  Implemento a tela de preparação diária e as folhas juntos? São duas features complementares — a tela de preparação já
+  poderia mostrar o saldo de folhas do dia anterior como motivação para abrir o caderno.
+
+✻ Baked for 41s · 3 shells still running
+
+> Eu acho que pode ser 25 reais por semana e 1h de celular resgatável por dia. Mas o tempo de celular não é cumulativo
+  para o outro dia. O valor por semana, em dinheiro, é um máximo de 25 reais  por semana. Daí você pode calcular esses
+  dois tipos de bônus do jeito que você achar melhor. Mas lembre, ela pode escolher trocar as folhas por bônus no dia,
+  em troca de uma hora de telefone, ou seguir acumulando acumulando dinheiro, em busca da mesada, e ganha somente 30
+  minutos de telefone no  dia. Você imagina como de ser esse cálculo e essa arquitetura?
+
+● Gostei. Aqui está a arquitetura que eu proporia:
+
+  ---
+  Sistema de Folhas 🍃
+
+  Ganho de folhas
+
+  ┌──────────────────────────────────┬────────┐
+  │               Ação               │ Folhas │
+  ├──────────────────────────────────┼────────┤
+  │ Completar sessão do dia          │ 20 🍃  │
+  ├──────────────────────────────────┼────────┤
+  │ Streak ativo (por dia)           │ 5 🍃   │
+  ├──────────────────────────────────┼────────┤
+  │ Sessão com ≥80% de acerto        │ 10 🍃  │
+  ├──────────────────────────────────┼────────┤
+  │ Dominar um tópico (primeira vez) │ 50 🍃  │
+  └──────────────────────────────────┴────────┘
+
+  Estimativa realista: uma criança que estuda todo dia ganha ~35 folhas/dia, ~245/semana.
+
+  ---
+  A escolha diária
+
+  Após a sessão (ou na home), a Helena vê:
+
+  🍃 145 folhas disponíveis
+
+  O que você quer fazer hoje?
+
+  ┌─────────────────────────────┐
+  │  📱 Quero minha hora hoje   │
+  │  Gasta 50 🍃                │
+  │  → 60 min de celular        │
+  └─────────────────────────────┘
+
+  ┌─────────────────────────────┐
+  │  💰 Guardar para mesada     │
+  │  Mantém as 🍃               │
+  │  → 30 min de celular grátis │
+  └─────────────────────────────┘
+
+  - Modo Tela: gasta 50 folhas → 60 minutos hoje. As folhas gastas saem do saldo e não contam para a mesada
+  - Modo Mesada: mantém as folhas → 30 minutos grátis. As folhas acumulam para a semana
+
+  O 30 min é o "salário base" de estudar — existe só para não punir quem está poupando.
+
+  ---
+  Conversão para mesada
+
+  10 🍃 = R$1,00
+  250 🍃 acumuladas no modo Mesada = R$25 (teto semanal)
+
+  Com 35 folhas/dia no modo Mesada → ~245 folhas/semana → ~R$24,50. Praticamente o teto, se estudar todos os dias.
+
+  Se faltar um dia: ~210 folhas → ~R$21. O desconto natural cria a consequência sem precisar de punição explícita.
+
+  ---
+  Regras importantes
+
+  - Tempo de celular não é cumulativo — o que não usar hoje não acumula
+  - O modo Mesada acumula semana a semana — até o teto de R$25
+  - Sábado ou domingo: pai confirma o pagamento no painel com PIN, zerando o acumulado semanal
+  - A troca de tempo (50 folhas → 60 min) precisa ser aprovada por vocês no painel? Ou a Helena decide sozinha? — eu
+  recomendo ela decidir sozinha, mas vocês verem no painel
+
+  ---
+  Arquitetura de dados
+
+  LeafBalance por criança:
+    saldo_disponivel: number
+    acumulado_semana: number   (modo mesada)
+    inicio_semana: date
+    minutos_hoje: number       (max 60, reseta à meia-noite)
+    modo_hoje: 'tela' | 'mesada' | null
+
+  ---
+  O que fica no painel dos pais
+
+  - Saldo atual de folhas da Helena
+  - Folhas acumuladas esta semana (modo mesada)
+  - Equivalente em R$ → "Helena tem R$18,50 acumulados"
+  - Botão "Pagar mesada" (com PIN) → zera o acumulado semanal
+  - Histórico de trocas e sessões
+
+  ---
+  Implemento? Posso fazer isso junto com a tela de preparação diária — que ficaria assim: a Helena abre o app de manhã,
+  vê o saldo de 🍃 do dia anterior e já faz a escolha do dia (tela ou mesada) antes de estudar.
+
+✻ Sautéed for 1m 1s · 3 shells still running
+
+> Sim
+● Vou construir tudo de forma sistemática. Começo pelos tipos e fundação, depois as telas.
+
+  1. Tipos
+
+● Update(src\types\index.ts)
+  ⎿  Added 40 lines
+       68    new_items: number
+       69  }
+       70
+       71 +// ── Folhas (moeda do app) ────────────────────────────────────────────────────
+       72 +
+       73 +export type LeafMode = 'tela' | 'mesada' | null
+       74 +
+       75 +export interface LeafBalance {
+       76 +  id?: number
+       77 +  child_id: string
+       78 +  available: number           // saldo disponível para gastar
+       79 +  acumulado_semana: number    // folhas poupadas para mesada esta semana
+       80 +  modo_hoje: LeafMode         // escolha do dia
+       81 +  minutos_hoje: number        // 30 (mesada) ou 60 (tela)
+       82 +  data_hoje: string           // ISO date — para resetar diariamente
+       83 +  semana_inicio: string       // segunda-feira da semana atual
+       84 +  synced_at?: string
+       85 +}
+       86 +
+       87 +export interface LeafTransaction {
+       88 +  id?: number
+       89 +  child_id: string
+       90 +  amount: number              // positivo = ganhou, negativo = gastou
+       91 +  type: 'session' | 'streak' | 'perfect' | 'topic' | 'upgrade_tela' | 'pagamento_mesada'
+       92 +  descricao: string
+       93 +  date: string                // ISO date
+       94 +}
+       95 +
+       96 +// Constantes do sistema
+       97 +export const LEAF = {
+       98 +  SESSION: 20,
+       99 +  STREAK: 5,
+      100 +  PERFECT: 10,       // sessão com ≥80% de acerto
+      101 +  TOPIC: 50,         // dominar um tópico pela primeira vez
+      102 +  CUSTO_TELA: 50,    // custo para upgrade de 30→60 min
+      103 +  MESADA_RATE: 10,   // folhas por R$1
+      104 +  MESADA_MAX: 250,   // teto semanal (R$25)
+      105 +  MIN_TELA: 30,      // minutos grátis (modo mesada)
+      106 +  MAX_TELA: 60,      // minutos ao comprar (modo tela)
+      107 +} as const
+      108 +
+      109 +// ── Criança ──────────────────────────────────────────────────────────────────
+      110 +
+      111  export interface Child {
+      112    id: string
+      113    nome: string
+
+● 2. Dexie v4
+
+  Read 1 file (ctrl+o to expand)
+
+● Write(src\db\schema.ts)
+  ⎿  Added 12 lines, removed 3 lines
+       1  import Dexie, { type Table } from 'dexie'
+       2 -import type { MemoryState, SessionLog, Child } from '../types'
+       2 +import type { MemoryState, SessionLog, Child, LeafBalance, LeafTransaction } from '../types'
+       3
+       4  export class AppDB extends Dexie {
+       5    memoryStates!: Table<MemoryState>
+       6    sessionLogs!: Table<SessionLog>
+       7    children!: Table<Child>
+       8 +  leafBalances!: Table<LeafBalance>
+       9 +  leafTransactions!: Table<LeafTransaction>
+      10    syncQueue!: Table<{ id?: number; table: string; payload: unknown; created_at: string }>
+      11
+      12    constructor() {
+     ...
+      17        children:     'id',
+      18        syncQueue:    '++id, table, created_at',
+      19      })
+      18 -    // v2: children ganham guardians e invite_code
+      20      this.version(2).stores({
+      21        memoryStates: '++id, [question_id+child_id], child_id, due, state',
+      22        sessionLogs:  '++id, child_id, date',
+      23        children:     'id, invite_code',
+      24        syncQueue:    '++id, table, created_at',
+      25      })
+      25 -    // v3: children ganham birthday
+      26      this.version(3).stores({
+      27        memoryStates: '++id, [question_id+child_id], child_id, due, state',
+      28        sessionLogs:  '++id, child_id, date',
+      29        children:     'id, invite_code',
+      30        syncQueue:    '++id, table, created_at',
+      31      })
+      32 +    // v4: sistema de folhas
+      33 +    this.version(4).stores({
+      34 +      memoryStates:     '++id, [question_id+child_id], child_id, due, state',
+      35 +      sessionLogs:      '++id, child_id, date',
+      36 +      children:         'id, invite_code',
+      37 +      leafBalances:     '++id, child_id',
+      38 +      leafTransactions: '++id, child_id, date',
+      39 +      syncQueue:        '++id, table, created_at',
+      40 +    })
+      41    }
+      42  }
+      43
+
+● 3. Engine de folhas
+
+● Write(src\lib\leaves.ts)
+  ⎿  Wrote 151 lines to src\lib\leaves.ts
+       1 import { db } from '../db/schema'
+       2 import { LEAF, type LeafBalance, type LeafMode } from '../types'
+       3
+       4 function today(): string {
+       5   return new Date().toISOString().slice(0, 10)
+       6 }
+       7
+       8 function mondayOfWeek(): string {
+       9   const d = new Date()
+      10   const day = d.getDay()
+     … +141 lines (ctrl+o to expand)
+
+● 4. Store atualizado
+
+● Update(src\stores\appStore.ts)
+  ⎿  Added 1 line, removed 1 line
+      1  import { create } from 'zustand'
+      2  import { persist } from 'zustand/middleware'
+      3 -import type { Child, MemoryState } from '../types'
+      3 +import type { Child, MemoryState, LeafBalance } from '../types'
+      4
+      5  interface AppState {
+      6    activeChild: Child | null
+
+● Update(src\stores\appStore.ts)
+  ⎿  Added 2 lines
+       6    activeChild: Child | null
+       7    children: Child[]
+       8    hasSeenOnboarding: boolean
+       9 +  lastOpenDate: string        // para mostrar DailyPrep uma vez por dia
+      10 +  leafBalance: LeafBalance | null
+      11    memoryStates: Record<string, MemoryState>
+      12    setActiveChild: (child: Child) => void
+      13    setChildren: (children: Child[]) => void
+
+● Update(src\stores\appStore.ts)
+  ⎿  Added 2 lines
+      12    setActiveChild: (child: Child) => void
+      13    setChildren: (children: Child[]) => void
+      14    setHasSeenOnboarding: (v: boolean) => void
+      15 +  setLastOpenDate: (date: string) => void
+      16 +  setLeafBalance: (balance: LeafBalance | null) => void
+      17    addChild: (child: Child) => void
+      18    removeChild: (childId: string) => void
+      19    clearMemoryStates: () => void
+
+● Update(src\stores\appStore.ts)
+  ⎿  Added 2 lines
+      28        activeChild: null,
+      29        children: [],
+      30        hasSeenOnboarding: false,
+      31 +      lastOpenDate: '',
+      32 +      leafBalance: null,
+      33        memoryStates: {},
+      34
+      35        setActiveChild: (activeChild) => set({ activeChild, memoryStates: {} }),
+
+● Update(src\stores\appStore.ts)
+  ⎿  Added 3 lines, removed 1 line
+      32        leafBalance: null,
+      33        memoryStates: {},
+      34
+      35 -      setActiveChild: (activeChild) => set({ activeChild, memoryStates: {} }),
+      35 +      setActiveChild: (activeChild) => set({ activeChild, memoryStates: {}, leafBalance: null }),
+      36        setChildren: (children) => set({ children }),
+      37        setHasSeenOnboarding: (hasSeenOnboarding) => set({ hasSeenOnboarding }),
+      38 +      setLastOpenDate: (lastOpenDate) => set({ lastOpenDate }),
+      39 +      setLeafBalance: (leafBalance) => set({ leafBalance }),
+      40        addChild: (child) => set((s) => ({ children: [...s.children, child] })),
+      41        removeChild: (childId) =>
+      42          set((s) => ({
+
+● 5. Tela DailyPrep
+
+● Write(src\pages\DailyPrep.tsx)
+  ⎿  Wrote 151 lines to src\pages\DailyPrep.tsx
+      1 import { useState } from 'react'
+      2 import { motion } from 'framer-motion'
+      3 import { useAppStore } from '../stores/appStore'
+      4 import { chooseDailyMode } from '../lib/leaves'
+      5 import { LEAF, type LeafMode } from '../types'
+      6
+      7 interface Props {
+      8   onReady: () => void
+      9 }
+     … +143 lines (ctrl+o to expand)
+
+● 6. Home com contador de folhas
+
+● Update(src\pages\Home.tsx)
+  ⎿  Error editing file
+
+  Searched for 2 patterns (ctrl+o to expand)
+
+● Update(src\pages\Home.tsx)
+  ⎿  Added 13 lines, removed 1 line
+       86              )}
+       87            </div>
+       88          </div>
+       89 -        <div className="flex items-center gap-3 mt-1">
+       89 +        <div className="flex items-center gap-2 mt-1 flex-wrap">
+       90            {streak > 0 && (
+       91              <div className="flex items-center gap-1 bg-orange-50 text-orange-500 rounded-full px-2 py-
+           1">
+       92                <span className="text-sm">🔥</span>
+       93                <span className="text-xs font-bold">{streak}</span>
+       94              </div>
+       95            )}
+       96 +          {leafBalance && (
+       97 +            <div className="flex items-center gap-1 bg-green-50 text-green-600 rounded-full px-2 py-1"
+          +>
+       98 +              <span className="text-sm">🍃</span>
+       99 +              <span className="text-xs font-bold">{leafBalance.available}</span>
+      100 +            </div>
+      101 +          )}
+      102 +          {leafBalance && leafBalance.minutos_hoje > 0 && (
+      103 +            <div className="flex items-center gap-1 bg-indigo-50 text-indigo-500 rounded-full px-2 py-
+          +1">
+      104 +              <span className="text-sm">📱</span>
+      105 +              <span className="text-xs font-bold">{leafBalance.minutos_hoje}min</span>
+      106 +            </div>
+      107 +          )}
+      108            <button
+      109              onClick={() => navigate('/parents')}
+      110              className="text-xs text-gray-400 border border-gray-200 rounded-full px-3 py-1 hover:borde
+           r-indigo-300 hover:text-indigo-500 transition-colors"
+
+● Agora importo leafBalance no Home.tsx:
+
+● Update(src\pages\Home.tsx)
+  ⎿  Added 1 line, removed 1 line
+       8  import type { Child, MemoryState, SessionLog } from '../types'
+       9
+      10  export default function Home() {
+      11 -  const { activeChild, children, memoryStates, setMemoryStates, setActiveChild } = useAppStore()
+      11 +  const { activeChild, children, memoryStates, setMemoryStates, setActiveChild, leafBalance } = useAppS
+         +tore()
+      12    const navigate = useNavigate()
+      13    const [dueCount, setDueCount] = useState(0)
+      14    const [nextReview, setNextReview] = useState<string | null>(null)
+
+● 7. Session.tsx — concede folhas ao terminar
+
+● Update(src\pages\Session.tsx)
+  ⎿  Added 1 line
+      26    const [lastAnswer, setLastAnswer] = useState<{ correct: boolean; answer: string } | null>(null)
+      27    const [gancho, setGancho] = useState<{ topicNome: string; descricao: string; texto: string } | null>(
+          null)
+      28    const [isFirstSession, setIsFirstSession] = useState(false)
+      29 +  const [leavesEarned, setLeavesEarned] = useState(0)
+      30
+      31    useEffect(() => {
+      32      if (activeChild) buildSession()
+
+● Update(src\pages\Session.tsx)
+  ⎿  Error editing file
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Update(src\pages\Session.tsx)
+  ⎿  Added 1 line
+       6  import { isDue, getEmptyState, scheduleReview, Rating } from '../fsrs/engine'
+       7  import { syncMemoryState } from '../lib/sync'
+       8  import { questions, topics } from '../content/trails'
+       9 +import { earnLeaves } from '../lib/leaves'
+      10  import QuestionCard from '../components/QuestionCard'
+      11  import FeedbackCard from '../components/FeedbackCard'
+      12  import SessionEnd from '../components/SessionEnd'
+
+  Searched for 1 pattern (ctrl+o to expand)
+
+● Update(src\pages\Session.tsx)
+  ⎿  Added 1 line, removed 1 line
+      19  export default function Session() {
+      20    const [searchParams] = useSearchParams()
+      21    const topicFilter = searchParams.get('topic')
+      22 -  const { activeChild, memoryStates, setMemoryState } = useAppStore()
+      22 +  const { activeChild, memoryStates, setMemoryState, setLeafBalance } = useAppStore()
+      23    const { queue, currentIndex, phase, startSession, answerCorrect, answerWrong, nextQuestion, endSessio
+          n } =
+      24      useSessionStore()
+      25    const navigate = useNavigate()
+
+● Update(src\pages\Session.tsx)
+  ⎿  Added 16 lines, removed 5 lines
+      42
+      43    async function saveSessionLog() {
+      44      if (!activeChild) return
+      45 -    const log = {
+      45 +    const { correct, newItemsCount } = useSessionStore.getState()
+      46 +    const pct = queue.length > 0 ? Math.round((correct / queue.length) * 100) : 0
+      47 +
+      48 +    await db.sessionLogs.add({
+      49        child_id: activeChild.id,
+      50        date: new Date().toISOString().slice(0, 10),
+      51        items_seen: queue.length,
+      49 -      correct: useSessionStore.getState().correct,
+      50 -      new_items: useSessionStore.getState().newItemsCount,
+      51 -    }
+      52 -    await db.sessionLogs.add(log)
+      52 +      correct,
+      53 +      new_items: newItemsCount,
+      54 +    })
+      55 +
+      56 +    // Concede folhas pela sessão
+      57 +    const logs = await db.sessionLogs.where('child_id').equals(activeChild.id).toArray()
+      58 +    const uniqueDays = new Set(logs.map((l) => l.date)).size
+      59 +    const streak = uniqueDays > 0 ? Math.min(uniqueDays, 30) : 0
+      60 +
+      61 +    const { total, balance } = await earnLeaves(activeChild.id, { streak, pct })
+      62 +    setLeavesEarned(total)
+      63 +    setLeafBalance(balance)
+      64    }
+      65
+      66    async function buildSession() {
+
+● Update(src\pages\Session.tsx)
+  ⎿  Added 1 line, removed 1 line
+      153    }
+      154
+      155    if (phase === 'done') {
+      156 -    return <SessionEnd isFirstSession={isFirstSession} onClose={() => { endSession(); navigate('/') }}
+          - />
+      156 +    return <SessionEnd isFirstSession={isFirstSession} leavesEarned={leavesEarned} onClose={() => { en
+          +dSession(); navigate('/') }} />
+      157    }
+      158
+      159    if (queue.length === 0) {
+
+● 8. SessionEnd — mostra folhas ganhas
+
+● Update(src\components\SessionEnd.tsx)
+  ⎿  Added 1 line
+       6  interface Props {
+       7    onClose: () => void
+       8    isFirstSession?: boolean
+       9 +  leavesEarned?: number
+      10  }
+      11
+      12  const MESSAGES = [
+
+● Update(src\components\SessionEnd.tsx)
+  ⎿  Added 1 line, removed 1 line
+      27    show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+      28  }
+      29
+      30 -export default function SessionEnd({ onClose, isFirstSession }: Props) {
+      30 +export default function SessionEnd({ onClose, isFirstSession, leavesEarned = 0 }: Props) {
+      31    const { queue, correct } = useSessionStore()
+      32    const total = queue.length
+      33    const pct   = total > 0 ? Math.round((correct / total) * 100) : 0
+
+● Update(src\components\SessionEnd.tsx)
+  ⎿  Added 6 lines
+      100            </p>
+      101          )}
+      102        </motion.div>
+      103 +      {leavesEarned > 0 && (
+      104 +        <motion.div variants={fadeUp} className="bg-green-50 border border-green-200 rounded-2xl px-5
+          +py-3 text-center">
+      30 -export default function SessionEnd({ onClose, isFirstSession }: Props) {
+      30 +export default function SessionEnd({ onClose, isFirstSession, leavesEarned = 0 }: Props) {
+      31    const { queue, correct } = useSessionStore()
+      32    const total = queue.length
+      33    const pct   = total > 0 ? Math.round((correct / total) * 100) : 0
+
+● Update(src\components\SessionEnd.tsx)
+  ⎿  Added 6 lines
+      100            </p>
+      101          )}
+      102        </motion.div>
+      103 +      {leavesEarned > 0 && (
+      104 +        <motion.div variants={fadeUp} className="bg-green-50 border border-green-200 rounded-2xl px-5 py-3 text-center">
+      105 +          <p className="text-green-700 font-bold text-lg">+{leavesEarned} 🍃</p>
+      106 +          <p className="text-green-500 text-xs">folhas ganhas nessa sessão</p>
+      107 +        </motion.div>
+      108 +      )}
+      109        <motion.p variants={fadeUp} className="text-gray-500 text-center text-sm max-w-xs">{msg}</motion.p>
+      110        <motion.p variants={fadeUp} className="text-indigo-400 text-sm font-medium">
+      111          ✔ Acabou por hoje — ótimo trabalho!
+
+● 9. App.tsx — roteamento com DailyPrep
+
+● Update(src\App.tsx)
+  ⎿  Added 1 line
+      10  import Login from './pages/Login'
+      11  import ParentPanel from './pages/ParentPanel'
+      12  import Onboarding from './pages/Onboarding'
+      13 +import DailyPrep from './pages/DailyPrep'
+      14  import UpdatePrompt from './components/UpdatePrompt'
+      15  import PinGate from './components/PinGate'
+      16
+
+● Update(src\App.tsx)
+  ⎿  Added 3 lines, removed 1 line
+      16
+      17  export default function App() {
+      18    const { user, authLoading, setUser, setAuthLoading } = useAuthStore()
+      19 -  const { activeChild, setActiveChild, setChildren, hasSeenOnboarding, setHasSeenOnboarding } = useAppStore()
+      19 +  const { activeChild, setActiveChild, setChildren, hasSeenOnboarding, setHasSeenOnboarding, lastOpenDate, setLastOpenDate, setLeafBalance } = useAppSt
+         +ore()
+      20 +  const today = new Date().toISOString().slice(0, 10)
+      21 +  const needsDailyPrep = hasSeenOnboarding && !!activeChild && lastOpenDate !== today
+      22
+      23    useEffect(() => {
+      24      const unsub = onAuthChange(async (firebaseUser) => {
+  ⎿  You've hit your session limit · resets 12:30am (America/Sao_Paulo)
+     /upgrade or /usage-credits to finish what you’re working on.
+
+✻ Cogitated for 5m 29s · 3 shells still running
+
+> Foi?                                                                                                                                                                        16
+
+● Update(src\App.tsx)
+  ⎿  Added 3 lines, removed 1 line
+      16
+      17  export default function App() {
+      18    const { user, authLoading, setUser, setAuthLoading } = useAuthStore()
+      19 -  const { activeChild, setActiveChild, setChildren, hasSeenOnboarding, setHasSeenOnboarding } = useAppStore()
+      19 +  const { activeChild, setActiveChild, setChildren, hasSeenOnboarding, setHasSeenOnboarding, lastOpenDate, setLastOpenDate, setLeafBalance } = useAppSt
+      23    useEffect(() => {
+      24      const unsub = onAuthChange(async (firebaseUser) => {
+  ⎿  You've hit your session limit · resets 12:30am (America/Sao_Paulo)
+     /upgrade or /usage-credits to finish what you’re working on.
+
+✻ Churned for 5m 29s · 3 shells still running
+
+> Foi?
+  ⎿  API Error: Usage credits required for 1M context · run /usage-credits to turn them on, or /model to switch to standard context
+
+✻ Crunched for 1s · 3 shells still running
+
+> E aí? Pode continuar?
+  ⎿  API Error: Usage credits required for 1M context · run /usage-credits to turn them on, or /model to switch to standard context
+
+✻ Cogitated for 0s · 3 shells still running
+
+> /model
+  ⎿  Kept model as Sonnet 4.6 (default)
+
+> /model
+  ⎿  Set model to Sonnet 4.6 (default) for this session
+
+> E agora? Podemos avançar?
+  ⎿  API Error: Usage credits required for 1M context · run /usage-credits to turn them on, or /model to switch to standard context
+
+✻ Brewed for 0s · 3 shells still running
+
+> /model
+  ⎿  Set model to Haiku 4.5 for this session
+
+> E agora? Podemos avançar?
+  ⎿  Read src\App.tsx (107 lines)
+  ⎿  Read src\pages\Session.tsx (215 lines)
+  ⎿  Read src\pages\DailyPrep.tsx (152 lines)
+  ⎿  Read src\stores\appStore.ts (67 lines)
+  ⎿  Read src\lib\leaves.ts (152 lines)
+  ⎿  Context limit reached · /compact or /clear to continue
+
+✻ Baked for 2m 5s · 3 shells still running
+
+> E agora? Podemos avançar?
+  ⎿  Context limit reached · /compact or /clear to continue
+
+> Copiei toda a nossa conversa e as suas ações em um bloco de notas chamado historico.txt
+  ⎿  Read src\App.tsx (107 lines)
+  ⎿  Read src\pages\Session.tsx (215 lines)
+  ⎿  Read src\pages\DailyPrep.tsx (152 lines)
+  ⎿  Read src\stores\appStore.ts (67 lines)
+  ⎿  Read src\lib\leaves.ts (152 lines)
+  ⎿  Context limit reached · /compact or /clear to continue
+
+✻ Sautéed for 2m 21s · 3 shells still running
+
+  1 tasks (0 done, 1 in progress, 0 open)
+  ■ Implementar sistema de Folhas com tela de preparação diária

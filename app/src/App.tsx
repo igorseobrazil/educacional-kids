@@ -12,7 +12,6 @@ import ParentPanel from './pages/ParentPanel'
 import Onboarding from './pages/Onboarding'
 import DailyPrep from './pages/DailyPrep'
 import { getOrCreateBalance } from './lib/leaves'
-import UpdatePrompt from './components/UpdatePrompt'
 import PinGate from './components/PinGate'
 
 export default function App() {
@@ -65,7 +64,6 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <UpdatePrompt />
       <Routes>
         <Route
           path="/"
