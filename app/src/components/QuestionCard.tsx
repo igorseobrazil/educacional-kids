@@ -12,6 +12,11 @@ export default function QuestionCard({ question, onAnswer }: Props) {
   const [dicaAberta, setDicaAberta] = useState(false)
   const dicaRef = useRef<HTMLDivElement>(null)
 
+  // Caderno: renderiza card especial sem lógica de resposta
+  if (question.tipo === 'caderno') {
+    return <CadernoCard question={question} onConfirm={() => onAnswer('anotei')} />
+  }
+
   function handleSubmit() {
     const answer =
       question.tipo === 'multipla_escolha' || question.tipo === 'verdadeiro_falso'
@@ -110,6 +115,58 @@ export default function QuestionCard({ question, onAnswer }: Props) {
   )
 }
 
+function CadernoCard({ question, onConfirm }: { question: Question; onConfirm: () => void }) {
+  const hoje = new Date()
+  const dataFormatada = hoje.toLocaleDateString('pt-BR', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+  // Capitaliza o dia da semana
+  const dataCapitalizada = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1)
+
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-5">
+        <div className="flex items-center gap-2 mb-4">
+          <span className="text-2xl">📓</span>
+          <p className="font-bold text-amber-800 text-lg">Hora de anotar no caderno!</p>
+        </div>
+
+        {/* Data no estilo caderno */}
+        <div className="bg-white rounded-xl border border-amber-200 p-4 mb-4">
+          <p className="text-amber-600 text-sm font-medium border-b border-amber-100 pb-2 mb-3">
+            {dataCapitalizada}
+          </p>
+          {/* Linhas do caderno */}
+          <div className="space-y-3">
+            {question.enunciado.split('\n').map((linha, i) => (
+              <p
+                key={i}
+                className="text-gray-700 text-sm leading-relaxed border-b border-blue-100 pb-2"
+              >
+                {linha}
+              </p>
+            ))}
+          </div>
+        </div>
+
+        <p className="text-amber-700 text-xs">
+          ✏️ Escreva exatamente assim no seu caderno — com a data e o conteúdo.
+        </p>
+      </div>
+
+      <button
+        onClick={onConfirm}
+        className="bg-amber-500 text-white rounded-xl py-3 font-bold text-lg hover:bg-amber-600 transition-colors"
+      >
+        Anotei! ✓
+      </button>
+    </div>
+  )
+}
+
 function labelTipo(tipo: Question['tipo']): string {
   const labels: Record<Question['tipo'], string> = {
     multipla_escolha: 'Múltipla escolha',
@@ -118,6 +175,7 @@ function labelTipo(tipo: Question['tipo']): string {
     ordenacao: 'Ordenar e classificar',
     resposta_curta: 'Resposta curta',
     elaboracao: 'Explique com suas palavras',
+    caderno: 'Anote no caderno',
   }
   return labels[tipo]
 }

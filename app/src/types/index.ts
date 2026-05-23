@@ -5,6 +5,7 @@ export type QuestionType =
   | 'ordenacao'
   | 'resposta_curta'
   | 'elaboracao'
+  | 'caderno'
 
 export interface Question {
   id: string

@@ -29,7 +29,7 @@ export const topics: Topic[] = [
     eixo_bncc: 'Análise linguística e gramática',
     gancho_curiosidade: 'Você sabia que tudo que existe tem um nome — e esse nome é uma palavra especial? Por que será que "amor" e "saudade" são substantivos, mas "feliz" não é?',
     pre_requisitos: [],
-    itens: ['q-sub-01','q-sub-02','q-sub-03','q-sub-04','q-sub-05','q-sub-06','q-sub-07','q-sub-08'],
+    itens: ['q-sub-01','q-sub-02','q-sub-03','q-sub-cad','q-sub-04','q-sub-05','q-sub-06','q-sub-07','q-sub-08'],
   },
   {
     id: 'topic-adjetivo',
@@ -38,7 +38,7 @@ export const topics: Topic[] = [
     eixo_bncc: 'Análise linguística e gramática',
     gancho_curiosidade: 'Imagine um jogo sem adjetivos: sem "raro", sem "épico", sem "lendário". Chato, né? Descubra por que os adjetivos são o "farmador de aura" das frases.',
     pre_requisitos: ['topic-substantivo'],
-    itens: ['q-adj-01','q-adj-02','q-adj-03','q-adj-04','q-adj-05','q-adj-06','q-adj-07','q-adj-08'],
+    itens: ['q-adj-01','q-adj-02','q-adj-03','q-adj-cad','q-adj-04','q-adj-05','q-adj-06','q-adj-07','q-adj-08'],
   },
   {
     id: 'topic-artigo',
@@ -47,7 +47,7 @@ export const topics: Topic[] = [
     eixo_bncc: 'Análise linguística e gramática',
     gancho_curiosidade: 'Por que dizemos "o cachorro" e não "um cachorro" quando falamos do nosso pet? Essa pequena diferença muda o sentido inteiro da frase — e quem faz isso é o artigo.',
     pre_requisitos: ['topic-substantivo'],
-    itens: ['q-art-01','q-art-02','q-art-03','q-art-04','q-art-05','q-art-06','q-art-07','q-art-08'],
+    itens: ['q-art-01','q-art-02','q-art-03','q-art-cad','q-art-04','q-art-05','q-art-06','q-art-07','q-art-08'],
   },
   {
     id: 'topic-pronome',
@@ -56,7 +56,7 @@ export const topics: Topic[] = [
     eixo_bncc: 'Análise linguística e gramática',
     gancho_curiosidade: 'Imagina ter que repetir o nome de todo mundo toda vez que fala deles? "João foi à escola. João comeu. João brincou." O pronome resolve isso — descubra como.',
     pre_requisitos: ['topic-substantivo'],
-    itens: ['q-pro-01','q-pro-02','q-pro-03','q-pro-04','q-pro-05','q-pro-06','q-pro-07','q-pro-08'],
+    itens: ['q-pro-01','q-pro-02','q-pro-03','q-pro-cad','q-pro-04','q-pro-05','q-pro-06','q-pro-07','q-pro-08'],
   },
   {
     id: 'topic-verbo',
@@ -65,7 +65,7 @@ export const topics: Topic[] = [
     eixo_bncc: 'Análise linguística e gramática',
     gancho_curiosidade: 'Sem verbos, nada acontece. Sem verbos, nem essa frase existe. O verbo é a palavra que dá vida e movimento — é ele que faz a história andar.',
     pre_requisitos: ['topic-adjetivo'],
-    itens: ['q-vb-01','q-vb-02','q-vb-03','q-vb-04','q-vb-05','q-vb-06','q-vb-07','q-vb-08'],
+    itens: ['q-vb-01','q-vb-02','q-vb-03','q-vb-cad','q-vb-04','q-vb-05','q-vb-06','q-vb-07','q-vb-08'],
   },
 
   // ── TRAIL: SEMÂNTICA ────────────────────────────────────────────────────────
@@ -77,7 +77,7 @@ export const topics: Topic[] = [
     eixo_bncc: 'Análise linguística e gramática',
     gancho_curiosidade: 'Por que escritores não repetem a mesma palavra o tempo todo? Porque existe uma lista secreta de palavras com o mesmo sentido. Você vai desbloquear essa lista agora.',
     pre_requisitos: ['topic-substantivo', 'topic-adjetivo'],
-    itens: ['q-sin-01','q-sin-02','q-sin-03','q-sin-04','q-sin-05','q-sin-06','q-sin-07','q-sin-08'],
+    itens: ['q-sin-01','q-sin-02','q-sin-03','q-sin-cad','q-sin-04','q-sin-05','q-sin-06','q-sin-07','q-sin-08'],
   },
   {
     id: 'topic-antonimos',
@@ -86,7 +86,7 @@ export const topics: Topic[] = [
     eixo_bncc: 'Análise linguística e gramática',
     gancho_curiosidade: 'Em todo jogo tem luz e sombra, herói e vilão, ataque e defesa. Na língua portuguesa também — essas palavras opostas têm um nome especial.',
     pre_requisitos: ['topic-sinonimos'],
-    itens: ['q-ant-01','q-ant-02','q-ant-03','q-ant-04','q-ant-05','q-ant-06','q-ant-07','q-ant-08'],
+    itens: ['q-ant-01','q-ant-02','q-ant-03','q-ant-cad','q-ant-04','q-ant-05','q-ant-06','q-ant-07','q-ant-08'],
   },
 ]
 
@@ -152,6 +152,13 @@ export const questions: Question[] = [
     referencia_cultural: 'exemplo livre da criança',
   },
 
+  {
+    id: 'q-sub-cad', topico_id: 'topic-substantivo', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Substantivo\n\nÉ a palavra que dá nome a seres, lugares, sentimentos e coisas.\n\nExemplos: escola, amor, Brasil, cachorro, alegria.\n\nSubstantivo próprio: nomeia um ser único e começa com maiúscula. Ex: Helena, Rio de Janeiro.\nSubstantivo comum: nomeia qualquer ser da mesma espécie. Ex: menina, cidade.',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+
   // ════════════════════════════════════════════════════════════
   // ADJETIVO
   // ════════════════════════════════════════════════════════════
@@ -214,6 +221,13 @@ export const questions: Question[] = [
     resposta_correta: '',
     explicacao: 'Não existe resposta única. O importante é ter usado adjetivos reais e explicado como cada um descreve o personagem.',
     referencia_cultural: 'personagem favorito da criança',
+  },
+
+  {
+    id: 'q-adj-cad', topico_id: 'topic-adjetivo', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Adjetivo\n\nÉ a palavra que qualifica ou caracteriza o substantivo — diz como ele é.\n\nExemplos: bonito, alto, inteligente, azul, corajoso.\n\nO adjetivo concorda com o substantivo em gênero e número:\ngato gordo → gata gorda → gatos gordos → gatas gordas.',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
   },
 
   // ════════════════════════════════════════════════════════════
@@ -285,6 +299,13 @@ export const questions: Question[] = [
     referencia_cultural: 'tema livre da criança',
   },
 
+  {
+    id: 'q-art-cad', topico_id: 'topic-artigo', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Artigo\n\nPalavra que acompanha o substantivo e indica se ele é específico ou genérico.\n\nDefinidos (algo específico): o, a, os, as\nEx: "O cachorro latiu." (um cachorro específico)\n\nIndefinidos (algo genérico): um, uma, uns, umas\nEx: "Vi um cachorro na rua." (qualquer cachorro)',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+
   // ════════════════════════════════════════════════════════════
   // PRONOME PESSOAL
   // ════════════════════════════════════════════════════════════
@@ -351,6 +372,13 @@ export const questions: Question[] = [
     referencia_cultural: 'contexto pessoal da criança',
   },
 
+  {
+    id: 'q-pro-cad', topico_id: 'topic-pronome', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Pronome Pessoal\n\nSubstitui o nome de uma pessoa para evitar repetição.\n\n1ª pessoa (quem fala): eu, nós\n2ª pessoa (com quem se fala): tu, você, vocês\n3ª pessoa (de quem se fala): ele, ela, eles, elas\n\nEx: "Maria chegou. Ela estava cansada." → "ela" substitui "Maria".',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+
   // ════════════════════════════════════════════════════════════
   // VERBO
   // ════════════════════════════════════════════════════════════
@@ -412,6 +440,13 @@ export const questions: Question[] = [
     resposta_correta: '',
     explicacao: 'O exercício mostra como usamos verbos em diferentes tempos para contar nossa história.',
     referencia_cultural: 'rotina diária da criança',
+  },
+
+  {
+    id: 'q-vb-cad', topico_id: 'topic-verbo', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Verbo\n\nPalavra que indica ação, estado ou fenômeno da natureza.\n\nAção: correr, estudar, jogar\nEstado: ser, estar, ficar\nFenômeno: chover, nevar, amanhecer\n\nO verbo muda conforme o tempo:\nPassado: joguei | Presente: jogo | Futuro: jogarei',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
   },
 
   // ════════════════════════════════════════════════════════════
@@ -480,10 +515,23 @@ export const questions: Question[] = [
     referencia_cultural: 'vocabulário cotidiano da criança',
   },
 
+  {
+    id: 'q-sin-cad', topico_id: 'topic-sinonimos', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Sinônimos\n\nSão palavras diferentes com sentido igual ou parecido.\n\nExemplos:\nfeliz = alegre\nrápido = veloz\niniciar = começar\ntriste = melancólico\n\nUsar sinônimos deixa o texto mais variado e interessante.',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+
   // ════════════════════════════════════════════════════════════
   // ANTÔNIMOS
   // ════════════════════════════════════════════════════════════
 
+  {
+    id: 'q-ant-cad', topico_id: 'topic-antonimos', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Antônimos\n\nSão palavras com sentido oposto.\n\nExemplos:\namor ≠ ódio\nchegada ≠ partida\ngeneroso ≠ egoísta\nantigo ≠ moderno\nvitória ≠ derrota\n\nUma mesma palavra pode ter antônimos diferentes conforme o contexto.',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
   {
     id: 'q-ant-01', topico_id: 'topic-antonimos', tipo: 'multipla_escolha', dificuldade: 1,
     enunciado: 'O que são antônimos?',

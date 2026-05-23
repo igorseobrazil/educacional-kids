@@ -86,8 +86,8 @@ export default function Session() {
   async function handleAnswer(answer: string) {
     const question = queue[currentIndex]
     const isCorrect =
-      question.tipo === 'elaboracao'
-        ? true // elaboração é sempre auto-avaliada como correta para o FSRS
+      question.tipo === 'elaboracao' || question.tipo === 'caderno'
+        ? true // sem avaliação automática — sempre correto para o FSRS
         : normalize(answer) === normalize(question.resposta_correta)
 
     setLastAnswer({ correct: isCorrect, answer })
