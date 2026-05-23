@@ -1,7 +1,7 @@
 # Roadmap — App Educativo Gamificado
 
 > Referência diária: o que está feito, o que está em andamento e o que vem a seguir.
-> Atualizado em: 23/05/2026
+> Atualizado em: 23/05/2026 (última sessão)
 
 ---
 
@@ -27,14 +27,14 @@
 ## ✅ Implementado
 
 ### Infraestrutura
-- [x] PWA offline-first (vite-plugin-pwa + Workbox)
+- [x] PWA instalável (manifest.webmanifest, sem service worker)
 - [x] Firebase Auth (Google + e-mail/senha)
 - [x] Firestore com sincronização em tempo real entre dispositivos
 - [x] Dexie (IndexedDB) como cache local — funciona offline
 - [x] Fila de sync para enviar dados quando reconectar
 - [x] Code splitting (firebase / react / fsrs em chunks separados)
 - [x] ErrorBoundary — tela amigável em caso de crash
-- [x] Banner de atualização PWA (prompt mode + reload forçado)
+- [x] Service worker removido — app sempre carrega fresco do Vercel
 - [x] PWA full-screen no celular (meta tags iOS, viewport-fit, safe-area)
 - [x] Deploy automático no Vercel (repositório público)
 
@@ -48,7 +48,7 @@
 
 ### Funcionalidades pedagógicas
 - [x] Motor FSRS (repetição espaçada) — ts-fsrs
-- [x] Sessão diária com limite de itens novos (5/dia)
+- [x] Sessão diária com limite de itens novos (8/dia)
 - [x] Streak de dias consecutivos com perdão (1 dia de folga não zera)
 - [x] Próxima revisão exibida na home quando não há pendentes
 - [x] GanchoScreen — tela de curiosidade antes do primeiro tópico novo
@@ -133,7 +133,7 @@
 | Camada | Tecnologia |
 |---|---|
 | Front-end | React + Vite + Tailwind v4 |
-| PWA | vite-plugin-pwa (prompt mode, skipWaiting) |
+| PWA | manifest.webmanifest (instalável, sem service worker) |
 | Armazenamento local | Dexie (IndexedDB) |
 | Backend / banco | Firebase Firestore |
 | Autenticação | Firebase Auth |
