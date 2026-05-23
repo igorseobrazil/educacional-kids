@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../stores/authStore'
 import { savePin, getPin } from '../lib/authHelpers'
 
@@ -9,6 +10,7 @@ interface Props {
 export default function PinGate({ children }: Props) {
   const { user, parentUnlocked, setParentUnlocked } = useAuthStore()
   const [mode, setMode] = useState<'loading' | 'criar' | 'verificar' | 'confirmar'>('loading')
+  const navigate = useNavigate()
 
   // Bloqueia quando o usuário sai da rota /parents
   useEffect(() => {
@@ -100,7 +102,14 @@ export default function PinGate({ children }: Props) {
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-xs">
+      <div className="bg-white rounded-2xl shadow-lg p-6 w-full max-w-xs relative">
+        <button
+          onClick={() => navigate('/')}
+          className="absolute top-4 right-4 text-gray-300 hover:text-gray-500 transition-colors text-xl leading-none"
+          title="Voltar"
+        >
+          ✕
+        </button>
         <div className="text-center mb-6">
           <span className="text-4xl">🔒</span>
           <h1 className="text-lg font-bold text-gray-800 mt-2">{titulo}</h1>
