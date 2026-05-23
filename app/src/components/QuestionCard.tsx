@@ -1,4 +1,5 @@
 import { useState, useRef, useMemo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import type { Question } from '../types'
 
 interface Props {
@@ -12,7 +13,6 @@ export default function QuestionCard({ question, onAnswer }: Props) {
   const [dicaAberta, setDicaAberta] = useState(false)
   const dicaRef = useRef<HTMLDivElement>(null)
 
-  // Caderno: renderiza card especial sem lógica de resposta
   if (question.tipo === 'caderno') {
     return <CadernoCard question={question} onConfirm={() => onAnswer('anotei')} />
   }
@@ -39,7 +39,13 @@ export default function QuestionCard({ question, onAnswer }: Props) {
   const canSubmit = isMulti ? !!selected : textAnswer.trim().length > 0
 
   return (
-    <div className="flex flex-col gap-6">
+    <motion.div
+      key={question.id}
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
+      className="flex flex-col gap-6"
+    >
       {question.referencia_cultural && (
         <div className="bg-indigo-100 text-indigo-700 rounded-xl px-3 py-2 text-xs font-medium">
           🎮 Contexto: {question.referencia_cultural}
@@ -58,8 +64,9 @@ export default function QuestionCard({ question, onAnswer }: Props) {
       {isMulti && (
         <div className="flex flex-col gap-3">
           {options.map((opt) => (
-            <button
+            <motion.button
               key={opt}
+              whileTap={{ scale: 0.97 }}
               onClick={() => setSelected(opt)}
               className={`text-left px-4 py-3 rounded-xl border-2 font-medium transition-colors ${
                 selected === opt
@@ -68,7 +75,7 @@ export default function QuestionCard({ question, onAnswer }: Props) {
               }`}
             >
               {opt}
-            </button>
+            </motion.button>
           ))}
         </div>
       )}
@@ -96,74 +103,76 @@ export default function QuestionCard({ question, onAnswer }: Props) {
             <span>💡</span>
             <span>{dicaAberta ? 'Esconder dica' : 'Ver dica'}</span>
           </button>
-          {dicaAberta && (
-            <div ref={dicaRef} className="mt-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800 leading-relaxed">
-              {question.dica}
-            </div>
-          )}
+          <AnimatePresence>
+            {dicaAberta && (
+              <motion.div
+                ref={dicaRef}
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="mt-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800 leading-relaxed overflow-hidden"
+              >
+                {question.dica}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       )}
 
-      <button
+      <motion.button
+        whileTap={{ scale: 0.97 }}
         onClick={handleSubmit}
         disabled={!canSubmit}
         className="bg-indigo-600 text-white rounded-xl py-3 font-bold text-lg disabled:opacity-40 hover:bg-indigo-700 transition-colors"
       >
         Responder
-      </button>
-    </div>
+      </motion.button>
+    </motion.div>
   )
 }
 
 function CadernoCard({ question, onConfirm }: { question: Question; onConfirm: () => void }) {
   const hoje = new Date()
   const dataFormatada = hoje.toLocaleDateString('pt-BR', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
+    weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
   })
-  // Capitaliza o dia da semana
   const dataCapitalizada = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1)
 
   return (
-    <div className="flex flex-col gap-5">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.96 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.3 }}
+      className="flex flex-col gap-5"
+    >
       <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-5">
         <div className="flex items-center gap-2 mb-4">
           <span className="text-2xl">📓</span>
           <p className="font-bold text-amber-800 text-lg">Hora de anotar no caderno!</p>
         </div>
-
-        {/* Data no estilo caderno */}
         <div className="bg-white rounded-xl border border-amber-200 p-4 mb-4">
           <p className="text-amber-600 text-sm font-medium border-b border-amber-100 pb-2 mb-3">
             {dataCapitalizada}
           </p>
-          {/* Linhas do caderno */}
           <div className="space-y-3">
             {question.enunciado.split('\n').map((linha, i) => (
-              <p
-                key={i}
-                className="text-gray-700 text-sm leading-relaxed border-b border-blue-100 pb-2"
-              >
+              <p key={i} className="text-gray-700 text-sm leading-relaxed border-b border-blue-100 pb-2">
                 {linha}
               </p>
             ))}
           </div>
         </div>
-
-        <p className="text-amber-700 text-xs">
-          ✏️ Escreva exatamente assim no seu caderno — com a data e o conteúdo.
-        </p>
+        <p className="text-amber-700 text-xs">✏️ Escreva exatamente assim no seu caderno — com a data e o conteúdo.</p>
       </div>
 
-      <button
+      <motion.button
+        whileTap={{ scale: 0.97 }}
         onClick={onConfirm}
         className="bg-amber-500 text-white rounded-xl py-3 font-bold text-lg hover:bg-amber-600 transition-colors"
       >
         Anotei! ✓
-      </button>
-    </div>
+      </motion.button>
+    </motion.div>
   )
 }
 

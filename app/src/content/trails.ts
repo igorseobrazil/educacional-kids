@@ -33,6 +33,14 @@ export const trails: Trail[] = [
     narrativa: 'Uma palavra pode virar várias outras só mudando o começo ou o final. É como montar peças de Lego com a língua portuguesa.',
     topicos: ['topic-formacao'],
   },
+  {
+    id: 'trail-gramatica-uso',
+    nome: 'Gramática no Uso',
+    materia: 'Língua Portuguesa',
+    ano_escolar: 5,
+    narrativa: 'Gramática não é decorar regras — é entender como a língua funciona de verdade. Nessa trilha você vai usar o que sabe para falar e escrever cada vez melhor.',
+    topicos: ['topic-acentuacao', 'topic-numeral', 'topic-concordancia'],
+  },
 ]
 
 export const topics: Topic[] = [
@@ -124,6 +132,36 @@ export const topics: Topic[] = [
     gancho_curiosidade: 'Por que "passo" tem dois S e "caso" tem um, se os dois têm S no meio? Se o som é parecido, por que a escrita é diferente? Esse é um dos maiores segredos da ortografia.',
     pre_requisitos: ['topic-rr'],
     itens: ['q-ss-01','q-ss-02','q-ss-03','q-ss-cad','q-ss-04','q-ss-05','q-ss-06','q-ss-07','q-ss-08'],
+  },
+
+  // ── TRAIL: GRAMÁTICA NO USO ─────────────────────────────────────────────────
+
+  {
+    id: 'topic-acentuacao',
+    nome: 'Acentuação',
+    trilha_id: 'trail-gramatica-uso',
+    eixo_bncc: 'Análise linguística e gramática',
+    gancho_curiosidade: 'Se "ônibus" tem acento e "caminhão" não tem, é porque existe um sistema que decide quando acentuar. Mas a regra é mais lógica do que parece — e você vai conseguir deduzir ela.',
+    pre_requisitos: [],
+    itens: ['q-ac-01','q-ac-02','q-ac-03','q-ac-cad','q-ac-04','q-ac-05','q-ac-06','q-ac-07','q-ac-08'],
+  },
+  {
+    id: 'topic-numeral',
+    nome: 'Numeral',
+    trilha_id: 'trail-gramatica-uso',
+    eixo_bncc: 'Análise linguística e gramática',
+    gancho_curiosidade: 'Quantos gols o CR7 marcou? Qual posição seu squad ficou no torneio? Metade da pizza sobrou? Todas essas respostas usam numerais — que vão muito além dos números.',
+    pre_requisitos: ['topic-substantivo'],
+    itens: ['q-num-01','q-num-02','q-num-03','q-num-cad','q-num-04','q-num-05','q-num-06','q-num-07','q-num-08'],
+  },
+  {
+    id: 'topic-concordancia',
+    nome: 'Concordância',
+    trilha_id: 'trail-gramatica-uso',
+    eixo_bncc: 'Análise linguística e gramática',
+    gancho_curiosidade: 'Por que "as meninas saíram" soa certo e "as meninas saiu" soa errado? Existe uma regra de combinação entre as palavras — e ela é mais simples do que parece.',
+    pre_requisitos: ['topic-substantivo', 'topic-adjetivo', 'topic-verbo'],
+    itens: ['q-con-01','q-con-02','q-con-03','q-con-cad','q-con-04','q-con-05','q-con-06','q-con-07','q-con-08'],
   },
 
   // ── TRAIL: CONSTRUÇÃO DE PALAVRAS ───────────────────────────────────────────
@@ -643,6 +681,224 @@ export const questions: Question[] = [
     resposta_correta: '',
     explicacao: 'O exercício mostra como antônimos criam contraste — e é exatamente isso que escritores usam para tornar histórias mais interessantes.',
     referencia_cultural: 'herói e vilão de qualquer história',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // ACENTUAÇÃO
+  // ════════════════════════════════════════════════════════════
+
+  {
+    id: 'q-ac-01', topico_id: 'topic-acentuacao', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Palavras proparoxítonas (acento na ANTEpenúltima sílaba) sempre têm acento escrito. Qual delas é proparoxítona?',
+    resposta_correta: 'ônibus',
+    distratores: ['café', 'sofá', 'parabéns'],
+    explicacao: '"Ônibus" = Ô-ni-bus. O acento cai em "Ô" — a antepenúltima sílaba. Toda proparoxítona é acentuada obrigatoriamente.',
+  },
+  {
+    id: 'q-ac-02', topico_id: 'topic-acentuacao', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Oxítonas são palavras com acento na ÚLTIMA sílaba. Qual das palavras abaixo é oxítona E tem acento escrito?',
+    resposta_correta: 'café',
+    distratores: ['mesa', 'livro', 'carro'],
+    explicacao: '"Café" = ca-FÉ. O acento cai na última sílaba e a palavra termina em E — por isso tem acento escrito. "Mesa", "livro" e "carro" são paroxítonas com terminações comuns (sem acento).',
+  },
+  {
+    id: 'q-ac-03', topico_id: 'topic-acentuacao', tipo: 'lacuna', dificuldade: 1,
+    enunciado: '"Médico", "ônibus" e "pêssego" são proparoxítonas — o acento cai na _______ sílaba.',
+    resposta_correta: 'antepenúltima',
+    explicacao: 'Antepenúltima = antes da penúltima. MÉ-di-co: o acento está em MÉ, que é a primeira sílaba — e nesse caso, a antepenúltima. Toda proparoxítona tem acento.',
+    dica: 'Conta as sílabas de trás para frente: última, penúltima, antepenúltima. O acento das proparoxítonas cai na terceira contando do final.',
+  },
+  {
+    id: 'q-ac-cad', topico_id: 'topic-acentuacao', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Acentuação\n\nOXÍTONA — acento na ÚLTIMA sílaba\nTem acento quando termina em: a(s), e(s), o(s), em, ens\nExemplos: sofá, café, avó, parabéns, armazém\n\nPAROXÍTONA — acento na PENÚLTIMA sílaba\nTem acento quando NÃO termina em a, e, o, em, ens\nExemplos: fácil, lápis, táxi, hífen\n\nPROPAROXÍTONA — acento na ANTEPENÚLTIMA sílaba\nSEMPRE tem acento!\nExemplos: médico, ônibus, pêssego, lâmpada, árvore',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+  {
+    id: 'q-ac-04', topico_id: 'topic-acentuacao', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Cristiano Ronaldo grita "SIUUU!" após marcar gol. Se "siu" fosse uma palavra portuguesa, ela seria oxítona — o som mais forte cai no final. Isso significa que:',
+    resposta_correta: 'Se terminasse em "u", não teria acento escrito — oxítonas só se acentuam com certas terminações',
+    distratores: [
+      'Teria acento em "i", porque é a vogal do meio',
+      'Seria sempre acentuada, como toda oxítona',
+      'Não poderia existir em português porque termina em "u"',
+    ],
+    explicacao: 'Oxítonas só ganham acento escrito quando terminam em: a(s), e(s), o(s), em, ens. Terminações em "u" não são acentuadas: "parabéns" tem acento, "siu" não teria.',
+    referencia_cultural: 'SIU do Cristiano Ronaldo',
+    validade_cultural: '2030-01-01',
+  },
+  {
+    id: 'q-ac-05', topico_id: 'topic-acentuacao', tipo: 'verdadeiro_falso', dificuldade: 2,
+    enunciado: 'Toda palavra proparoxítona tem acento gráfico obrigatório, sem exceção.',
+    resposta_correta: 'Verdadeiro',
+    explicacao: 'Proparoxítonas são sempre acentuadas: médico, ônibus, pêssego, lâmpada, cômodo, árvore, óculos. É a regra mais fácil de lembrar — sem exceções!',
+  },
+  {
+    id: 'q-ac-06', topico_id: 'topic-acentuacao', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: '"Avó" e "avô" têm acentos diferentes (agudo e circunflexo). Por quê?',
+    resposta_correta: 'Porque têm sons diferentes — avó tem o aberto (ó), avô tem o fechado (ô)',
+    distratores: [
+      'Por acaso — qualquer acento estaria correto',
+      'Porque avó é feminino e avô é masculino',
+      'Porque têm origens em idiomas diferentes',
+    ],
+    explicacao: 'O acento agudo (´) indica vogal aberta: avó, avó soa "avó" aberto. O circunflexo (^) indica vogal fechada: avô soa "avô" fechado. São palavras diferentes com pronúncias diferentes!',
+  },
+  {
+    id: 'q-ac-07', topico_id: 'topic-acentuacao', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual palavra é paroxítona e por isso recebe acento?',
+    resposta_correta: 'fácil',
+    distratores: ['café', 'ônibus', 'sofá'],
+    explicacao: '"Fácil" = FÁ-cil. Acento na penúltima sílaba, terminando em "l" — paroxítona com terminação especial. "Café" e "sofá" são oxítonas; "ônibus" é proparoxítona.',
+  },
+  {
+    id: 'q-ac-08', topico_id: 'topic-acentuacao', tipo: 'elaboracao', dificuldade: 3,
+    enunciado: 'Escolha 6 palavras com acento que você usa no dia a dia — de músicas, séries, lugares ou nomes. Para cada uma, escreva se é oxítona, paroxítona ou proparoxítona e por que tem acento.',
+    resposta_correta: '',
+    explicacao: 'Classificar palavras do seu próprio vocabulário é a melhor forma de fixar as regras de acentuação de verdade.',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // NUMERAL
+  // ════════════════════════════════════════════════════════════
+
+  {
+    id: 'q-num-01', topico_id: 'topic-numeral', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'O que é um numeral?',
+    resposta_correta: 'Palavra que indica quantidade, ordem, fração ou multiplicação',
+    distratores: ['Palavra que indica ação ou estado', 'Palavra que qualifica o substantivo', 'Palavra que substitui o nome de uma pessoa'],
+    explicacao: 'Numerais indicam: quantidade (três gols), ordem (primeiro lugar), fração (metade da pizza) ou multiplicação (o dobro do preço).',
+  },
+  {
+    id: 'q-num-02', topico_id: 'topic-numeral', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Em "o primeiro gol do jogo", o numeral "primeiro" é:',
+    resposta_correta: 'Ordinal — indica posição ou ordem',
+    distratores: ['Cardinal — indica quantidade exata', 'Fracionário — indica uma parte', 'Multiplicativo — indica multiplicação'],
+    explicacao: 'Numerais ordinais indicam posição: primeiro, segundo, terceiro... Numerais cardinais indicam quantidade: um, dois, três...',
+  },
+  {
+    id: 'q-num-03', topico_id: 'topic-numeral', tipo: 'lacuna', dificuldade: 1,
+    enunciado: 'Os números que indicam quantidade simples — um, dois, três, dez, cem — são chamados de numerais _______.',
+    resposta_correta: 'cardinais',
+    explicacao: 'Cardinais = quantidade simples. Ordinais = ordem. Multiplicativos = multiplicação (dobro, triplo). Fracionários = parte (metade, terço).',
+    dica: 'Cardinal vem de "cardeal" — o número base, fundamental. São os números que você usaria para contar: um, dois, três...',
+  },
+  {
+    id: 'q-num-cad', topico_id: 'topic-numeral', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Numeral\n\nCARDINAL → quantidade\num, dois, três, cem, mil\n"Marquei três gols!"\n\nORDINAL → ordem/posição\nprimeiro, segundo, terceiro, décimo\n"Fiquei em primeiro lugar!"\n\nMULTIPLICATIVO → múltiplo\ndobro, triplo, quádruplo\n"O preço é o dobro do que era."\n\nFRACIONÁRIO → parte\nmetade, terço, quarto\n"Comi metade da pizza."',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+  {
+    id: 'q-num-04', topico_id: 'topic-numeral', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'CR7 marcou o centésimo gol da carreira e fez o famoso "SIUUU!". A palavra "centésimo" é numeral:',
+    resposta_correta: 'Ordinal — indica posição (o gol de número cem)',
+    distratores: ['Cardinal — indica quantidade simples', 'Multiplicativo — indica multiplicação', 'Fracionário — indica uma parte'],
+    explicacao: '"Centésimo" = posição 100. Ordinais indicam ordem: primeiro, décimo, centésimo. Não confundir com "cem" (cardinal = quantidade).',
+    referencia_cultural: 'CR7 / SIUUU',
+    validade_cultural: '2030-01-01',
+  },
+  {
+    id: 'q-num-05', topico_id: 'topic-numeral', tipo: 'verdadeiro_falso', dificuldade: 2,
+    enunciado: '"Dobro", "triplo" e "quádruplo" são numerais multiplicativos porque indicam que uma quantidade foi multiplicada.',
+    resposta_correta: 'Verdadeiro',
+    explicacao: 'Multiplicativos indicam múltiplos: dobro = ×2, triplo = ×3, quádruplo = ×4. "Paguei o dobro" = paguei duas vezes o valor original.',
+  },
+  {
+    id: 'q-num-06', topico_id: 'topic-numeral', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Em qual frase o numeral está sendo usado como FRACIONÁRIO?',
+    resposta_correta: 'Ela comeu metade do brigadeiro.',
+    distratores: ['Ela ganhou dois brigadeiros.', 'Ela foi a terceira da fila.', 'Ela comeu o dobro de todo mundo.'],
+    explicacao: '"Metade" indica uma parte (½) — é fracionário. "Dois" é cardinal, "terceira" é ordinal, "dobro" é multiplicativo.',
+  },
+  {
+    id: 'q-num-07', topico_id: 'topic-numeral', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Seu squad ficou em terceiro lugar no torneio de Brawl Stars. "Terceiro" é numeral:',
+    resposta_correta: 'Ordinal — indica posição no ranking',
+    distratores: ['Cardinal — indica quantidade', 'Multiplicativo — indica o triplo', 'Fracionário — indica um terço'],
+    explicacao: '"Terceiro" indica posição (3ª colocação) — é ordinal. Não confundir com "três" (cardinal = quantidade) ou "triplo" (multiplicativo = ×3).',
+    referencia_cultural: 'torneio de Brawl Stars / games',
+    validade_cultural: '2029-01-01',
+  },
+  {
+    id: 'q-num-08', topico_id: 'topic-numeral', tipo: 'elaboracao', dificuldade: 3,
+    enunciado: 'Escreva um parágrafo sobre um jogo, esporte ou competição que você gosta. Use pelo menos: 1 numeral cardinal, 1 ordinal e 1 multiplicativo. Depois identifique e classifique cada um.',
+    resposta_correta: '',
+    explicacao: 'Usar os quatro tipos de numeral em contextos reais é a melhor forma de não confundi-los nunca mais.',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // CONCORDÂNCIA
+  // ════════════════════════════════════════════════════════════
+
+  {
+    id: 'q-con-01', topico_id: 'topic-concordancia', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Concordância nominal é quando o adjetivo (e artigo) concordam em gênero e número com o:',
+    resposta_correta: 'Substantivo que acompanham',
+    distratores: ['Verbo da frase', 'Pronome da frase', 'Sujeito da oração'],
+    explicacao: 'O adjetivo "segue" o substantivo: gato preto → gata preta → gatos pretos → gatas pretas. É a mesma regra que você já viu no tópico de Adjetivos!',
+  },
+  {
+    id: 'q-con-02', topico_id: 'topic-concordancia', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Qual frase tem a concordância nominal CORRETA?',
+    resposta_correta: 'As garotas estavam animadas.',
+    distratores: ['As garotas estavam animado.', 'As garota estavam animadas.', 'A garotas estavam animada.'],
+    explicacao: '"As garotas" = feminino plural. O adjetivo precisa concordar: "animadas" (feminino plural). "Animado" seria masculino — errado aqui.',
+  },
+  {
+    id: 'q-con-03', topico_id: 'topic-concordancia', tipo: 'lacuna', dificuldade: 1,
+    enunciado: 'Complete com a forma correta do verbo: Os jogadores _______ muito bem no último jogo. (jogou/jogaram)',
+    resposta_correta: 'jogaram',
+    explicacao: '"Os jogadores" é plural — o verbo precisa concordar e ficar no plural também: jogaram. "Jogou" seria para sujeito singular: "o jogador jogou".',
+    dica: 'O sujeito é "os jogadores" — plural. Regra: sujeito plural → verbo plural. Um jogador jogou. Dois jogadores jogaram.',
+  },
+  {
+    id: 'q-con-cad', topico_id: 'topic-concordancia', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Concordância\n\nCONCORDÂNCIA NOMINAL:\nAdjetivo e artigo combinam com o substantivo em gênero e número.\ngato preto → gata preta → gatos pretos → gatas pretas\n\nCONCORDÂNCIA VERBAL:\nO verbo combina com o sujeito em número e pessoa.\neu jogo → ele joga → nós jogamos → eles jogam\n\nErro clássico:\n❌ Os meninos foi à escola.\n✅ Os meninos foram à escola.',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+  {
+    id: 'q-con-04', topico_id: 'topic-concordancia', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: '"Os sigma boys ficaram em silêncio." O verbo "ficaram" está correto porque:',
+    resposta_correta: 'O sujeito "os sigma boys" é plural, então o verbo vai para o plural também',
+    distratores: [
+      '"Ficaram" está errado — o certo seria "ficou"',
+      'Palavras estrangeiras sempre usam verbo no singular',
+      'O verbo concorda com "silêncio", que é singular',
+    ],
+    explicacao: 'Concordância verbal: sujeito plural → verbo plural. "Os sigma boys" = plural. "Ficaram" = plural. Correto! O verbo sempre concorda com o sujeito.',
+    referencia_cultural: 'sigma meme',
+    validade_cultural: '2027-01-01',
+  },
+  {
+    id: 'q-con-05', topico_id: 'topic-concordancia', tipo: 'verdadeiro_falso', dificuldade: 2,
+    enunciado: 'Em "as crianças brincavam felizes", o adjetivo "felizes" está no plural porque concorda com "crianças".',
+    resposta_correta: 'Verdadeiro',
+    explicacao: '"Crianças" é feminino plural. "Felizes" também precisa ser plural (concordância nominal). A forma singular seria "feliz" — mas aqui, com várias crianças, vai para "felizes".',
+  },
+  {
+    id: 'q-con-06', topico_id: 'topic-concordancia', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual frase tem concordância verbal ERRADA?',
+    resposta_correta: 'As meninas foi ao shopping.',
+    distratores: ['As meninas foram ao shopping.', 'Os meninos foram ao campo.', 'Ela foi à escola cedo.'],
+    explicacao: '"As meninas" é plural, então o verbo precisa ser plural: "foram". "Foi" é singular — só para "ela foi", "ele foi". Erro muito comum na escrita!',
+  },
+  {
+    id: 'q-con-07', topico_id: 'topic-concordancia', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual opção completa corretamente? "Os jogadores estavam _____."',
+    resposta_correta: 'cansados',
+    distratores: ['cansada', 'cansado', 'cansadas'],
+    explicacao: '"Os jogadores" = masculino plural. O adjetivo precisa concordar: "cansados" (masculino plural). "Cansado" seria singular, "cansada/cansadas" seria feminino.',
+    referencia_cultural: 'futebol / esportes',
+    validade_cultural: '2032-01-01',
+  },
+  {
+    id: 'q-con-08', topico_id: 'topic-concordancia', tipo: 'elaboracao', dificuldade: 3,
+    enunciado: 'Escreva um parágrafo sobre seu time, grupo ou squad favorito (game, esporte, série...). Use pelo menos 4 frases. Depois sublinha os sujeitos e os verbos e verifica: todos concordam?',
+    resposta_correta: '',
+    explicacao: 'Revisar o próprio texto procurando concordância é o que escritores profissionais fazem. É uma habilidade que você vai usar para sempre.',
+    referencia_cultural: 'squad / time favorito',
   },
 
   // ════════════════════════════════════════════════════════════
