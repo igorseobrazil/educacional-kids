@@ -9,6 +9,11 @@ interface Props {
 export default function PinGate({ children }: Props) {
   const { user, parentUnlocked, setParentUnlocked } = useAuthStore()
   const [mode, setMode] = useState<'loading' | 'criar' | 'verificar' | 'confirmar'>('loading')
+
+  // Bloqueia quando o usuário sai da rota /parents
+  useEffect(() => {
+    return () => setParentUnlocked(false)
+  }, [])
   const [pin, setPin] = useState('')
   const [pinConfirm, setPinConfirm] = useState('')
   const [erro, setErro] = useState('')
@@ -16,10 +21,12 @@ export default function PinGate({ children }: Props) {
 
   useEffect(() => {
     if (!user) return
-    getPin(user.uid).then((p) => {
-      setPinSalvo(p)
-      setMode(p ? 'verificar' : 'criar')
-    })
+    getPin(user.uid)
+      .then((p) => {
+        setPinSalvo(p)
+        setMode(p ? 'verificar' : 'criar')
+      })
+      .catch(() => setMode('criar'))
   }, [user])
 
   // Já desbloqueado nesta sessão
@@ -58,9 +65,14 @@ export default function PinGate({ children }: Props) {
         setPinConfirm('')
         return
       }
-      await savePin(user!.uid, pin)
-      setPinSalvo(pin)
-      setParentUnlocked(true)
+      try {
+        await savePin(user!.uid, pin)
+        setPinSalvo(pin)
+        setParentUnlocked(true)
+      } catch (e) {
+        console.error('[PIN] Erro ao salvar PIN:', e)
+        setErro('Erro ao salvar PIN. Tente novamente.')
+      }
       return
     }
 

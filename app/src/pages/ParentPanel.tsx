@@ -10,7 +10,7 @@ import type { MemoryState, SessionLog } from '../types'
 
 export default function ParentPanel() {
   const { activeChild } = useAppStore()
-  const { user, setParentUnlocked } = useAuthStore()
+  const { user } = useAuthStore()
   const navigate = useNavigate()
   const [sessions, setSessions] = useState<SessionLog[]>([])
   const [memoryMap, setMemoryMap] = useState<Record<string, MemoryState>>({})
@@ -19,11 +19,6 @@ export default function ParentPanel() {
   useEffect(() => {
     if (activeChild) loadData()
   }, [activeChild])
-
-  // Bloqueia só quando o componente desmonta de verdade (não a cada mudança de activeChild)
-  useEffect(() => {
-    return () => setParentUnlocked(false)
-  }, [])
 
   async function loadData() {
     if (!activeChild) return
