@@ -46,8 +46,12 @@ export default function App() {
         // Carrega saldo de folhas
         const childToUse = child ?? (children.length > 0 ? children[0] : null)
         if (childToUse) {
-          const balance = await getOrCreateBalance(childToUse.id)
-          setLeafBalance(balance)
+          try {
+            const balance = await getOrCreateBalance(childToUse.id)
+            setLeafBalance(balance)
+          } catch {
+            console.warn('Erro ao carregar folhas — segue sem')
+          }
         }
       }
     })

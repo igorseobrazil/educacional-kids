@@ -32,9 +32,13 @@ export default function DailyPrep({ onReady }: Props) {
     setLoading(true)
 
     if (hasLeaves) {
-      const mode: LeafMode = modoSelecionado ?? 'mesada'
-      const updated = await chooseDailyMode(activeChild.id, mode)
-      setLeafBalance(updated)
+      try {
+        const mode: LeafMode = modoSelecionado ?? 'mesada'
+        const updated = await chooseDailyMode(activeChild.id, mode)
+        setLeafBalance(updated)
+      } catch {
+        console.warn('Erro ao escolher modo — segue com padrão')
+      }
     }
 
     setLastOpenDate(new Date().toISOString().slice(0, 10))
