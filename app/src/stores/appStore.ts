@@ -1,15 +1,19 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { Child, MemoryState } from '../types'
+import type { Child, MemoryState, LeafBalance } from '../types'
 
 interface AppState {
   activeChild: Child | null
   children: Child[]
   hasSeenOnboarding: boolean
+  lastOpenDate: string        // para mostrar DailyPrep uma vez por dia
+  leafBalance: LeafBalance | null
   memoryStates: Record<string, MemoryState>
   setActiveChild: (child: Child) => void
   setChildren: (children: Child[]) => void
   setHasSeenOnboarding: (v: boolean) => void
+  setLastOpenDate: (date: string) => void
+  setLeafBalance: (balance: LeafBalance | null) => void
   addChild: (child: Child) => void
   removeChild: (childId: string) => void
   clearMemoryStates: () => void
@@ -24,11 +28,15 @@ export const useAppStore = create<AppState>()(
       activeChild: null,
       children: [],
       hasSeenOnboarding: false,
+      lastOpenDate: '',
+      leafBalance: null,
       memoryStates: {},
 
-      setActiveChild: (activeChild) => set({ activeChild, memoryStates: {} }),
+      setActiveChild: (activeChild) => set({ activeChild, memoryStates: {}, leafBalance: null }),
       setChildren: (children) => set({ children }),
       setHasSeenOnboarding: (hasSeenOnboarding) => set({ hasSeenOnboarding }),
+      setLastOpenDate: (lastOpenDate) => set({ lastOpenDate }),
+      setLeafBalance: (leafBalance) => set({ leafBalance }),
       addChild: (child) => set((s) => ({ children: [...s.children, child] })),
       removeChild: (childId) =>
         set((s) => ({

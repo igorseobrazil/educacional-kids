@@ -68,6 +68,46 @@ export interface SessionLog {
   new_items: number
 }
 
+// ── Folhas (moeda do app) ────────────────────────────────────────────────────
+
+export type LeafMode = 'tela' | 'mesada' | null
+
+export interface LeafBalance {
+  id?: number
+  child_id: string
+  available: number           // saldo disponível para gastar
+  acumulado_semana: number    // folhas poupadas para mesada esta semana
+  modo_hoje: LeafMode         // escolha do dia
+  minutos_hoje: number        // 30 (mesada) ou 60 (tela)
+  data_hoje: string           // ISO date — para resetar diariamente
+  semana_inicio: string       // segunda-feira da semana atual
+  synced_at?: string
+}
+
+export interface LeafTransaction {
+  id?: number
+  child_id: string
+  amount: number              // positivo = ganhou, negativo = gastou
+  type: 'session' | 'streak' | 'perfect' | 'topic' | 'upgrade_tela' | 'pagamento_mesada'
+  descricao: string
+  date: string                // ISO date
+}
+
+// Constantes do sistema
+export const LEAF = {
+  SESSION: 20,
+  STREAK: 5,
+  PERFECT: 10,       // sessão com ≥80% de acerto
+  TOPIC: 50,         // dominar um tópico pela primeira vez
+  CUSTO_TELA: 50,    // custo para upgrade de 30→60 min
+  MESADA_RATE: 10,   // folhas por R$1
+  MESADA_MAX: 250,   // teto semanal (R$25)
+  MIN_TELA: 30,      // minutos grátis (modo mesada)
+  MAX_TELA: 60,      // minutos ao comprar (modo tela)
+} as const
+
+// ── Criança ──────────────────────────────────────────────────────────────────
+
 export interface Child {
   id: string
   nome: string

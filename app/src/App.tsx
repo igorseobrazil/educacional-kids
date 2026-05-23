@@ -10,12 +10,16 @@ import Setup from './pages/Setup'
 import Login from './pages/Login'
 import ParentPanel from './pages/ParentPanel'
 import Onboarding from './pages/Onboarding'
+import DailyPrep from './pages/DailyPrep'
+import { getOrCreateBalance } from './lib/leaves'
 import UpdatePrompt from './components/UpdatePrompt'
 import PinGate from './components/PinGate'
 
 export default function App() {
   const { user, authLoading, setUser, setAuthLoading } = useAuthStore()
-  const { activeChild, setActiveChild, setChildren, hasSeenOnboarding, setHasSeenOnboarding } = useAppStore()
+  const { activeChild, setActiveChild, setChildren, hasSeenOnboarding, setHasSeenOnboarding, lastOpenDate, setLeafBalance } = useAppStore()
+  const today = new Date().toISOString().slice(0, 10)
+  const needsDailyPrep = hasSeenOnboarding && !!activeChild && lastOpenDate !== today
 
   useEffect(() => {
     const unsub = onAuthChange(async (firebaseUser) => {
@@ -39,6 +43,13 @@ export default function App() {
         }
 
         await flushSyncQueue()
+
+        // Carrega saldo de folhas
+        const childToUse = child ?? (children.length > 0 ? children[0] : null)
+        if (childToUse) {
+          const balance = await getOrCreateBalance(childToUse.id)
+          setLeafBalance(balance)
+        }
       }
     })
     return unsub
@@ -66,6 +77,9 @@ export default function App() {
                 nome={activeChild.nome}
                 onFinish={() => setHasSeenOnboarding(true)}
               />
+            ) :
+            needsDailyPrep ? (
+              <DailyPrep onReady={() => {}} />
             ) :
             <Home />
           }

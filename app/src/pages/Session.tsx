@@ -6,19 +6,20 @@ import { db } from '../db/schema'
 import { isDue, getEmptyState, scheduleReview, Rating } from '../fsrs/engine'
 import { syncMemoryState } from '../lib/sync'
 import { questions, topics } from '../content/trails'
+import { earnLeaves } from '../lib/leaves'
 import QuestionCard from '../components/QuestionCard'
 import FeedbackCard from '../components/FeedbackCard'
 import SessionEnd from '../components/SessionEnd'
 import GanchoScreen from '../components/GanchoScreen'
 import type { Question } from '../types'
 
-const MAX_NEW_PER_SESSION = 5
+const MAX_NEW_PER_SESSION = 8
 const SESSION_SIZE = 12
 
 export default function Session() {
   const [searchParams] = useSearchParams()
   const topicFilter = searchParams.get('topic')
-  const { activeChild, memoryStates, setMemoryState } = useAppStore()
+  const { activeChild, memoryStates, setMemoryState, setLeafBalance } = useAppStore()
   const { queue, currentIndex, phase, startSession, answerCorrect, answerWrong, nextQuestion, endSession } =
     useSessionStore()
   const navigate = useNavigate()
@@ -26,6 +27,8 @@ export default function Session() {
   const [lastAnswer, setLastAnswer] = useState<{ correct: boolean; answer: string } | null>(null)
   const [gancho, setGancho] = useState<{ topicNome: string; descricao: string; texto: string } | null>(null)
   const [isFirstSession, setIsFirstSession] = useState(false)
+  const [leavesEarned, setLeavesEarned] = useState(0)
+  const [leavesBreakdown, setLeavesBreakdown] = useState<string[]>([])
 
   useEffect(() => {
     if (activeChild) buildSession()
@@ -40,14 +43,26 @@ export default function Session() {
 
   async function saveSessionLog() {
     if (!activeChild) return
-    const log = {
+    const { correct, newItemsCount } = useSessionStore.getState()
+    const pct = queue.length > 0 ? Math.round((correct / queue.length) * 100) : 0
+
+    await db.sessionLogs.add({
       child_id: activeChild.id,
       date: new Date().toISOString().slice(0, 10),
       items_seen: queue.length,
-      correct: useSessionStore.getState().correct,
-      new_items: useSessionStore.getState().newItemsCount,
-    }
-    await db.sessionLogs.add(log)
+      correct,
+      new_items: newItemsCount,
+    })
+
+    // Concede folhas pela sessão
+    const logs = await db.sessionLogs.where('child_id').equals(activeChild.id).toArray()
+    const uniqueDays = new Set(logs.map((l) => l.date)).size
+    const streak = uniqueDays > 0 ? Math.min(uniqueDays, 30) : 0
+
+    const { total, balance, breakdown } = await earnLeaves(activeChild.id, { streak, pct })
+    setLeavesEarned(total)
+    setLeavesBreakdown(breakdown)
+    setLeafBalance(balance)
   }
 
   async function buildSession() {
@@ -140,7 +155,7 @@ export default function Session() {
   }
 
   if (phase === 'done') {
-    return <SessionEnd isFirstSession={isFirstSession} onClose={() => { endSession(); navigate('/') }} />
+    return <SessionEnd isFirstSession={isFirstSession} leavesEarned={leavesEarned} leavesBreakdown={leavesBreakdown} onClose={() => { endSession(); navigate('/') }} />
   }
 
   if (queue.length === 0) {

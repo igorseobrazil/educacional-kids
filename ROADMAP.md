@@ -85,6 +85,18 @@
 - [x] Respostas normalizadas (maiúscula e pontuação final aceitas)
 - [x] Dicas nas questões mais difíceis (lacunas e regras abstratas)
 
+### Sistema de Folhas 🍃
+- [x] Tipos e constantes (LeafBalance, LeafTransaction, LEAF constants)
+- [x] Banco local Dexie v4 (leafBalances, leafTransactions)
+- [x] Engine de folhas (ganhar, gastar, escolher modo, pagar mesada)
+- [x] Tela de preparação diária (DailyPrep) — checklist + escolha do modo
+- [x] Concessão de folhas ao fim da sessão (sessão, streak, desempenho, tópico)
+- [x] Breakdown na tela de encerramento explicando o que foi ganho
+- [x] Badge 🍃 e 📱min na Home
+- [x] Modo tela (gasta 50🍃 → 60min de celular)
+- [x] Modo mesada (30min grátis + acumula para R$25/semana)
+- [x] Sessão mínima aumentada para 8 questões
+
 ---
 
 ## 🔲 Pendente — próximas sessões

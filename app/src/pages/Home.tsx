@@ -8,7 +8,7 @@ import ChildSwitcher from '../components/ChildSwitcher'
 import type { Child, MemoryState, SessionLog } from '../types'
 
 export default function Home() {
-  const { activeChild, children, memoryStates, setMemoryStates, setActiveChild } = useAppStore()
+  const { activeChild, children, memoryStates, setMemoryStates, setActiveChild, leafBalance } = useAppStore()
   const navigate = useNavigate()
   const [dueCount, setDueCount] = useState(0)
   const [nextReview, setNextReview] = useState<string | null>(null)
@@ -86,11 +86,23 @@ export default function Home() {
             )}
           </div>
         </div>
-        <div className="flex items-center gap-3 mt-1">
+        <div className="flex items-center gap-2 mt-1 flex-wrap">
           {streak > 0 && (
             <div className="flex items-center gap-1 bg-orange-50 text-orange-500 rounded-full px-2 py-1">
               <span className="text-sm">🔥</span>
               <span className="text-xs font-bold">{streak}</span>
+            </div>
+          )}
+          {leafBalance && (
+            <div className="flex items-center gap-1 bg-green-50 text-green-600 rounded-full px-2 py-1">
+              <span className="text-sm">🍃</span>
+              <span className="text-xs font-bold">{leafBalance.available + leafBalance.acumulado_semana}</span>
+            </div>
+          )}
+          {leafBalance && leafBalance.minutos_hoje > 0 && (
+            <div className="flex items-center gap-1 bg-indigo-50 text-indigo-500 rounded-full px-2 py-1">
+              <span className="text-sm">📱</span>
+              <span className="text-xs font-bold">{leafBalance.minutos_hoje}min</span>
             </div>
           )}
           <button
