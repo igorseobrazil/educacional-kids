@@ -286,9 +286,10 @@ export const questions: Question[] = [
     validade_cultural: '2029-01-01',
   },
   {
-    id: 'q-art-07', topico_id: 'topic-artigo', tipo: 'ordenacao', dificuldade: 2,
-    enunciado: 'Separe em ARTIGOS DEFINIDOS e ARTIGOS INDEFINIDOS:\no | uns | a | uma | as | um | os | umas',
+    id: 'q-art-07', topico_id: 'topic-artigo', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual opção separa corretamente os artigos?\no | uns | a | uma | as | um | os | umas',
     resposta_correta: 'Definidos: o, a, os, as | Indefinidos: um, uma, uns, umas',
+    distratores: ['Definidos: o, a, um, uma | Indefinidos: os, as, uns, umas', 'Definidos: o, os, um, uns | Indefinidos: a, as, uma, umas', 'Definidos: o, a, uns, umas | Indefinidos: um, uma, os, as'],
     explicacao: 'Definidos (o, a, os, as) apontam para algo específico. Indefinidos (um, uma, uns, umas) apontam para algo genérico.',
   },
   {

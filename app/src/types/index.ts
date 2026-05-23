@@ -2,7 +2,6 @@ export type QuestionType =
   | 'multipla_escolha'
   | 'lacuna'
   | 'verdadeiro_falso'
-  | 'ordenacao'
   | 'resposta_curta'
   | 'elaboracao'
   | 'caderno'

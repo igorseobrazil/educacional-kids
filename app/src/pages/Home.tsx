@@ -176,18 +176,28 @@ function calcStreak(logs: SessionLog[]): number {
   const today = new Date().toISOString().slice(0, 10)
   const uniqueDays = [...new Set(logs.map((l) => l.date))].sort().reverse()
 
-  // Streak só conta se estudou hoje ou ontem
   const mostRecent = uniqueDays[0]
-  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
-  if (mostRecent !== today && mostRecent !== yesterday) return 0
+  const yesterday   = new Date(Date.now() - 86400000).toISOString().slice(0, 10)
+  const twoDaysAgo  = new Date(Date.now() - 172800000).toISOString().slice(0, 10)
+
+  // Perdão de 1 dia — streak só zera depois de 2 dias sem estudar
+  if (mostRecent !== today && mostRecent !== yesterday && mostRecent !== twoDaysAgo) return 0
 
   let count = 1
+  let usedForgiveness = false
   for (let i = 1; i < uniqueDays.length; i++) {
     const prev = new Date(uniqueDays[i - 1])
     const curr = new Date(uniqueDays[i])
     const diff = Math.round((prev.getTime() - curr.getTime()) / 86400000)
-    if (diff === 1) count++
-    else break
+    if (diff === 1) {
+      count++
+    } else if (diff === 2 && !usedForgiveness) {
+      // Um dia de folga perdoado por streak
+      count++
+      usedForgiveness = true
+    } else {
+      break
+    }
   }
   return count
 }

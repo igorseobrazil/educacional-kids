@@ -5,10 +5,11 @@ import { useSessionStore } from '../stores/sessionStore'
 import { db } from '../db/schema'
 import { isDue, getEmptyState, scheduleReview, Rating } from '../fsrs/engine'
 import { syncMemoryState } from '../lib/sync'
-import { questions } from '../content/trails'
+import { questions, topics } from '../content/trails'
 import QuestionCard from '../components/QuestionCard'
 import FeedbackCard from '../components/FeedbackCard'
 import SessionEnd from '../components/SessionEnd'
+import GanchoScreen from '../components/GanchoScreen'
 import type { Question } from '../types'
 
 const MAX_NEW_PER_SESSION = 5
@@ -23,6 +24,7 @@ export default function Session() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [lastAnswer, setLastAnswer] = useState<{ correct: boolean; answer: string } | null>(null)
+  const [gancho, setGancho] = useState<{ topicNome: string; texto: string } | null>(null)
 
   useEffect(() => {
     if (activeChild) buildSession()
@@ -79,6 +81,15 @@ export default function Session() {
     session.sort(() => Math.random() - 0.5)
 
     const newCount = session.filter((q) => !stateMap[q.id]).length
+
+    // Mostra gancho se é tópico específico e a criança ainda não tem nenhuma questão respondida
+    if (topicFilter && newCount === session.length) {
+      const topic = topics.find((t) => t.id === topicFilter)
+      if (topic?.gancho_curiosidade) {
+        setGancho({ topicNome: topic.nome, texto: topic.gancho_curiosidade })
+      }
+    }
+
     setLoading(false)
     startSession(session, newCount)
   }
@@ -109,6 +120,16 @@ export default function Session() {
       <div className="min-h-screen flex items-center justify-center bg-indigo-50">
         <p className="text-indigo-400">Montando sua sessão...</p>
       </div>
+    )
+  }
+
+  if (gancho) {
+    return (
+      <GanchoScreen
+        topicNome={gancho.topicNome}
+        gancho={gancho.texto}
+        onStart={() => setGancho(null)}
+      />
     )
   }
 

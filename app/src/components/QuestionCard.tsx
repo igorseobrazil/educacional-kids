@@ -35,7 +35,7 @@ export default function QuestionCard({ question, onAnswer }: Props) {
   [question.id])
 
   const isMulti = question.tipo === 'multipla_escolha' || question.tipo === 'verdadeiro_falso'
-  const isText = ['lacuna', 'resposta_curta', 'elaboracao', 'ordenacao'].includes(question.tipo)
+  const isText = ['lacuna', 'resposta_curta', 'elaboracao'].includes(question.tipo)
   const canSubmit = isMulti ? !!selected : textAnswer.trim().length > 0
 
   return (
@@ -172,7 +172,6 @@ function labelTipo(tipo: Question['tipo']): string {
     multipla_escolha: 'Múltipla escolha',
     lacuna: 'Complete a lacuna',
     verdadeiro_falso: 'Verdadeiro ou falso',
-    ordenacao: 'Ordenar e classificar',
     resposta_curta: 'Resposta curta',
     elaboracao: 'Explique com suas palavras',
     caderno: 'Anote no caderno',
