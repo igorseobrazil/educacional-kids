@@ -1,16 +1,15 @@
+import { useState } from 'react'
 import { useRegisterSW } from 'virtual:pwa-register/react'
 
 export default function UpdatePrompt() {
+  const [dismissed, setDismissed] = useState(false)
   const { needRefresh: [needRefresh], updateServiceWorker } = useRegisterSW({
     onRegisteredSW(_swUrl, r) {
-      // Verifica atualizações a cada 60 segundos
-      setInterval(async () => {
-        if (r) await r.update()
-      }, 60_000)
+      setInterval(async () => { if (r) await r.update() }, 60_000)
     },
   })
 
-  if (!needRefresh) return null
+  if (!needRefresh || dismissed) return null
 
   async function handleUpdate() {
     await updateServiceWorker(true)
@@ -18,14 +17,20 @@ export default function UpdatePrompt() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 z-50 max-w-sm mx-auto">
-      <div className="bg-indigo-700 text-white rounded-2xl shadow-lg px-4 py-3 flex items-center justify-between gap-3">
-        <p className="text-sm font-medium">Nova versão disponível!</p>
+    <div className="fixed top-0 left-0 right-0 z-50 bg-indigo-600 text-white px-4 py-2 flex items-center justify-between gap-2 text-sm shadow">
+      <span className="font-medium">Nova versão disponível</span>
+      <div className="flex items-center gap-2 shrink-0">
         <button
           onClick={handleUpdate}
-          className="bg-white text-indigo-700 text-sm font-bold rounded-xl px-4 py-1.5 shrink-0 hover:bg-indigo-50 transition-colors"
+          className="bg-white text-indigo-700 font-bold rounded-lg px-3 py-1 text-xs hover:bg-indigo-50 transition-colors"
         >
           Atualizar
+        </button>
+        <button
+          onClick={() => setDismissed(true)}
+          className="text-indigo-200 hover:text-white text-lg leading-none"
+        >
+          ✕
         </button>
       </div>
     </div>
