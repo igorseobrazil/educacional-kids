@@ -69,9 +69,14 @@ export default function ParentPanel() {
       `Tem certeza que quer excluir o perfil de ${child.nome}? Todo o progresso será apagado permanentemente.`
     )
     if (!confirmed) return
-    await deleteChild(child.id)
-    removeChild(child.id)
-    if (children.length <= 1) navigate('/')
+    try {
+      await deleteChild(child.id)
+      removeChild(child.id)
+      if (children.length <= 1) navigate('/')
+    } catch (err) {
+      console.error('Erro ao excluir filho:', err)
+      alert('Não foi possível excluir. Verifique sua conexão e tente novamente.')
+    }
   }
 
   async function handleSaveBirthday(childId: string) {

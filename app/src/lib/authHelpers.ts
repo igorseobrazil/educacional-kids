@@ -8,7 +8,7 @@ import {
   type User,
 } from 'firebase/auth'
 import {
-  doc, setDoc, getDoc, getDocs,
+  doc, setDoc, getDoc, getDocs, deleteDoc,
   collection, query, where, updateDoc, arrayUnion,
 } from 'firebase/firestore'
 import { auth, firestore } from './firebase'
@@ -93,8 +93,6 @@ export async function loadChildren(uid: string): Promise<Child[]> {
 
 export async function deleteChild(childId: string) {
   // Apaga subcoleções no Firestore
-  const { deleteDoc } = await import('firebase/firestore')
-
   const statesSnap = await getDocs(collection(firestore, 'children', childId, 'memory_states'))
   for (const d of statesSnap.docs) await deleteDoc(d.ref)
 
