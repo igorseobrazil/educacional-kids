@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import type { Question } from '../types'
 
 interface Props {
@@ -21,12 +21,13 @@ export default function QuestionCard({ question, onAnswer }: Props) {
     onAnswer(answer)
   }
 
-  const options =
+  const options = useMemo(() =>
     question.tipo === 'multipla_escolha'
       ? shuffle([question.resposta_correta, ...(question.distratores ?? [])])
       : question.tipo === 'verdadeiro_falso'
       ? ['Verdadeiro', 'Falso']
-      : []
+      : [],
+  [question.id])
 
   const isMulti = question.tipo === 'multipla_escolha' || question.tipo === 'verdadeiro_falso'
   const isText = ['lacuna', 'resposta_curta', 'elaboracao', 'ordenacao'].includes(question.tipo)
