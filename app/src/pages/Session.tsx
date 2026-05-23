@@ -24,7 +24,7 @@ export default function Session() {
   const navigate = useNavigate()
   const [loading, setLoading] = useState(true)
   const [lastAnswer, setLastAnswer] = useState<{ correct: boolean; answer: string } | null>(null)
-  const [gancho, setGancho] = useState<{ topicNome: string; texto: string } | null>(null)
+  const [gancho, setGancho] = useState<{ topicNome: string; descricao: string; texto: string } | null>(null)
   const [isFirstSession, setIsFirstSession] = useState(false)
 
   useEffect(() => {
@@ -91,7 +91,7 @@ export default function Session() {
     if (topicFilter && newCount === session.length) {
       const topic = topics.find((t) => t.id === topicFilter)
       if (topic?.gancho_curiosidade) {
-        setGancho({ topicNome: topic.nome, texto: topic.gancho_curiosidade })
+        setGancho({ topicNome: topic.nome, descricao: topic.descricao ?? '', texto: topic.gancho_curiosidade })
       }
     }
 
@@ -132,6 +132,7 @@ export default function Session() {
     return (
       <GanchoScreen
         topicNome={gancho.topicNome}
+        descricao={gancho.descricao}
         gancho={gancho.texto}
         onStart={() => setGancho(null)}
       />

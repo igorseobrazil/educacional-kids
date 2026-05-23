@@ -26,6 +26,7 @@ export interface Topic {
   nome: string
   trilha_id: string
   eixo_bncc?: string
+  descricao: string          // "o que você vai aprender" — exibido antes do gancho
   gancho_curiosidade: string
   pre_requisitos: string[]
   itens: string[] // question ids
