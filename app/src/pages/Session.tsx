@@ -25,6 +25,7 @@ export default function Session() {
   const [loading, setLoading] = useState(true)
   const [lastAnswer, setLastAnswer] = useState<{ correct: boolean; answer: string } | null>(null)
   const [gancho, setGancho] = useState<{ topicNome: string; texto: string } | null>(null)
+  const [isFirstSession, setIsFirstSession] = useState(false)
 
   useEffect(() => {
     if (activeChild) buildSession()
@@ -57,6 +58,10 @@ export default function Session() {
       : questions
 
     // Load or initialize memory states
+    // Verifica se é a primeira sessão antes de construir
+    const existingLogs = await db.sessionLogs.where('child_id').equals(activeChild.id).count()
+    if (existingLogs === 0) setIsFirstSession(true)
+
     const existingStates = await db.memoryStates.where('child_id').equals(activeChild.id).toArray()
     const stateMap = Object.fromEntries(existingStates.map((s) => [s.question_id, s]))
 
@@ -134,7 +139,7 @@ export default function Session() {
   }
 
   if (phase === 'done') {
-    return <SessionEnd onClose={() => { endSession(); navigate('/') }} />
+    return <SessionEnd isFirstSession={isFirstSession} onClose={() => { endSession(); navigate('/') }} />
   }
 
   if (queue.length === 0) {
