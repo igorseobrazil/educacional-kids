@@ -33,9 +33,23 @@ export async function getOrCreateBalance(childId: string): Promise<LeafBalance> 
     return existing
   }
 
+  // Calcula folhas iniciais baseadas no histórico de sessões anteriores
+  let initialLeaves = 0
+  try {
+    const logs = await db.sessionLogs.where('child_id').equals(childId).toArray()
+    for (const log of logs) {
+      initialLeaves += LEAF.SESSION
+      if (log.items_seen > 0 && (log.correct / log.items_seen) >= 0.8) {
+        initialLeaves += LEAF.PERFECT
+      }
+    }
+  } catch {
+    // Segue com 0 se não conseguir ler o histórico
+  }
+
   const fresh: LeafBalance = {
     child_id: childId,
-    available: 0,
+    available: initialLeaves,
     acumulado_semana: 0,
     modo_hoje: null,
     minutos_hoje: 0,
@@ -43,6 +57,17 @@ export async function getOrCreateBalance(childId: string): Promise<LeafBalance> 
     semana_inicio: mondayOfWeek(),
   }
   await db.leafBalances.add(fresh)
+
+  if (initialLeaves > 0) {
+    await db.leafTransactions.add({
+      child_id: childId,
+      amount: initialLeaves,
+      type: 'session',
+      descricao: `Folhas iniciais baseadas em sessões anteriores`,
+      date: today(),
+    })
+  }
+
   return getOrCreateBalance(childId)
 }
 
