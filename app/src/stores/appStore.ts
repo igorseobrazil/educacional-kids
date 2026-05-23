@@ -5,9 +5,11 @@ import type { Child, MemoryState } from '../types'
 interface AppState {
   activeChild: Child | null
   children: Child[]
+  hasSeenOnboarding: boolean
   memoryStates: Record<string, MemoryState>
   setActiveChild: (child: Child) => void
   setChildren: (children: Child[]) => void
+  setHasSeenOnboarding: (v: boolean) => void
   addChild: (child: Child) => void
   removeChild: (childId: string) => void
   clearMemoryStates: () => void
@@ -21,10 +23,12 @@ export const useAppStore = create<AppState>()(
     (set) => ({
       activeChild: null,
       children: [],
+      hasSeenOnboarding: false,
       memoryStates: {},
 
       setActiveChild: (activeChild) => set({ activeChild, memoryStates: {} }),
       setChildren: (children) => set({ children }),
+      setHasSeenOnboarding: (hasSeenOnboarding) => set({ hasSeenOnboarding }),
       addChild: (child) => set((s) => ({ children: [...s.children, child] })),
       removeChild: (childId) =>
         set((s) => ({

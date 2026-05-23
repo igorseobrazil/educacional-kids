@@ -9,12 +9,13 @@ import Session from './pages/Session'
 import Setup from './pages/Setup'
 import Login from './pages/Login'
 import ParentPanel from './pages/ParentPanel'
+import Onboarding from './pages/Onboarding'
 import UpdatePrompt from './components/UpdatePrompt'
 import PinGate from './components/PinGate'
 
 export default function App() {
   const { user, authLoading, setUser, setAuthLoading } = useAuthStore()
-  const { activeChild, setActiveChild, setChildren } = useAppStore()
+  const { activeChild, setActiveChild, setChildren, hasSeenOnboarding, setHasSeenOnboarding } = useAppStore()
 
   useEffect(() => {
     const unsub = onAuthChange(async (firebaseUser) => {
@@ -60,6 +61,12 @@ export default function App() {
           element={
             !user ? <Navigate to="/login" replace /> :
             !activeChild ? <Navigate to="/setup" replace /> :
+            !hasSeenOnboarding ? (
+              <Onboarding
+                nome={activeChild.nome}
+                onFinish={() => setHasSeenOnboarding(true)}
+              />
+            ) :
             <Home />
           }
         />
