@@ -9,6 +9,7 @@ interface AppState {
   setActiveChild: (child: Child) => void
   setChildren: (children: Child[]) => void
   addChild: (child: Child) => void
+  removeChild: (childId: string) => void
   updateChildInStore: (childId: string, fields: Partial<Child>) => void
   setMemoryState: (state: MemoryState) => void
   setMemoryStates: (states: MemoryState[]) => void
@@ -24,6 +25,11 @@ export const useAppStore = create<AppState>()(
       setActiveChild: (activeChild) => set({ activeChild, memoryStates: {} }),
       setChildren: (children) => set({ children }),
       addChild: (child) => set((s) => ({ children: [...s.children, child] })),
+      removeChild: (childId) =>
+        set((s) => ({
+          children: s.children.filter((c) => c.id !== childId),
+          activeChild: s.activeChild?.id === childId ? (s.children.find((c) => c.id !== childId) ?? null) : s.activeChild,
+        })),
       updateChildInStore: (childId, fields) =>
         set((s) => ({
           children: s.children.map((c) => c.id === childId ? { ...c, ...fields } : c),

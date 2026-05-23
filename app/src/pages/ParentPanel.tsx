@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '../stores/appStore'
 import { useAuthStore } from '../stores/authStore'
-import { signOut, createChild, updateChild } from '../lib/authHelpers'
+import { signOut, createChild, updateChild, deleteChild } from '../lib/authHelpers'
 import { db } from '../db/schema'
 import { progressPercent, masteryPercent } from '../fsrs/engine'
 import { topics, trails } from '../content/trails'
@@ -11,7 +11,7 @@ import type { MemoryState, SessionLog } from '../types'
 type Tab = 'progresso' | 'filhos'
 
 export default function ParentPanel() {
-  const { activeChild, children, setActiveChild, addChild, updateChildInStore } = useAppStore()
+  const { activeChild, children, setActiveChild, addChild, removeChild, updateChildInStore } = useAppStore()
   const { user } = useAuthStore()
   const navigate = useNavigate()
 
@@ -62,6 +62,16 @@ export default function ParentPanel() {
     } finally {
       setAddLoading(false)
     }
+  }
+
+  async function handleDeleteChild(child: typeof children[0]) {
+    const confirmed = window.confirm(
+      `Tem certeza que quer excluir o perfil de ${child.nome}? Todo o progresso será apagado permanentemente.`
+    )
+    if (!confirmed) return
+    await deleteChild(child.id)
+    removeChild(child.id)
+    if (children.length <= 1) navigate('/')
   }
 
   async function handleSaveBirthday(childId: string) {
@@ -258,7 +268,15 @@ export default function ParentPanel() {
                   <div key={c.id} className="border border-gray-100 rounded-xl p-4">
                     <div className="flex items-center justify-between mb-3">
                       <p className="font-semibold text-gray-800">{c.nome}</p>
-                      <span className="text-xs text-gray-400">{c.ano_escolar}º ano</span>
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs text-gray-400">{c.ano_escolar}º ano</span>
+                        <button
+                          onClick={() => handleDeleteChild(c)}
+                          className="text-xs text-red-400 hover:text-red-600 transition-colors"
+                        >
+                          Excluir
+                        </button>
+                      </div>
                     </div>
                     {/* Aniversário (PIN da criança) */}
                     <div className="bg-amber-50 rounded-xl p-3 mb-2">

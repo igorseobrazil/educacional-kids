@@ -91,6 +91,24 @@ export async function loadChildren(uid: string): Promise<Child[]> {
   return children
 }
 
+export async function deleteChild(childId: string) {
+  // Apaga subcoleções no Firestore
+  const { deleteDoc } = await import('firebase/firestore')
+
+  const statesSnap = await getDocs(collection(firestore, 'children', childId, 'memory_states'))
+  for (const d of statesSnap.docs) await deleteDoc(d.ref)
+
+  const logsSnap = await getDocs(collection(firestore, 'children', childId, 'session_logs'))
+  for (const d of logsSnap.docs) await deleteDoc(d.ref)
+
+  await deleteDoc(doc(firestore, 'children', childId))
+
+  // Apaga do Dexie
+  await db.children.delete(childId)
+  await db.memoryStates.where('child_id').equals(childId).delete()
+  await db.sessionLogs.where('child_id').equals(childId).delete()
+}
+
 export async function updateChild(childId: string, fields: Partial<Child>) {
   await updateDoc(doc(firestore, 'children', childId), fields as Record<string, unknown>)
   const existing = await db.children.get(childId)
