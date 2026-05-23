@@ -74,5 +74,6 @@ export interface Child {
   avatar?: string
   guardians: string[]   // uids dos responsáveis
   invite_code: string   // código de 6 letras para convidar outro responsável
+  birthday?: string     // "DDMM" ex: "1207" = 12 de julho. PIN da criança para trocar de perfil
   created_at?: string
 }

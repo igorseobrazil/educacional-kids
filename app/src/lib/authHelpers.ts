@@ -91,6 +91,12 @@ export async function loadChildren(uid: string): Promise<Child[]> {
   return children
 }
 
+export async function updateChild(childId: string, fields: Partial<Child>) {
+  await updateDoc(doc(firestore, 'children', childId), fields as Record<string, unknown>)
+  const existing = await db.children.get(childId)
+  if (existing) await db.children.put({ ...existing, ...fields })
+}
+
 export async function joinChildByCode(code: string, uid: string): Promise<Child | null> {
   const q = query(
     collection(firestore, 'children'),

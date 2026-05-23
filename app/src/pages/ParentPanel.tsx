@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '../stores/appStore'
 import { useAuthStore } from '../stores/authStore'
-import { signOut, createChild } from '../lib/authHelpers'
+import { signOut, createChild, updateChild } from '../lib/authHelpers'
 import { db } from '../db/schema'
 import { progressPercent, masteryPercent } from '../fsrs/engine'
 import { topics, trails } from '../content/trails'
@@ -11,7 +11,7 @@ import type { MemoryState, SessionLog } from '../types'
 type Tab = 'progresso' | 'filhos'
 
 export default function ParentPanel() {
-  const { activeChild, children, setActiveChild, addChild } = useAppStore()
+  const { activeChild, children, setActiveChild, addChild, updateChildInStore } = useAppStore()
   const { user } = useAuthStore()
   const navigate = useNavigate()
 
@@ -23,6 +23,10 @@ export default function ParentPanel() {
   // Adicionar filho
   const [novoNome, setNovoNome] = useState('')
   const [addLoading, setAddLoading] = useState(false)
+
+  // Aniversário por filho (DDMM)
+  const [birthdayEdits, setBirthdayEdits] = useState<Record<string, string>>({})
+  const [birthdaySaving, setBirthdaySaving] = useState<string | null>(null)
 
   useEffect(() => {
     if (activeChild) loadData()
@@ -50,6 +54,16 @@ export default function ParentPanel() {
     setNovoNome('')
     setAddLoading(false)
     setTab('progresso')
+  }
+
+  async function handleSaveBirthday(childId: string) {
+    const raw = (birthdayEdits[childId] ?? '').replace(/\D/g, '').slice(0, 4)
+    if (raw.length !== 4) return
+    setBirthdaySaving(childId)
+    await updateChild(childId, { birthday: raw })
+    updateChildInStore(childId, { birthday: raw })
+    setBirthdaySaving(null)
+    setBirthdayEdits((prev) => ({ ...prev, [childId]: '' }))
   }
 
   async function handleSignOut() {
@@ -238,6 +252,31 @@ export default function ParentPanel() {
                       <p className="font-semibold text-gray-800">{c.nome}</p>
                       <span className="text-xs text-gray-400">{c.ano_escolar}º ano</span>
                     </div>
+                    {/* Aniversário (PIN da criança) */}
+                    <div className="bg-amber-50 rounded-xl p-3 mb-2">
+                      <p className="text-xs text-amber-700 font-medium mb-1">🎂 Aniversário (PIN da criança)</p>
+                      <p className="text-xs text-amber-600 mb-2">Dia + mês, sem separador. Ex: 12 de julho → 1207</p>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          maxLength={4}
+                          placeholder={c.birthday ? c.birthday : 'DDMM'}
+                          value={birthdayEdits[c.id] ?? ''}
+                          onChange={(e) => setBirthdayEdits((prev) => ({ ...prev, [c.id]: e.target.value.replace(/\D/g, '').slice(0, 4) }))}
+                          className="flex-1 border border-amber-200 rounded-lg px-3 py-1.5 text-sm font-mono tracking-widest focus:outline-none focus:border-amber-400"
+                        />
+                        <button
+                          onClick={() => handleSaveBirthday(c.id)}
+                          disabled={birthdaySaving === c.id || (birthdayEdits[c.id] ?? '').length !== 4}
+                          className="bg-amber-500 text-white rounded-lg px-3 py-1.5 text-xs font-semibold disabled:opacity-40 hover:bg-amber-600"
+                        >
+                          {birthdaySaving === c.id ? '...' : 'Salvar'}
+                        </button>
+                      </div>
+                      {c.birthday && <p className="text-xs text-amber-500 mt-1">PIN atual: {c.birthday}</p>}
+                    </div>
+
                     <div className="bg-gray-50 rounded-xl p-3">
                       <p className="text-xs text-gray-400 mb-1">Código de convite para outro responsável</p>
                       <div className="flex items-center justify-between">

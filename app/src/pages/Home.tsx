@@ -4,7 +4,8 @@ import { useAppStore } from '../stores/appStore'
 import { db } from '../db/schema'
 import { isDue, progressPercent } from '../fsrs/engine'
 import { trails, topics } from '../content/trails'
-import type { MemoryState, SessionLog } from '../types'
+import ChildSwitcher from '../components/ChildSwitcher'
+import type { Child, MemoryState, SessionLog } from '../types'
 
 export default function Home() {
   const { activeChild, children, memoryStates, setMemoryStates, setActiveChild } = useAppStore()
@@ -12,6 +13,12 @@ export default function Home() {
   const [dueCount, setDueCount] = useState(0)
   const [nextReview, setNextReview] = useState<string | null>(null)
   const [streak, setStreak] = useState(0)
+  const [showSwitcher, setShowSwitcher] = useState(false)
+
+  function handleSwitch(child: Child) {
+    setActiveChild(child)
+    setShowSwitcher(false)
+  }
 
   useEffect(() => {
     if (!activeChild) return
@@ -56,25 +63,28 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-50 to-white p-4 max-w-lg mx-auto pb-8">
+      {showSwitcher && activeChild && (
+        <ChildSwitcher
+          children={children}
+          activeChild={activeChild}
+          onSwitch={handleSwitch}
+          onClose={() => setShowSwitcher(false)}
+        />
+      )}
       <header className="pt-6 pb-4 flex items-start justify-between">
         <div>
           <p className="text-gray-400 text-sm">Olá,</p>
-          {children.length > 1 ? (
-            <select
-              value={activeChild?.id}
-              onChange={(e) => {
-                const child = children.find((c) => c.id === e.target.value)
-                if (child) setActiveChild(child)
-              }}
-              className="text-2xl font-bold text-indigo-700 bg-transparent border-none outline-none cursor-pointer"
-            >
-              {children.map((c) => (
-                <option key={c.id} value={c.id}>{c.nome} 🌳</option>
-              ))}
-            </select>
-          ) : (
+          <div className="flex items-center gap-2">
             <h1 className="text-2xl font-bold text-indigo-700">{activeChild?.nome} 🌳</h1>
-          )}
+            {children.length > 1 && (
+              <button
+                onClick={() => setShowSwitcher(true)}
+                className="text-xs text-indigo-400 border border-indigo-200 rounded-full px-2 py-0.5 hover:bg-indigo-50"
+              >
+                trocar
+              </button>
+            )}
+          </div>
         </div>
         <div className="flex items-center gap-3 mt-1">
           {streak > 0 && (

@@ -22,6 +22,13 @@ export class AppDB extends Dexie {
       children:     'id, invite_code',
       syncQueue:    '++id, table, created_at',
     })
+    // v3: children ganham birthday
+    this.version(3).stores({
+      memoryStates: '++id, [question_id+child_id], child_id, due, state',
+      sessionLogs:  '++id, child_id, date',
+      children:     'id, invite_code',
+      syncQueue:    '++id, table, created_at',
+    })
   }
 }
 
