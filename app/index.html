@@ -1,10 +1,24 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>app</title>
+
+    <!-- Viewport com suporte a notch/Dynamic Island -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- iOS: transforma em app de verdade ao instalar -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Estudo" />
+
+    <!-- Cor da barra de status no Android -->
+    <meta name="theme-color" content="#4f46e5" />
+
+    <!-- Impede zoom acidental no iOS -->
+    <meta name="format-detection" content="telephone=no" />
+
+    <title>Estudo — 5º Ano</title>
   </head>
   <body>
     <div id="root"></div>
