@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from './stores/authStore'
 import { useAppStore } from './stores/appStore'
-import { onAuthChange, loadChildren, loadMemoryStatesFromFirestore } from './lib/authHelpers'
+import { onAuthChange, loadChildren, loadMemoryStatesFromFirestore, migrateLocalDataIfNeeded } from './lib/authHelpers'
 import { flushSyncQueue } from './lib/sync'
 import Home from './pages/Home'
 import Session from './pages/Session'
@@ -22,6 +22,9 @@ export default function App() {
       setAuthLoading(false)
 
       if (firebaseUser) {
+        // Migra dados antigos (sem guardians) para o novo formato se necessário
+        await migrateLocalDataIfNeeded(firebaseUser.uid)
+
         const children = await loadChildren(firebaseUser.uid)
         setChildren(children)
 

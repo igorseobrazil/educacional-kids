@@ -116,6 +116,52 @@ export async function joinChildByCode(code: string, uid: string): Promise<Child 
   return updated
 }
 
+// ── Migração ─────────────────────────────────────────────────────────────────
+// Lê filhos do Dexie que ainda não têm guardians (formato antigo),
+// completa os campos e sobe tudo para o novo caminho no Firestore.
+export async function migrateLocalDataIfNeeded(uid: string): Promise<boolean> {
+  const localChildren = await db.children.toArray()
+  const needsMigration = localChildren.filter((c) => !c.guardians || c.guardians.length === 0)
+
+  if (needsMigration.length === 0) return false
+
+  for (const child of needsMigration) {
+    const updated = {
+      ...child,
+      guardians: [uid],
+      invite_code: child.invite_code ?? Math.random().toString(36).substring(2, 8).toUpperCase(),
+      created_at: child.created_at ?? new Date().toISOString(),
+    }
+
+    // Atualiza Dexie
+    await db.children.put(updated)
+
+    // Sobe filho para novo caminho no Firestore
+    await setDoc(doc(firestore, 'children', child.id), updated)
+
+    // Sobe memory_states
+    const states = await db.memoryStates.where('child_id').equals(child.id).toArray()
+    for (const state of states) {
+      await setDoc(
+        doc(firestore, 'children', child.id, 'memory_states', state.question_id),
+        { ...state, synced_at: new Date().toISOString() },
+      )
+    }
+
+    // Sobe session_logs
+    const logs = await db.sessionLogs.where('child_id').equals(child.id).toArray()
+    for (const log of logs) {
+      const logId = log.id != null ? String(log.id) : crypto.randomUUID()
+      await setDoc(
+        doc(firestore, 'children', child.id, 'session_logs', logId),
+        { ...log, synced_at: new Date().toISOString() },
+      )
+    }
+  }
+
+  return true
+}
+
 export async function loadMemoryStatesFromFirestore(childId: string) {
   const snap = await getDocs(
     collection(firestore, 'children', childId, 'memory_states'),
