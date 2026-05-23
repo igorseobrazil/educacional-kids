@@ -7,10 +7,15 @@ import {
   signInWithPopup,
   type User,
 } from 'firebase/auth'
-import { doc, setDoc, getDoc, getDocs, collection } from 'firebase/firestore'
+import {
+  doc, setDoc, getDoc, getDocs,
+  collection, query, where, updateDoc, arrayUnion,
+} from 'firebase/firestore'
 import { auth, firestore } from './firebase'
 import { db } from '../db/schema'
 import type { Child } from '../types'
+
+// ── Auth ────────────────────────────────────────────────────────────────────
 
 export async function signUp(email: string, password: string) {
   const { user } = await createUserWithEmailAndPassword(auth, email, password)
@@ -42,15 +47,6 @@ export function onAuthChange(callback: (user: User | null) => void) {
   return onAuthStateChanged(auth, callback)
 }
 
-// Salva criança localmente e no Firestore
-export async function saveChild(child: Child, uid: string) {
-  await db.children.put(child)
-  await setDoc(
-    doc(firestore, 'users', uid, 'children', child.id),
-    { ...child, profile_id: uid, created_at: new Date().toISOString() },
-  )
-}
-
 // ── PIN ─────────────────────────────────────────────────────────────────────
 
 export async function savePin(uid: string, pin: string) {
@@ -64,9 +60,30 @@ export async function getPin(uid: string): Promise<string | null> {
 
 // ── Filhos ───────────────────────────────────────────────────────────────────
 
-// Busca crianças do usuário no Firestore e sincroniza localmente
-export async function loadChildrenFromFirestore(uid: string): Promise<Child[]> {
-  const snap = await getDocs(collection(firestore, 'users', uid, 'children'))
+function generateInviteCode(): string {
+  return Math.random().toString(36).substring(2, 8).toUpperCase()
+}
+
+export async function createChild(nome: string, uid: string): Promise<Child> {
+  const child: Child = {
+    id: crypto.randomUUID(),
+    nome,
+    ano_escolar: 5,
+    guardians: [uid],
+    invite_code: generateInviteCode(),
+    created_at: new Date().toISOString(),
+  }
+  await db.children.put(child)
+  await setDoc(doc(firestore, 'children', child.id), child)
+  return child
+}
+
+export async function loadChildren(uid: string): Promise<Child[]> {
+  const q = query(
+    collection(firestore, 'children'),
+    where('guardians', 'array-contains', uid),
+  )
+  const snap = await getDocs(q)
   const children: Child[] = snap.docs.map((d) => d.data() as Child)
   for (const child of children) {
     await db.children.put(child)
@@ -74,10 +91,28 @@ export async function loadChildrenFromFirestore(uid: string): Promise<Child[]> {
   return children
 }
 
-// Busca estados de memória do Firestore e sincroniza com Dexie
-export async function loadMemoryStatesFromFirestore(uid: string, childId: string) {
+export async function joinChildByCode(code: string, uid: string): Promise<Child | null> {
+  const q = query(
+    collection(firestore, 'children'),
+    where('invite_code', '==', code.toUpperCase()),
+  )
+  const snap = await getDocs(q)
+  if (snap.empty) return null
+
+  const childDoc = snap.docs[0]
+  const child = childDoc.data() as Child
+
+  if (child.guardians.includes(uid)) return child // já é responsável
+
+  const updated: Child = { ...child, guardians: [...child.guardians, uid] }
+  await updateDoc(doc(firestore, 'children', child.id), { guardians: arrayUnion(uid) })
+  await db.children.put(updated)
+  return updated
+}
+
+export async function loadMemoryStatesFromFirestore(childId: string) {
   const snap = await getDocs(
-    collection(firestore, 'users', uid, 'children', childId, 'memory_states'),
+    collection(firestore, 'children', childId, 'memory_states'),
   )
   for (const d of snap.docs) {
     await db.memoryStates.put(d.data() as Parameters<typeof db.memoryStates.put>[0])

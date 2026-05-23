@@ -7,7 +7,7 @@ import { trails, topics } from '../content/trails'
 import type { MemoryState, SessionLog } from '../types'
 
 export default function Home() {
-  const { activeChild, memoryStates, setMemoryStates } = useAppStore()
+  const { activeChild, children, memoryStates, setMemoryStates, setActiveChild } = useAppStore()
   const navigate = useNavigate()
   const [dueCount, setDueCount] = useState(0)
   const [nextReview, setNextReview] = useState<string | null>(null)
@@ -59,7 +59,22 @@ export default function Home() {
       <header className="pt-6 pb-4 flex items-start justify-between">
         <div>
           <p className="text-gray-400 text-sm">Olá,</p>
-          <h1 className="text-2xl font-bold text-indigo-700">{activeChild?.nome} 🌳</h1>
+          {children.length > 1 ? (
+            <select
+              value={activeChild?.id}
+              onChange={(e) => {
+                const child = children.find((c) => c.id === e.target.value)
+                if (child) setActiveChild(child)
+              }}
+              className="text-2xl font-bold text-indigo-700 bg-transparent border-none outline-none cursor-pointer"
+            >
+              {children.map((c) => (
+                <option key={c.id} value={c.id}>{c.nome} 🌳</option>
+              ))}
+            </select>
+          ) : (
+            <h1 className="text-2xl font-bold text-indigo-700">{activeChild?.nome} 🌳</h1>
+          )}
         </div>
         <div className="flex items-center gap-3 mt-1">
           {streak > 0 && (

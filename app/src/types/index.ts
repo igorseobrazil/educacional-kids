@@ -72,4 +72,7 @@ export interface Child {
   nome: string
   ano_escolar: number
   avatar?: string
+  guardians: string[]   // uids dos responsáveis
+  invite_code: string   // código de 6 letras para convidar outro responsável
+  created_at?: string
 }

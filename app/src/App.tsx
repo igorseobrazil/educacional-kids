@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from './stores/authStore'
 import { useAppStore } from './stores/appStore'
-import { onAuthChange, loadChildrenFromFirestore, loadMemoryStatesFromFirestore } from './lib/authHelpers'
+import { onAuthChange, loadChildren, loadMemoryStatesFromFirestore } from './lib/authHelpers'
 import { flushSyncQueue } from './lib/sync'
 import Home from './pages/Home'
 import Session from './pages/Session'
@@ -14,7 +14,7 @@ import PinGate from './components/PinGate'
 
 export default function App() {
   const { user, authLoading, setUser, setAuthLoading } = useAuthStore()
-  const { activeChild, setActiveChild } = useAppStore()
+  const { activeChild, setActiveChild, setChildren } = useAppStore()
 
   useEffect(() => {
     const unsub = onAuthChange(async (firebaseUser) => {
@@ -22,19 +22,18 @@ export default function App() {
       setAuthLoading(false)
 
       if (firebaseUser) {
-        // Carrega filhos do Firestore e sincroniza com Dexie
-        const children = await loadChildrenFromFirestore(firebaseUser.uid)
+        const children = await loadChildren(firebaseUser.uid)
+        setChildren(children)
+
         if (children.length > 0 && !activeChild) {
           setActiveChild(children[0])
         }
 
-        // Carrega estados de memória se há criança ativa
         const child = activeChild ?? children[0]
         if (child) {
-          await loadMemoryStatesFromFirestore(firebaseUser.uid, child.id)
+          await loadMemoryStatesFromFirestore(child.id)
         }
 
-        // Envia itens pendentes de sync
         await flushSyncQueue()
       }
     })

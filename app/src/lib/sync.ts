@@ -3,20 +3,16 @@ import { auth, firestore } from './firebase'
 import { db } from '../db/schema'
 import type { MemoryState } from '../types'
 
-// Estrutura no Firestore:
-// users/{uid}/children/{childId}/memory_states/{questionId}
+// Estrutura no Firestore: children/{childId}/memory_states/{questionId}
 
 function memoryStateRef(childId: string, questionId: string) {
-  const uid = auth.currentUser?.uid
-  if (!uid) throw new Error('not-authenticated')
-  return doc(firestore, 'users', uid, 'children', childId, 'memory_states', questionId)
+  return doc(firestore, 'children', childId, 'memory_states', questionId)
 }
 
 export async function syncMemoryState(state: MemoryState) {
   const now = new Date().toISOString()
   const record = { ...state, synced_at: now }
 
-  // Sempre grava local primeiro
   await db.memoryStates.put(record)
 
   if (!auth.currentUser || !navigator.onLine) {
@@ -40,28 +36,19 @@ export async function flushSyncQueue() {
   for (const item of pending) {
     try {
       const payload = item.payload as MemoryState
-      await setDoc(
-        memoryStateRef(payload.child_id, payload.question_id),
-        payload,
-        { merge: true },
-      )
+      await setDoc(memoryStateRef(payload.child_id, payload.question_id), payload, { merge: true })
       if (item.id != null) await db.syncQueue.delete(item.id)
     } catch {
-      // mantém na fila para próxima tentativa
+      // mantém na fila
     }
   }
 }
 
-export function startRealtimeSync(
-  childId: string,
-  onUpdate: (state: MemoryState) => void,
-) {
-  const uid = auth.currentUser?.uid
-  if (!uid) return () => {}
+export function startRealtimeSync(childId: string, onUpdate: (state: MemoryState) => void) {
+  if (!auth.currentUser) return () => {}
 
-  const col = collection(firestore, 'users', uid, 'children', childId, 'memory_states')
+  const col = collection(firestore, 'children', childId, 'memory_states')
 
-  // onSnapshot retorna a função de unsubscribe
   return onSnapshot(col, (snapshot) => {
     snapshot.docChanges().forEach(async (change) => {
       if (change.type === 'added' || change.type === 'modified') {

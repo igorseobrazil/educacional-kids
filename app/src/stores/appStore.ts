@@ -4,8 +4,11 @@ import type { Child, MemoryState } from '../types'
 
 interface AppState {
   activeChild: Child | null
-  memoryStates: Record<string, MemoryState> // key: question_id
+  children: Child[]
+  memoryStates: Record<string, MemoryState>
   setActiveChild: (child: Child) => void
+  setChildren: (children: Child[]) => void
+  addChild: (child: Child) => void
   setMemoryState: (state: MemoryState) => void
   setMemoryStates: (states: MemoryState[]) => void
 }
@@ -14,9 +17,12 @@ export const useAppStore = create<AppState>()(
   persist(
     (set) => ({
       activeChild: null,
+      children: [],
       memoryStates: {},
 
-      setActiveChild: (child) => set({ activeChild: child }),
+      setActiveChild: (activeChild) => set({ activeChild, memoryStates: {} }),
+      setChildren: (children) => set({ children }),
+      addChild: (child) => set((s) => ({ children: [...s.children, child] })),
 
       setMemoryState: (state) =>
         set((prev) => ({
