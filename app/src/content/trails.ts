@@ -7,7 +7,7 @@ export const trails: Trail[] = [
     materia: 'Língua Portuguesa',
     ano_escolar: 5,
     narrativa: 'Uma jornada pelo universo das palavras — descubra os poderes secretos de cada classe e como elas constroem o mundo ao seu redor.',
-    topicos: ['topic-substantivo', 'topic-adjetivo', 'topic-artigo', 'topic-pronome', 'topic-verbo'],
+    topicos: ['topic-substantivo', 'topic-adjetivo', 'topic-artigo', 'topic-pronome', 'topic-verbo', 'topic-adverbio'],
   },
   {
     id: 'trail-semantica',
@@ -23,7 +23,7 @@ export const trails: Trail[] = [
     materia: 'Língua Portuguesa',
     ano_escolar: 5,
     narrativa: 'Por que "carro" tem dois R e "caro" tem um? Por que "passo" tem dois S e "caso" tem um? Nessa trilha você vai decifrar os segredos da escrita correta.',
-    topicos: ['topic-rr', 'topic-ss'],
+    topicos: ['topic-rr', 'topic-ss', 'topic-mpb'],
   },
   {
     id: 'trail-construcao',
@@ -39,7 +39,7 @@ export const trails: Trail[] = [
     materia: 'Língua Portuguesa',
     ano_escolar: 5,
     narrativa: 'Gramática não é decorar regras — é entender como a língua funciona de verdade. Nessa trilha você vai usar o que sabe para falar e escrever cada vez melhor.',
-    topicos: ['topic-acentuacao', 'topic-numeral', 'topic-concordancia'],
+    topicos: ['topic-acentuacao', 'topic-numeral', 'topic-concordancia', 'topic-pontuacao', 'topic-conectivos'],
   },
 ]
 
@@ -162,6 +162,43 @@ export const topics: Topic[] = [
     gancho_curiosidade: 'Por que "as meninas saíram" soa certo e "as meninas saiu" soa errado? Existe uma regra de combinação entre as palavras — e ela é mais simples do que parece.',
     pre_requisitos: ['topic-substantivo', 'topic-adjetivo', 'topic-verbo'],
     itens: ['q-con-01','q-con-02','q-con-03','q-con-cad','q-con-04','q-con-05','q-con-06','q-con-07','q-con-08'],
+  },
+
+  {
+    id: 'topic-adverbio',
+    nome: 'Advérbio',
+    trilha_id: 'trail-classes-palavras',
+    eixo_bncc: 'Análise linguística e gramática',
+    gancho_curiosidade: 'Sabe quando alguém age "rapidamente", chega "tarde" ou mora "perto"? Todas essas palavras respondem à mesma pergunta — COMO? QUANDO? ONDE? Esse é o poder do advérbio, a classe de palavra que ninguém esquece depois que aprende.',
+    pre_requisitos: ['topic-verbo', 'topic-adjetivo'],
+    itens: ['q-adv-01','q-adv-02','q-adv-03','q-adv-cad','q-adv-04','q-adv-05','q-adv-06','q-adv-07','q-adv-08'],
+  },
+  {
+    id: 'topic-pontuacao',
+    nome: 'Pontuação',
+    trilha_id: 'trail-gramatica-uso',
+    eixo_bncc: 'Análise linguística e gramática',
+    gancho_curiosidade: 'Uma vírgula pode mudar tudo: "Vamos comer crianças." vs "Vamos comer, crianças." É a mesma frase — mas o sentido é completamente diferente. Pontuação não é detalhe.',
+    pre_requisitos: [],
+    itens: ['q-pon-01','q-pon-02','q-pon-03','q-pon-cad','q-pon-04','q-pon-05','q-pon-06','q-pon-07','q-pon-08'],
+  },
+  {
+    id: 'topic-mpb',
+    nome: 'M antes de P e B',
+    trilha_id: 'trail-ortografia',
+    eixo_bncc: 'Análise linguística e gramática',
+    gancho_curiosidade: 'Por que escrevemos "campo" e não "canpo"? Por que "também" e não "tanbém"? Existe uma regra simples que explica tudo — e você nunca mais vai errar depois de aprender.',
+    pre_requisitos: ['topic-rr', 'topic-ss'],
+    itens: ['q-mpb-01','q-mpb-02','q-mpb-03','q-mpb-cad','q-mpb-04','q-mpb-05','q-mpb-06','q-mpb-07','q-mpb-08'],
+  },
+  {
+    id: 'topic-conectivos',
+    nome: 'Conectivos',
+    trilha_id: 'trail-gramatica-uso',
+    eixo_bncc: 'Análise linguística e gramática',
+    gancho_curiosidade: 'O que liga "estudei muito" com "tirei nota boa"? O que conecta duas ideias opostas? Existe uma família especial de palavras que costura o texto — e usá-las bem é o segredo dos bons escritores.',
+    pre_requisitos: ['topic-concordancia'],
+    itens: ['q-lig-01','q-lig-02','q-lig-03','q-lig-cad','q-lig-04','q-lig-05','q-lig-06','q-lig-07','q-lig-08'],
   },
 
   // ── TRAIL: CONSTRUÇÃO DE PALAVRAS ───────────────────────────────────────────
@@ -681,6 +718,276 @@ export const questions: Question[] = [
     resposta_correta: '',
     explicacao: 'O exercício mostra como antônimos criam contraste — e é exatamente isso que escritores usam para tornar histórias mais interessantes.',
     referencia_cultural: 'herói e vilão de qualquer história',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // ADVÉRBIO
+  // ════════════════════════════════════════════════════════════
+
+  {
+    id: 'q-adv-01', topico_id: 'topic-adverbio', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'O advérbio é a palavra que modifica o verbo, o adjetivo ou outro advérbio. Ele responde às perguntas:',
+    resposta_correta: 'Como? Quando? Onde? Quanto?',
+    distratores: ['Quem? O quê? Para quem?', 'Qual? Quantos? De que tipo?', 'Por quê? Para quê? Com quem?'],
+    explicacao: 'Advérbio indica circunstâncias da ação: modo (como?), tempo (quando?), lugar (onde?), intensidade (quanto?). Ex: "ela chegou TARDE (quando?) e falou BAIXO (como?)."',
+  },
+  {
+    id: 'q-adv-02', topico_id: 'topic-adverbio', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Na frase "O jogador chegou TARDE ao treino", "tarde" é advérbio de:',
+    resposta_correta: 'Tempo — indica quando aconteceu',
+    distratores: ['Modo — indica como aconteceu', 'Lugar — indica onde aconteceu', 'Intensidade — indica o quanto'],
+    explicacao: '"Tarde" responde a pergunta "quando?" — é advérbio de tempo. Se fosse "o jogador chegou LENTAMENTE", seria advérbio de modo (como?).',
+  },
+  {
+    id: 'q-adv-03', topico_id: 'topic-adverbio', tipo: 'lacuna', dificuldade: 1,
+    enunciado: 'A palavra "rapidamente" vem de "rápido" + sufixo "-mente". Esse sufixo transforma adjetivos em _______.',
+    resposta_correta: 'advérbios',
+    explicacao: 'O sufixo "-mente" transforma adjetivos em advérbios de modo: rápido → rapidamente, feliz → felizmente, silencioso → silenciosamente. Eles dizem COMO algo acontece.',
+    dica: 'Pensa: "ela saiu silenciosamente". COMO ela saiu? Silenciosamente. Palavras terminadas em -mente quase sempre são advérbios de modo.',
+  },
+  {
+    id: 'q-adv-cad', topico_id: 'topic-adverbio', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Advérbio\n\nPalavra que modifica o verbo, o adjetivo ou outro advérbio.\n\nTipos principais:\nMODO (como?): bem, mal, rapidamente, devagar, assim\nTEMPO (quando?): hoje, ontem, sempre, nunca, tarde, cedo\nLUGAR (onde?): aqui, lá, perto, longe, fora, dentro\nINTENSIDADE (quanto?): muito, pouco, bastante, demais, tão\nAFIRMAÇÃO: sim, certamente, realmente\nNEGAÇÃO: não, nunca, jamais\n\nDica de ouro: sufixo -mente = quase sempre advérbio de modo',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+  {
+    id: 'q-adv-04', topico_id: 'topic-adverbio', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Seu amigo saiu "silenciosamente" do grupo do WhatsApp. Nessa frase, "silenciosamente" é advérbio de:',
+    resposta_correta: 'Modo — indica COMO ele saiu',
+    distratores: ['Tempo — indica QUANDO ele saiu', 'Lugar — indica ONDE ele saiu', 'Negação — indica que ele NÃO saiu'],
+    explicacao: '"Silenciosamente" responde "como?" — ele saiu de que forma? Silenciosamente. Sempre que a palavra responder "como?", é advérbio de modo.',
+    referencia_cultural: 'sair do grupo silenciosamente',
+    validade_cultural: '2030-01-01',
+  },
+  {
+    id: 'q-adv-05', topico_id: 'topic-adverbio', tipo: 'verdadeiro_falso', dificuldade: 2,
+    enunciado: '"Muito" pode ser advérbio quando modifica um adjetivo, como em "muito bonito".',
+    resposta_correta: 'Verdadeiro',
+    explicacao: '"Muito" modifica o adjetivo "bonito" indicando intensidade — é advérbio de intensidade. Outros: "bastante bonito", "tão bonito", "pouco bonito". O advérbio não qualifica o substantivo, mas qualifica o adjetivo.',
+  },
+  {
+    id: 'q-adv-06', topico_id: 'topic-adverbio', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual é a diferença entre usar "rápido" (adjetivo) e "rapidamente" (advérbio)?',
+    resposta_correta: '"Rápido" qualifica substantivos; "rapidamente" modifica verbos',
+    distratores: ['Não há diferença — têm o mesmo uso', '"Rápido" modifica verbos; "rapidamente" qualifica substantivos', '"Rapidamente" é mais formal e educado que "rápido"'],
+    explicacao: '"O carro rápido" → rápido qualifica o substantivo "carro" (adjetivo). "O carro andou rapidamente" → rapidamente diz como o verbo "andou" aconteceu (advérbio). Essa distinção é fundamental.',
+  },
+  {
+    id: 'q-adv-07', topico_id: 'topic-adverbio', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Em qual frase "bem" está funcionando como ADVÉRBIO?',
+    resposta_correta: 'Ela cantou bem no show.',
+    distratores: ['O bem e o mal existem em todo lugar.', 'Ela fez o bem para todos.', 'Bem-vinda à nossa escola!'],
+    explicacao: '"Ela cantou bem" — "bem" modifica o verbo "cantou", dizendo COMO ela cantou. É advérbio de modo. Nas outras frases, "bem" é substantivo (o bem e o mal) ou parte de expressão (bem-vinda).',
+  },
+  {
+    id: 'q-adv-08', topico_id: 'topic-adverbio', tipo: 'elaboracao', dificuldade: 3,
+    enunciado: 'Escreva 5 frases sobre sua rotina usando advérbios diferentes. Use pelo menos: 1 de modo, 1 de tempo e 1 de lugar. Depois identifique cada advérbio e escreva que tipo é.',
+    resposta_correta: '',
+    explicacao: 'Reconhecer e usar advérbios no próprio texto é a habilidade que vai melhorar suas redações para sempre — e é muito mais eficaz do que decorar definições.',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // PONTUAÇÃO
+  // ════════════════════════════════════════════════════════════
+
+  {
+    id: 'q-pon-01', topico_id: 'topic-pontuacao', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: '"Vamos comer crianças." vs "Vamos comer, crianças." A vírgula muda tudo. Nesse caso ela serve para:',
+    resposta_correta: 'Separar o vocativo — a pessoa a quem a frase é dirigida',
+    distratores: ['Indicar que a frase é uma pergunta', 'Mostrar que a frase é uma ordem', 'Fazer uma pausa aleatória no texto'],
+    explicacao: 'O vocativo é quando chamamos alguém pelo nome ou categoria. A vírgula antes ou depois do vocativo é obrigatória: "Vamos comer, crianças." — a vírgula separa "crianças" do resto, mostrando que estamos falando COM elas, não sobre elas.',
+  },
+  {
+    id: 'q-pon-02', topico_id: 'topic-pontuacao', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'O ponto de exclamação (!) é usado em frases que expressam:',
+    resposta_correta: 'Emoção intensa — alegria, susto, surpresa, ordem ou euforia',
+    distratores: ['Dúvida ou pergunta', 'Afirmação neutra e tranquila', 'Pensamento incompleto ou suspense'],
+    explicacao: 'Exclamação = emoção forte. "SIU!" (euforia), "Cuidado!" (alerta), "Que lindo!" (admiração). O ponto de interrogação (?) é para perguntas. Reticências (...) para suspense.',
+    referencia_cultural: 'SIU do CR7',
+    validade_cultural: '2030-01-01',
+  },
+  {
+    id: 'q-pon-03', topico_id: 'topic-pontuacao', tipo: 'lacuna', dificuldade: 1,
+    enunciado: 'Cristiano Ronaldo marcou o gol histórico e gritou "SIU___". Qual sinal de pontuação termina essa comemoração?',
+    resposta_correta: '!',
+    explicacao: 'O ponto de exclamação (!) é o sinal certo para a euforia do "SIUUU!". A exclamação indica emoção intensa — e poucos momentos na vida são mais intensos que um gol histórico.',
+    dica: 'Pensa no volume e na emoção do SIU. Ponto final (.) seria neutro. Interrogação (?) seria uma pergunta. A emoção forte pede o sinal da emoção forte: !',
+    referencia_cultural: 'SIUUU do CR7',
+    validade_cultural: '2030-01-01',
+  },
+  {
+    id: 'q-pon-cad', topico_id: 'topic-pontuacao', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Pontuação\n\n. Ponto final → termina afirmações\nA aula acabou.\n\n? Interrogação → faz perguntas\nVocê estudou?\n\n! Exclamação → emoção intensa\nSIUUU!\n\n, Vírgula → separa elementos\n- Lista: maçã, banana, uva\n- Vocativo: Helena, venha aqui!\n- Explicação: O Brasil, meu país, é lindo.\n\n... Reticências → suspense ou pausa\nEu ia falar... mas prefiro não.\n\n: Dois pontos → introduz fala ou lista\nEla disse: "Vamos embora."',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+  {
+    id: 'q-pon-04', topico_id: 'topic-pontuacao', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Sua amiga mandou "ok." e você ficou em dúvida se ela estava brava. Se ela mandasse "ok!", a diferença seria:',
+    resposta_correta: '"ok." soa frio/neutro; "ok!" demonstra entusiasmo ou boa disposição',
+    distratores: ['Não há diferença — são exatamente a mesma coisa', '"ok." é mais formal e educado', '"ok!" é mais correto gramaticalmente'],
+    explicacao: 'Pontuação carrega tom emocional — mesmo em palavras curtas. No chat, isso importa muito: ponto final pode soar seco ou irritado; exclamação traz energia e simpatia. Escritores usam isso intencionalmente.',
+    referencia_cultural: 'mensagens no celular / tom de texto',
+    validade_cultural: '2030-01-01',
+  },
+  {
+    id: 'q-pon-05', topico_id: 'topic-pontuacao', tipo: 'verdadeiro_falso', dificuldade: 2,
+    enunciado: 'As reticências (...) indicam apenas que a frase foi cortada — não têm outro uso.',
+    resposta_correta: 'Falso',
+    explicacao: 'As reticências têm vários usos: pensamento incompleto ("Eu ia dizer..."), suspense narrativo ("Ela abriu a porta e..."), pausa hesitante ("Bem... não sei.") e ironia ou subentendido. São muito expressivas!',
+  },
+  {
+    id: 'q-pon-06', topico_id: 'topic-pontuacao', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Em qual frase a vírgula está sendo usada CORRETAMENTE?',
+    resposta_correta: 'Helena, você estudou para a prova?',
+    distratores: ['O gato, pulou o muro rapidamente.', 'Ela foi, ao mercado comprar pão.', 'O Brasil tem muitas, cidades lindas.'],
+    explicacao: 'A vírgula separa o vocativo "Helena" do resto da frase — uso correto. Não se usa vírgula entre sujeito e verbo ("gato, pulou"), entre verbo e objeto ("foi, ao mercado") ou dentro de sintagmas ("muitas, cidades").',
+  },
+  {
+    id: 'q-pon-07', topico_id: 'topic-pontuacao', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Os dois pontos (:) são usados para introduzir:',
+    resposta_correta: 'Discurso direto (fala de alguém) ou enumeração de itens',
+    distratores: ['Perguntas diretas', 'Emoção ou surpresa', 'Pausa e suspense no texto'],
+    explicacao: '"Ela disse: vou embora." (discurso direto). "Comprei: arroz, feijão e macarrão." (enumeração). Os dois pontos anunciam o que vem a seguir — são uma espécie de "olha o que vem aí:".',
+  },
+  {
+    id: 'q-pon-08', topico_id: 'topic-pontuacao', tipo: 'elaboracao', dificuldade: 3,
+    enunciado: 'Escreva um diálogo curto entre dois personagens — de jogo, série ou situação real. Use pelo menos: ponto final, exclamação, interrogação, vírgula e dois pontos. Depois explique por que usou cada sinal naquele lugar.',
+    resposta_correta: '',
+    explicacao: 'Diálogos são onde a pontuação mais importa — cada sinal muda o tom da fala. Escritores escolhem a pontuação com tanto cuidado quanto escolhem as palavras.',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // M ANTES DE P E B
+  // ════════════════════════════════════════════════════════════
+
+  {
+    id: 'q-mpb-01', topico_id: 'topic-mpb', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Antes das letras P e B, sempre usamos M, nunca N. Qual palavra está escrita CORRETAMENTE?',
+    resposta_correta: 'também',
+    distratores: ['tanbém', 'tãmbem', 'también'],
+    explicacao: '"Também" tem M antes do B: tam-BÉM. Nunca "tanbém" — N não aparece antes de B em português. A regra é simples: P e B fecham os lábios, M também fecha — por isso combinam.',
+  },
+  {
+    id: 'q-mpb-02', topico_id: 'topic-mpb', tipo: 'lacuna', dificuldade: 1,
+    enunciado: 'O Brasil é ca_peão mundial de futebol! (n/m)',
+    resposta_correta: 'm',
+    explicacao: '"Campeão" tem M antes do P: cam-PE-ão. Antes de P, sempre M — nunca "canpeão".',
+    dica: 'Antes de P, use M. Antes de B, use M. A letra depois do espaço vai te dizer: é P ou B? Então a letra antes é M!',
+  },
+  {
+    id: 'q-mpb-03', topico_id: 'topic-mpb', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Qual palavra está escrita CORRETAMENTE?',
+    resposta_correta: 'samba',
+    distratores: ['sanba', 'samba (correto)', 'zambo'],
+    explicacao: '"Samba" tem M antes do B: sam-BA. "Sanba" seria errado — N não aparece antes de B.',
+  },
+  {
+    id: 'q-mpb-cad', topico_id: 'topic-mpb', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'M antes de P e B\n\nRegra: antes das letras P e B, sempre use M, nunca N.\n\nM antes de P:\ncampo, campeão, compra, sempre, tempo, exemplo, trampolim\n\nM antes de B:\nsamba, também, bombom, sombra, embargo, colombo\n\nComo lembrar?\nP e B = lábios que se fecham (consoantes bilabiais)\nM = também fecha os lábios ao pronunciar\nPor isso M aparece naturalmente antes de P e B!',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+  {
+    id: 'q-mpb-04', topico_id: 'topic-mpb', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Em qual frase TODAS as palavras estão escritas corretamente?',
+    resposta_correta: 'O campeão também jogou no campo.',
+    distratores: ['O canpeão tanbém jogou no canpo.', 'O campeão tanbém jogou no campo.', 'O canpeão também jogou no campo.'],
+    explicacao: '"Campeão" (M antes de P), "também" (M antes de B), "campo" (M antes de P) — todos corretos. Nas outras opções há N onde deveria ser M.',
+  },
+  {
+    id: 'q-mpb-05', topico_id: 'topic-mpb', tipo: 'verdadeiro_falso', dificuldade: 2,
+    enunciado: 'Antes da letra "p", devemos sempre usar "m", não "n". Ex: com-PRA (não "conpra").',
+    resposta_correta: 'Verdadeiro',
+    explicacao: '"Compra" (M antes de P), "sempre" (M antes de P), "exemplo" (M antes de P) — a regra não tem exceções. Nunca "conpra", "senpre" ou "exenplo".',
+  },
+  {
+    id: 'q-mpb-06', topico_id: 'topic-mpb', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual palavra tem N onde deveria ter M?',
+    resposta_correta: 'tanbém',
+    distratores: ['também', 'campo', 'samba'],
+    explicacao: '"Tanbém" está errado — antes do B, usamos M: tam-BÉM. "Também", "campo" e "samba" já estão corretos.',
+  },
+  {
+    id: 'q-mpb-07', topico_id: 'topic-mpb', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Em qual opção TODAS as palavras estão corretas?',
+    resposta_correta: 'sombra, compra, também',
+    distratores: ['sonbra, conpra, também', 'sombra, compra, tanbém', 'sonbra, conpra, tanbém'],
+    explicacao: '"Sombra" (M antes de B), "compra" (M antes de P), "também" (M antes de B) — os três com M. As outras opções têm N indevido.',
+  },
+  {
+    id: 'q-mpb-08', topico_id: 'topic-mpb', tipo: 'elaboracao', dificuldade: 3,
+    enunciado: 'Escreva um parágrafo curto sobre futebol, música, culinária ou qualquer tema que você goste, usando pelo menos 5 palavras com M antes de P ou B. Depois sublinha cada uma e confirma que estão certas.',
+    resposta_correta: '',
+    explicacao: 'Escrever com atenção à ortografia e depois revisar é o hábito que separa escritores bons dos ótimos.',
+  },
+
+  // ════════════════════════════════════════════════════════════
+  // CONECTIVOS
+  // ════════════════════════════════════════════════════════════
+
+  {
+    id: 'q-lig-01', topico_id: 'topic-conectivos', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: 'Conectivos são palavras que:',
+    resposta_correta: 'Ligam ideias, orações ou partes do texto',
+    distratores: ['Qualificam os substantivos descrevendo características', 'Indicam ação ou estado de alguém', 'Substituem nomes para evitar repetição'],
+    explicacao: 'Conectivos cosuram o texto. Sem eles, as frases ficariam soltas e sem relação entre si. "Estudei muito E aprendi." / "Estudei muito MAS travei na prova." — o conectivo muda tudo.',
+  },
+  {
+    id: 'q-lig-02', topico_id: 'topic-conectivos', tipo: 'multipla_escolha', dificuldade: 1,
+    enunciado: '"Estudei muito, MAS não passei na prova." O conectivo "mas" indica:',
+    resposta_correta: 'Oposição — algo contrário ao esperado',
+    distratores: ['Causa — explica por que não passou', 'Conclusão — o resultado final do estudo', 'Adição — mais uma informação'],
+    explicacao: '"Mas" sempre introduz algo contrário: estudar muito deveria resultar em passar — mas não passou. É o conectivo da contradição, do obstáculo inesperado.',
+  },
+  {
+    id: 'q-lig-03', topico_id: 'topic-conectivos', tipo: 'lacuna', dificuldade: 1,
+    enunciado: 'Complete com o conectivo correto: "Ele estava cansado, _______ continuou treinando." (mas/porque)',
+    resposta_correta: 'mas',
+    explicacao: '"Mas" conecta ideias opostas — estar cansado é contrário a continuar. "Porque" indicaria causa: "continuou PORQUE estava animado" faria sentido; "continuou PORQUE estava cansado" seria contraditório.',
+    dica: '"Mas" = ideia contrária. "Porque" = causa/motivo. Estar cansado é o contrário de continuar treinando — qual conectivo de oposição cabe aqui?',
+  },
+  {
+    id: 'q-lig-cad', topico_id: 'topic-conectivos', tipo: 'caderno', dificuldade: 1,
+    enunciado: 'Conectivos — palavras que ligam ideias\n\nADIÇÃO: e, além disso, também, ainda\n"Estudou e tirou nota boa."\n\nOPOSIÇÃO: mas, porém, entretanto, contudo\n"Estudou, mas ficou nervoso."\n\nCAUSA: porque, pois, já que, como\n"Tirou nota boa porque estudou."\n\nCONCLUSÃO: portanto, então, logo, assim\n"Estudou muito, portanto passou."\n\nEXPLICAÇÃO: isto é, ou seja, por exemplo\n"Era difícil, ou seja, exigia atenção."',
+    resposta_correta: 'anotei',
+    explicacao: 'Anotar ajuda a fixar o conteúdo na memória. Parabéns por caprichar no caderno!',
+  },
+  {
+    id: 'q-lig-04', topico_id: 'topic-conectivos', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: '"Queria ir ao show da minha artista favorita, _______ não tinha ingresso." Qual conectivo indica que o problema impediu o plano?',
+    resposta_correta: 'mas',
+    distratores: ['porque', 'portanto', 'e'],
+    explicacao: '"Mas" indica oposição — querer ir é contrário a não ter ingresso. Esse é o padrão mais comum: situação boa + mas + obstáculo. "Porque" indicaria causa, "portanto" indicaria conclusão, "e" indicaria adição.',
+    referencia_cultural: 'show de artista favorito',
+    validade_cultural: '2030-01-01',
+  },
+  {
+    id: 'q-lig-05', topico_id: 'topic-conectivos', tipo: 'verdadeiro_falso', dificuldade: 2,
+    enunciado: '"Portanto" e "logo" são conectivos de conclusão — introduzem a consequência do que foi dito antes.',
+    resposta_correta: 'Verdadeiro',
+    explicacao: '"Treinei muito, portanto melhorei." A conclusão (melhorei) decorre do que foi dito antes (treinei muito). "Logo", "então", "assim" funcionam da mesma forma. São como a "moral da história".',
+  },
+  {
+    id: 'q-lig-06', topico_id: 'topic-conectivos', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Em qual frase o conectivo está sendo usado CORRETAMENTE?',
+    resposta_correta: 'Treinei bastante, portanto melhorei meu desempenho.',
+    distratores: ['Treinei bastante, porque melhorei meu desempenho.', 'Não treinei, mas melhorei meu desempenho.', 'Treinei bastante, e portanto melhorei.'],
+    explicacao: '"Portanto" introduz conclusão: treinar (causa) → melhorar (conclusão). "Porque" indicaria que melhorar é a causa do treino — invertido. "Não treinei, mas melhorei" seria uma contradição real, não errado — mas a opção certa é a mais lógica.',
+  },
+  {
+    id: 'q-lig-07', topico_id: 'topic-conectivos', tipo: 'multipla_escolha', dificuldade: 2,
+    enunciado: 'Qual conectivo de CAUSA completa corretamente? "Ela ficou em casa _______ estava chovendo muito."',
+    resposta_correta: 'porque',
+    distratores: ['mas', 'portanto', 'e'],
+    explicacao: '"Porque" indica causa — a chuva é o motivo de ficar em casa. "Mas" indicaria oposição (ficou em casa, mas estava chovendo — sem sentido). "Portanto" indicaria conclusão. "E" indicaria adição simples.',
+  },
+  {
+    id: 'q-lig-08', topico_id: 'topic-conectivos', tipo: 'elaboracao', dificuldade: 3,
+    enunciado: 'Escreva um texto curto (5 a 7 frases) sobre algo que aconteceu com você — bom ou ruim. Use pelo menos um conectivo de cada tipo: adição, oposição, causa e conclusão. Sublinha cada conectivo e identifica que tipo é.',
+    resposta_correta: '',
+    explicacao: 'Usar conectivos variados é o que diferencia um texto de criança de um texto maduro. É uma das habilidades mais importantes para redação — e você acabou de praticar.',
   },
 
   // ════════════════════════════════════════════════════════════

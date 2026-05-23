@@ -1,6 +1,4 @@
-import { useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { fireCorrect } from '../lib/confetti'
 import type { Question } from '../types'
 
 interface Props {
@@ -18,11 +16,11 @@ const ELABORACAO_FEEDBACKS = [
   { emoji: '🌱', titulo: 'Sua árvore cresceu!', subtitulo: 'Responder com suas palavras, mesmo com dúvida, é o que fixa de verdade.' },
 ]
 
-const ACERTO_FEEDBACKS = [
+const ACERTO_MSGS = [
   '✅ Isso aí!',
   '✅ SIU! Acertou!',
   '✅ W resposta!',
-  '✅ Arrrasou, diva!',
+  '✅ Arrasou, diva!',
   '✅ Perfeito!',
   '✅ Isso mesmo!',
 ]
@@ -31,24 +29,14 @@ export default function FeedbackCard({ question, isCorrect, onNext }: Props) {
   const isElaboracao = question.tipo === 'elaboracao'
   const isCaderno = question.tipo === 'caderno'
 
-  const elaboracaoFeedback = ELABORACAO_FEEDBACKS[
-    question.id.charCodeAt(question.id.length - 1) % ELABORACAO_FEEDBACKS.length
-  ]
-
-  const acertoFeedback = ACERTO_FEEDBACKS[
-    question.id.charCodeAt(question.id.length - 1) % ACERTO_FEEDBACKS.length
-  ]
-
-  useEffect(() => {
-    if (isCorrect && !isCaderno) {
-      fireCorrect()
-    }
-  }, [])
+  const idx = question.id.charCodeAt(question.id.length - 1)
+  const elaboracaoFeedback = ELABORACAO_FEEDBACKS[idx % ELABORACAO_FEEDBACKS.length]
+  const acertoMsg = ACERTO_MSGS[idx % ACERTO_MSGS.length]
 
   if (isCaderno) {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         className="flex flex-col gap-4"
       >
@@ -64,17 +52,22 @@ export default function FeedbackCard({ question, isCorrect, onNext }: Props) {
     )
   }
 
+  // Shake horizontal para respostas erradas
+  const shakeVariants = {
+    shake: { x: [0, -7, 7, -5, 5, -3, 3, 0], transition: { duration: 0.38 } },
+    still: { x: 0 },
+  }
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25 }}
+      transition={{ duration: 0.22 }}
       className="flex flex-col gap-4"
     >
       <motion.div
-        initial={{ scale: 0.95 }}
-        animate={{ scale: 1 }}
-        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        variants={shakeVariants}
+        animate={!isCorrect && !isElaboracao ? 'shake' : 'still'}
         className={`rounded-2xl p-5 ${
           isElaboracao
             ? 'bg-indigo-50 border-2 border-indigo-200'
@@ -83,19 +76,24 @@ export default function FeedbackCard({ question, isCorrect, onNext }: Props) {
             : 'bg-orange-50 border-2 border-orange-200'
         }`}
       >
-        <p className="text-xl font-bold mb-1">
+        <motion.p
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 18 }}
+          className="text-xl font-bold mb-1"
+        >
           {isElaboracao
             ? `${elaboracaoFeedback.emoji} ${elaboracaoFeedback.titulo}`
             : isCorrect
-            ? acertoFeedback
+            ? acertoMsg
             : '💪 Não dessa vez — mas errar faz parte!'}
-        </p>
+        </motion.p>
         <p className="text-sm text-gray-500">
           {isElaboracao
             ? elaboracaoFeedback.subtitulo
             : isCorrect
             ? 'Você se esforçou e acertou — isso é o que importa.'
-            : 'Veja a resposta certa abaixo e tente guardar. Na próxima revisão você vai lembrar!'}
+            : 'Veja a resposta certa abaixo. Na próxima revisão você vai lembrar!'}
         </p>
       </motion.div>
 

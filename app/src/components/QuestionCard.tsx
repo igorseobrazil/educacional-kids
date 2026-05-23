@@ -41,9 +41,9 @@ export default function QuestionCard({ question, onAnswer }: Props) {
   return (
     <motion.div
       key={question.id}
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: 'easeOut' }}
+      transition={{ duration: 0.22, ease: 'easeOut' }}
       className="flex flex-col gap-6"
     >
       {question.referencia_cultural && (
@@ -66,7 +66,7 @@ export default function QuestionCard({ question, onAnswer }: Props) {
           {options.map((opt) => (
             <motion.button
               key={opt}
-              whileTap={{ scale: 0.97 }}
+              whileTap={{ scale: 0.98 }}
               onClick={() => setSelected(opt)}
               className={`text-left px-4 py-3 rounded-xl border-2 font-medium transition-colors ${
                 selected === opt
@@ -84,11 +84,7 @@ export default function QuestionCard({ question, onAnswer }: Props) {
         <textarea
           value={textAnswer}
           onChange={(e) => setTextAnswer(e.target.value)}
-          placeholder={
-            question.tipo === 'elaboracao'
-              ? 'Escreva sua resposta aqui...'
-              : 'Digite sua resposta...'
-          }
+          placeholder={question.tipo === 'elaboracao' ? 'Escreva sua resposta aqui...' : 'Digite sua resposta...'}
           rows={question.tipo === 'elaboracao' ? 4 : 2}
           className="border-2 border-gray-200 rounded-xl p-3 text-gray-700 focus:outline-none focus:border-indigo-400 resize-none"
         />
@@ -110,6 +106,7 @@ export default function QuestionCard({ question, onAnswer }: Props) {
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
                 className="mt-2 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-800 leading-relaxed overflow-hidden"
               >
                 {question.dica}
@@ -119,8 +116,11 @@ export default function QuestionCard({ question, onAnswer }: Props) {
         </div>
       )}
 
+      {/* Pulse sutil quando o botão fica habilitado */}
       <motion.button
         whileTap={{ scale: 0.97 }}
+        animate={canSubmit ? { scale: [1, 1.02, 1] } : { scale: 1 }}
+        transition={{ duration: 0.3 }}
         onClick={handleSubmit}
         disabled={!canSubmit}
         className="bg-indigo-600 text-white rounded-xl py-3 font-bold text-lg disabled:opacity-40 hover:bg-indigo-700 transition-colors"
@@ -140,9 +140,9 @@ function CadernoCard({ question, onConfirm }: { question: Question; onConfirm: (
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.22 }}
       className="flex flex-col gap-5"
     >
       <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-5">
@@ -164,7 +164,6 @@ function CadernoCard({ question, onConfirm }: { question: Question; onConfirm: (
         </div>
         <p className="text-amber-700 text-xs">✏️ Escreva exatamente assim no seu caderno — com a data e o conteúdo.</p>
       </div>
-
       <motion.button
         whileTap={{ scale: 0.97 }}
         onClick={onConfirm}
