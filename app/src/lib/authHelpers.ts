@@ -99,6 +99,19 @@ export async function loadChildren(uid: string): Promise<Child[]> {
   return children
 }
 
+export async function resetChildProgress(childId: string) {
+  // Apaga memory_states e session_logs do Firestore
+  const statesSnap = await getDocs(collection(firestore, 'children', childId, 'memory_states'))
+  for (const d of statesSnap.docs) await deleteDoc(d.ref)
+
+  const logsSnap = await getDocs(collection(firestore, 'children', childId, 'session_logs'))
+  for (const d of logsSnap.docs) await deleteDoc(d.ref)
+
+  // Apaga do Dexie local
+  await db.memoryStates.where('child_id').equals(childId).delete()
+  await db.sessionLogs.where('child_id').equals(childId).delete()
+}
+
 export async function deleteChild(childId: string) {
   // Apaga subcoleções no Firestore
   const statesSnap = await getDocs(collection(firestore, 'children', childId, 'memory_states'))

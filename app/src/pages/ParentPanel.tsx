@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '../stores/appStore'
 import { useAuthStore } from '../stores/authStore'
-import { signOut, createChild, updateChild, deleteChild } from '../lib/authHelpers'
+import { signOut, createChild, updateChild, deleteChild, resetChildProgress } from '../lib/authHelpers'
 import { db } from '../db/schema'
 import { progressPercent, masteryPercent } from '../fsrs/engine'
 import { topics, trails } from '../content/trails'
@@ -11,7 +11,7 @@ import type { MemoryState, SessionLog } from '../types'
 type Tab = 'progresso' | 'filhos'
 
 export default function ParentPanel() {
-  const { activeChild, children, setActiveChild, addChild, removeChild, updateChildInStore } = useAppStore()
+  const { activeChild, children, setActiveChild, addChild, removeChild, clearMemoryStates, updateChildInStore } = useAppStore()
   const { user } = useAuthStore()
   const navigate = useNavigate()
 
@@ -61,6 +61,28 @@ export default function ParentPanel() {
       setAddErro('Não foi possível salvar. Verifique sua conexão e tente novamente.')
     } finally {
       setAddLoading(false)
+    }
+  }
+
+  async function handleResetProgress(child: typeof children[0]) {
+    const confirmed = window.confirm(
+      `Zerar TODO o progresso de ${child.nome}?\n\nIsso apaga o histórico de questões e sessões — não pode ser desfeito.`
+    )
+    if (!confirmed) return
+    // Segunda confirmação para dado sensível
+    const confirmed2 = window.confirm(
+      `Tem certeza? O progresso de ${child.nome} será apagado permanentemente.`
+    )
+    if (!confirmed2) return
+    try {
+      await resetChildProgress(child.id)
+      if (activeChild?.id === child.id) clearMemoryStates()
+      setSessions([])
+      setMemoryMap({})
+      alert(`Progresso de ${child.nome} zerado com sucesso.`)
+    } catch (err) {
+      console.error('Erro ao zerar progresso:', err)
+      alert('Não foi possível zerar. Verifique sua conexão e tente novamente.')
     }
   }
 
@@ -307,6 +329,15 @@ export default function ParentPanel() {
                       </div>
                       {c.birthday && <p className="text-xs text-amber-500 mt-1">PIN atual: {c.birthday}</p>}
                     </div>
+
+                    {/* Zerar progresso */}
+                    <button
+                      onClick={() => handleResetProgress(c)}
+                      className="w-full text-left bg-red-50 border border-red-100 rounded-xl px-4 py-3 mb-2 hover:bg-red-100 transition-colors"
+                    >
+                      <p className="text-xs font-semibold text-red-600">🗑️ Zerar progresso</p>
+                      <p className="text-xs text-red-400 mt-0.5">Apaga todo o histórico de questões e sessões</p>
+                    </button>
 
                     <div className="bg-gray-50 rounded-xl p-3">
                       <p className="text-xs text-gray-400 mb-1">Código de convite para outro responsável</p>
