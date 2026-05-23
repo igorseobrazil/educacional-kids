@@ -16,7 +16,7 @@ import PinGate from './components/PinGate'
 
 export default function App() {
   const { user, authLoading, setUser, setAuthLoading } = useAuthStore()
-  const { activeChild, setActiveChild, setChildren, hasSeenOnboarding, setHasSeenOnboarding, lastOpenDate, setLeafBalance } = useAppStore()
+  const { activeChild, setActiveChild, setChildren, hasSeenOnboarding, setHasSeenOnboarding, lastOpenDate, setLeafBalance, clearMemoryStates } = useAppStore()
   const today = new Date().toISOString().slice(0, 10)
   const needsDailyPrep = hasSeenOnboarding && !!activeChild && lastOpenDate !== today
 
@@ -25,33 +25,31 @@ export default function App() {
       setUser(firebaseUser)
       setAuthLoading(false)
 
-      if (firebaseUser) {
-        // Migra dados antigos (sem guardians) para o novo formato se necessário
-        await migrateLocalDataIfNeeded(firebaseUser.uid)
+      if (!firebaseUser) {
+        setActiveChild(null)
+        setChildren([])
+        setLeafBalance(null)
+        clearMemoryStates()
+        return
+      }
 
-        const children = await loadChildren(firebaseUser.uid)
-        setChildren(children)
+      // Migra dados antigos (sem guardians) para o novo formato se necessário
+      await migrateLocalDataIfNeeded(firebaseUser.uid)
 
-        if (children.length > 0 && !activeChild) {
-          setActiveChild(children[0])
-        }
+      const children = await loadChildren(firebaseUser.uid)
+      setChildren(children)
 
-        const child = activeChild ?? children[0]
-        if (child) {
-          await loadMemoryStatesFromFirestore(child.id)
-        }
-
+      const firstChild = children.length > 0 ? children[0] : null
+      if (firstChild) {
+        setActiveChild(firstChild)
+        await loadMemoryStatesFromFirestore(firstChild.id)
         await flushSyncQueue()
 
-        // Carrega saldo de folhas
-        const childToUse = child ?? (children.length > 0 ? children[0] : null)
-        if (childToUse) {
-          try {
-            const balance = await getOrCreateBalance(childToUse.id)
-            setLeafBalance(balance)
-          } catch {
-            console.warn('Erro ao carregar folhas — segue sem')
-          }
+        try {
+          const balance = await getOrCreateBalance(firstChild.id)
+          setLeafBalance(balance)
+        } catch {
+          console.warn('Erro ao carregar folhas — segue sem')
         }
       }
     })

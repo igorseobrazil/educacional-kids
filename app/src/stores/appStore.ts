@@ -9,7 +9,7 @@ interface AppState {
   lastOpenDate: string        // para mostrar DailyPrep uma vez por dia
   leafBalance: LeafBalance | null
   memoryStates: Record<string, MemoryState>
-  setActiveChild: (child: Child) => void
+  setActiveChild: (child: Child | null) => void
   setChildren: (children: Child[]) => void
   setHasSeenOnboarding: (v: boolean) => void
   setLastOpenDate: (date: string) => void
