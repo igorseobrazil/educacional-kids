@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { useAppStore } from '../stores/appStore'
 import { db } from '../db/schema'
 import { isDue, progressPercent } from '../fsrs/engine'
+import { getOrCreateBalance } from '../lib/leaves'
 import { trails, topics } from '../content/trails'
 import ChildSwitcher from '../components/ChildSwitcher'
 import type { Child, MemoryState, SessionLog } from '../types'
 
 export default function Home() {
-  const { activeChild, children, memoryStates, setMemoryStates, setActiveChild, leafBalance } = useAppStore()
+  const { activeChild, children, memoryStates, setMemoryStates, setActiveChild, setLeafBalance, leafBalance } = useAppStore()
   const navigate = useNavigate()
   const [dueCount, setDueCount] = useState(0)
   const [nextReview, setNextReview] = useState<string | null>(null)
@@ -47,6 +48,14 @@ export default function Home() {
       .reverse()
       .toArray()
     setStreak(calcStreak(logs))
+
+    // Folhas
+    try {
+      const balance = await getOrCreateBalance(activeChild.id)
+      setLeafBalance(balance)
+    } catch {
+      console.warn('Erro ao carregar folhas')
+    }
   }
 
   function getTopicMastery(topicId: string): number {
