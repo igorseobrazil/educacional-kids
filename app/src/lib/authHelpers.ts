@@ -89,6 +89,12 @@ export async function loadChildren(uid: string): Promise<Child[]> {
   const children: Child[] = snap.docs.map((d) => d.data() as Child)
   for (const child of children) {
     await db.children.put(child)
+    // Garante que o lookup de convite existe para cada filho
+    await setDoc(
+      doc(firestore, 'invite_codes', child.invite_code),
+      { child_id: child.id },
+      { merge: true },
+    )
   }
   return children
 }
